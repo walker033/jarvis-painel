@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mfs57CZGj0ueq99/ee3jOzs4UyOLY5uJPT+SOkjULVo='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-gF2FUlyfvWEwAMrAPC/qgzbcI4l3EfKfyoOQOAKo8EE='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Painel J.A.R.V.I.S.</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
@@ -371,8 +371,6 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   function pcmWav(b64){/* L16 sem cabeçalho -> WAV 24 kHz mono */var bin=atob(b64),n=bin.length,b=new ArrayBuffer(44+n),d=new DataView(b);function w(o,s){for(var i=0;i<s.length;i++)d.setUint8(o+i,s.charCodeAt(i))}
     w(0,"RIFF");d.setUint32(4,36+n,true);w(8,"WAVE");w(12,"fmt ");d.setUint32(16,16,true);d.setUint16(20,1,true);d.setUint16(22,1,true);d.setUint32(24,24000,true);d.setUint32(28,48000,true);d.setUint16(32,2,true);d.setUint16(34,16,true);w(36,"data");d.setUint32(40,n,true);
     for(var i=0;i<n;i++)d.setUint8(44+i,bin.charCodeAt(i));return new Blob([b],{type:"audio/wav"})}
-  var ESTILO_CURTO="Leia em português do Brasil, com voz calma, grave e elegante de mordomo britânico, como o JARVIS do Homem de Ferro:";
-  var ESTILO="Fale em português do Brasil, com voz calma, grave e elegante, leve formalidade de mordomo britânico e um toque de ironia fina, como o JARVIS dos filmes do Homem de Ferro. Ritmo natural, sem pressa.";
   /* Rotas da voz neural, em ordem: generateContent (formato clássico) e Interactions API, em vários modelos TTS.
      A primeira que funcionar fica lembrada neste aparelho. */
   var ROTAS=[["gc","gemini-3.8-flash-tts"],["gc","gemini-3.8-flash-lite-tts"],["gc","gemini-2.5-flash-preview-tts"],["ix","gemini-3.8-flash-tts"],["ix","gemini-3.8-flash-lite-tts"],["gc","gemini-3.1-flash-tts-preview"],["ix","gemini-3.1-flash-tts-preview"]];
@@ -380,15 +378,15 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   var cacheVoz=[],vozStatus="";
   function corpoTTS(rota,texto){
     if(rota[0]==="gc")return{url:"https://generativelanguage.googleapis.com/v1beta/models/"+rota[1]+":generateContent",
-      body:{contents:[{role:"user",parts:[{text:ESTILO_CURTO+" "+texto}]}],generationConfig:{responseModalities:["AUDIO"],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:cfg.gvoz}}}}}};
+      body:{contents:[{role:"user",parts:[{text:texto}]}],generationConfig:{responseModalities:["AUDIO"],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:cfg.gvoz}}}}}};
     return{url:"https://generativelanguage.googleapis.com/v1beta/interactions",
-      body:{model:rota[1],input:[{type:"user_input",content:[{type:"text",text:texto,annotations:[{type:"speech_metadata",style:ESTILO}]}]}],response_format:{type:"audio"},generation_config:{speech_config:[{voice:cfg.gvoz}]}}}}
+      body:{model:rota[1],input:[{type:"user_input",content:[{type:"text",text:texto}]}],response_format:{type:"audio"},generation_config:{speech_config:[{voice:cfg.gvoz}]}}}}
   function tentarRota(k,texto){var c=corpoTTS(ROTAS[k],texto);
     return timeout(fetch(c.url,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(c.body)}),30000)
       .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok,status:r.status,j:j}})})
       .then(function(x){
         if(x.ok){var a=acharAudio(x.j,0);if(a)return/l16|pcm/i.test(a.mime)?pcmWav(a.data):b64blob(a.data,a.mime||"audio/wav");x.status=0}
-        var msg=((x.j&&x.j.error&&x.j.error.message)||"sem áudio na resposta").slice(0,140),e=new Error(msg);e.status=x.status;throw e})}
+        var msg=((x.j&&x.j.error&&x.j.error.message)||"sem áudio na resposta").slice(0,140),e=new Error(msg);e.status=x.status;if(x.status===429)e.lim=infoLimite(x.j);throw e})}
   function geminiAudio(txt){
     var texto=limparFala(txt).replace(/\s+/g," ").trim(),chave=cfg.gvoz+"|"+texto;
     for(var c=0;c<cacheVoz.length;c++)if(cacheVoz[c][0]===chave)return Promise.resolve(cacheVoz[c][1]);
@@ -397,7 +395,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     function prox(n){if(n>=ordem.length){var e=new Error("A voz neural não está disponível para esta chave ("+(ultimo?(ultimo.status||"")+" "+ultimo.message:"sem resposta")+").");e.status=404;throw e}
       var k=ordem[n];return tentarRota(k,texto).then(function(b){if(rotaOk!==k){rotaOk=k;try{localStorage.setItem("jarvis_tts_rota",String(k))}catch(e){}}
           vozStatus="Voz neural funcionando ("+ROTAS[k][1]+").";cacheVoz.push([chave,b]);if(cacheVoz.length>12)cacheVoz.shift();return b},
-        function(e){if(e.status===429){var q=new Error("Limite gratuito da voz neural do Gemini atingido. Uso a voz do celular por 10 minutos.");q.status=429;throw q}
+        function(e){if(e.status===429){var li=e.lim||{dia:false,seg:60},q=new Error(li.dia?"A cota diária gratuita da voz neural acabou. Uso a voz do celular até ela renovar.":"Voz neural no limite por minuto. Volto a ela em instantes; enquanto isso, voz do celular.");q.status=429;q.lim=li;throw q}
           if(e.status===401){var a=new Error("A chave do Gemini foi recusada pela voz neural.");a.status=401;throw a}
           if(!e.status&&/Failed to fetch|NetworkError|tempo|Load failed/i.test(e.message||""))throw e;
           if(k===rotaOk){rotaOk=-1;try{localStorage.removeItem("jarvis_tts_rota")}catch(x){}}
@@ -409,14 +407,14 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     var feito=false;function f(){if(feito)return;feito=true;try{URL.revokeObjectURL(url)}catch(e){}res()}
     audioEl.onended=f;audioEl.onerror=f;audioEl.onpause=function(){if(id!==falaId)f()};
     var p=audioEl.play();if(p&&p.catch)p.catch(function(){if(feito)return;feito=true;try{URL.revokeObjectURL(url)}catch(x){}rej(new Error("O navegador bloqueou o áudio. Toque no reator uma vez."))})})}
-  function falar(txt,depois){
+  function falar(txt,depois,simples){
     pararFala();var id=falaId;
     function fim(){if(id!==falaId)return;speaking=false;setState("");if(depois)depois()}
     if(muted||!txt||!String(txt).trim()){fim();return}
     speaking=true;setState("FALANDO");
     try{
-      if(geminiVozOk()){geminiAudio(txt).then(function(b){return tocar(b,id)}).then(fim,function(e){if(id!==falaId)return;
-          if(e&&e.status===429)gPausaAte=Date.now()+10*60*1000;
+      if(!simples&&geminiVozOk()){geminiAudio(txt).then(function(b){return tocar(b,id)}).then(fim,function(e){if(id!==falaId)return;
+          if(e&&e.status===429){gPausaAte=Date.now()+(e.lim&&e.lim.dia?6*3600:Math.max(20,(e.lim&&e.lim.seg)||60))*1000;if(!(e.lim&&e.lim.dia))avisouG=false}
           if(e&&(e.status===401||e.status===404))gPausaAte=Date.now()+30*60*1000;
           if(!avisouG){avisouG=true;var em=(e&&e.message)||"";if(/Failed to fetch|NetworkError|tempo|Load failed/i.test(em))em="Sem conexão com a voz neural do Gemini.";avisoVoz(em+(/celular/.test(em)?"":" Usando a voz do celular."))}
           falarSistema(txt,id,fim)});return}
@@ -491,24 +489,44 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
       var m={not_granted:"O acesso ao Claude não foi autorizado nesta página.",rate_limited:"Limite de uso atingido. Tente de novo em instantes.",session_expired:"A sessão do Claude expirou; entre de novo."};
       throw new Error((e&&m[e.code])||"Falha na conexão com o núcleo. Tente de novo.")})}
 
-  var MODELOS=["gemini-flash-latest","gemini-2.5-flash"];
-  function viaGemini(msgs){
-    var contents=msgs.map(function(m){return{role:m.role==="assistant"?"model":"user",parts:[{text:m.content}]}});
-    function tentar(i,comBusca){
-      var body={system_instruction:{parts:[{text:contexto()}]},contents:contents,generationConfig:{temperature:.6,maxOutputTokens:400}};
+  /* Cérebro Gemini: cada modelo tem cota gratuita própria. Quando um bate no limite, passa ao próximo
+     e deixa aquele "esfriando" pelo tempo que o Google indicar (ou até o dia seguinte, se for cota diária). */
+  var MODELOS=["gemini-flash-latest","gemini-flash-lite-latest","gemini-3.5-flash-lite","gemini-2.5-flash-lite","gemini-2.5-flash"];
+  var esfria={};try{esfria=JSON.parse(localStorage.getItem("jarvis_esfria")||"{}")||{}}catch(e){esfria={}}
+  function gravaEsfria(){try{localStorage.setItem("jarvis_esfria",JSON.stringify(esfria))}catch(e){}}
+  function precisaBusca(t){return/\b(hoje|agora|ontem|amanh[ãa]|atual|[úu]ltim[oa]s?|not[íi]cias?|placar|jogo|resultado|pre[çc]o|cota[çc][ãa]o|d[óo]lar|euro|bitcoin|tr[âa]nsito|elei[çc]|quem (é|foi|ganhou)|quando (é|vai|abre|fecha)|lan[çc]amento|estreia|previs[ãa]o|pesquis|procur|busc)/i.test(t||"")}
+  function geminiGerar(o){/* o: {sistema, contents, busca, tokens, temp} -> {texto, fontes} */
+    var agora=Date.now(),lista=MODELOS.filter(function(m){return!(esfria[m]>agora)});if(!lista.length)lista=MODELOS.slice();
+    var ultimo429=null,naoExiste=0;
+    function tentar(i,comBusca){if(i>=lista.length){
+        if(ultimo429){var d=ultimo429.dia,e=new Error(d?"A cota diária gratuita do Gemini acabou em todos os modelos. Ela renova amanhã.":"O Gemini está no limite por minuto. Espere uns segundos e fale de novo.");e.status=429;throw e}
+        throw new Error("Nenhum modelo do Gemini respondeu. Confira a chave em AJUSTES.")}
+      var m=lista[i],body={system_instruction:{parts:[{text:o.sistema}]},contents:o.contents,generationConfig:{temperature:o.temp==null?.6:o.temp,maxOutputTokens:o.tokens||500}};
       if(comBusca)body.tools=[{google_search:{}}];
-      return timeout(fetch("https://generativelanguage.googleapis.com/v1beta/models/"+MODELOS[i]+":generateContent",
-        {method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(body)}),25000)
-        .then(function(r){return r.json().then(function(j){return{ok:r.ok,status:r.status,j:j}})})
+      return timeout(fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(body)}),o.busca?40000:25000)
+        .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok,status:r.status,j:j}})})
         .then(function(x){
-          if(x.ok){var p=x.j.candidates&&x.j.candidates[0]&&x.j.candidates[0].content&&x.j.candidates[0].content.parts;var t=p?p.map(function(q){return q.text||""}).join("").trim():"";if(t)return t;throw new Error("vazio")}
-          if(x.status===400&&comBusca)return tentar(i,false);
-          if(x.status===404&&i+1<MODELOS.length)return tentar(i+1,comBusca);
-          if(x.status===400||x.status===403)throw new Error("A chave do Gemini foi recusada. Confira em AJUSTES.");
-          if(x.status===429)throw new Error("Limite gratuito do Gemini atingido. Tente daqui a pouco.");
-          throw new Error("O Gemini não respondeu ("+x.status+").")})}
-    return tentar(0,true).catch(function(e){if(e&&/Failed to fetch|NetworkError|tempo/i.test(e.message))throw new Error("Sem conexão com o Gemini nesta tela. Use a versão aberta direto no Chrome.");throw e})}
+          if(x.ok){var c=(x.j.candidates&&x.j.candidates[0])||{},t=((c.content&&c.content.parts)||[]).map(function(q){return q.text||""}).join("").trim(),f=[],vistos={};
+            ((c.groundingMetadata&&c.groundingMetadata.groundingChunks)||[]).forEach(function(k){if(k.web&&k.web.uri&&!vistos[k.web.uri]){vistos[k.web.uri]=1;f.push({t:k.web.title||k.web.uri,u:k.web.uri})}});
+            if(t)return{texto:t,fontes:f,modelo:m};return tentar(i+1,comBusca)}
+          if(x.status===429){var li=infoLimite(x.j);
+            if(comBusca&&!o.busca)return tentar(i,false);
+            esfria[m]=Date.now()+(li.dia?8*3600:Math.max(20,li.seg))*1000;gravaEsfria();ultimo429=li;return tentar(i+1,comBusca)}
+          if(x.status===400&&comBusca&&!o.busca)return tentar(i,false);
+          if(x.status===404||(x.status===400&&/model|not found|not supported/i.test((x.j.error&&x.j.error.message)||""))){naoExiste++;return tentar(i+1,comBusca)}
+          if(x.status===400||x.status===403||x.status===401)throw new Error("A chave do Gemini foi recusada. Confira em AJUSTES.");
+          return tentar(i+1,comBusca)})}
+    return tentar(0,!!o.busca||!!o.buscaSeAjudar).catch(function(e){if(e&&/Failed to fetch|NetworkError|tempo/i.test(e.message))throw new Error("Sem conexão com o Gemini agora.");throw e})}
+  function viaGemini(msgs){
+    var contents=msgs.map(function(m){return{role:m.role==="assistant"?"model":"user",parts:[{text:m.content}]}}),ult=msgs[msgs.length-1];
+    return geminiGerar({sistema:contexto(),contents:contents,buscaSeAjudar:precisaBusca(ult&&ult.content),tokens:500}).then(function(r){return r.texto})}
 
+  /* lê a resposta 429 do Google: cota diária ou por minuto, e quanto esperar */
+  function infoLimite(j){var d=(j&&j.error&&j.error.details)||[],dia=false,seg=0;
+    d.forEach(function(x){if(x&&x.retryDelay){var m=String(x.retryDelay).match(/([\d.]+)/);if(m)seg=Math.ceil(+m[1])}
+      (x&&x.violations||[]).forEach(function(v){if(/PerDay|per_day|daily/i.test((v.quotaId||"")+" "+(v.quotaMetric||"")))dia=true})});
+    if(/per day|daily|PerDay/i.test((j&&j.error&&j.error.message)||""))dia=true;
+    return{dia:dia,seg:seg||60}}
   function bolha(cls,txt){var d=document.createElement("div");d.className="msg "+cls;d.textContent=txt;$("log").appendChild(d);$("log").scrollTop=$("log").scrollHeight;return d}
 
   /* ---------- entrevista de perfil (igual ao Gem) ---------- */
@@ -528,14 +546,14 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   function pulou(t){return/^(pular|pula|passa|próxima|proxima|nada|nenhum|nenhuma|não|nao)\b/i.test(norm(t).trim())}
   function iniciarEntrevista(){entrevista={i:0,r:{}};history=[];
     var abre="Antes de entrar em operação, preciso conhecê-la. São poucas perguntas, e a senhora pode dizer pular em qualquer uma. "+PERGUNTAS[0].q;
-    bolha("j",abre);falar(abre,depoisFalaEntrevista)}
+    bolha("j",abre);falar(abre,depoisFalaEntrevista,true)}
   function depoisFalaEntrevista(){if(entrevista&&!micBlocked)setTimeout(ouvir,350)}
   function responderEntrevista(txt){
     var p=PERGUNTAS[entrevista.i];var limpo=txt.replace(/[.!]+$/,"").trim();
     if(!pulou(limpo))entrevista.r[p.k]=limpo;
     var conf=pulou(limpo)?"Sem problema.":(p.k==="trat"?"Anotado: "+limpo+".":"Anotado.");
     entrevista.i++;
-    if(entrevista.i<PERGUNTAS.length){var t=conf+" "+PERGUNTAS[entrevista.i].q;bolha("j",t);falar(t,depoisFalaEntrevista);return}
+    if(entrevista.i<PERGUNTAS.length){var t=conf+" "+PERGUNTAS[entrevista.i].q;bolha("j",t);falar(t,depoisFalaEntrevista,true);return}
     concluirEntrevista(conf)}
   function concluirEntrevista(conf){
     var r=entrevista.r;entrevista=null;
@@ -549,7 +567,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     cfg.feito="1";var ok=save();tick();tagCerebro();
     var fim=conf+" Perfil concluído, "+cfg.trat+". Todos os sistemas estão online."+(ok?"":" Atenção: este navegador não guardou o perfil.");
     bolha("j",fim);if(!ok)bolha("j err",MSG_NAO_SALVA);
-    falar(fim,function(){buildCards().then(function(c){falar(briefing(c))})})}
+    falar(fim,function(){buildCards().then(function(c){falar(briefing(c))})},true)}
 
   function perguntar(txt){
     txt=(txt||"").trim();if(!txt||busy)return;
@@ -558,10 +576,10 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     var mb=txt.match(/^(jarvis,?\s*)?(pesquis[ae]r?|procur[ea]r?|busqu?e|buscar)\s+(sobre\s+|por\s+)?(.{2,})$/i);
     if(mb){$("ask").value="";hint("");bolha("u",txt);bolha("j","Pesquisando: "+mb[4]+". O resultado aparece logo abaixo.");executarBusca(mb[4],true);return}
     var ma=txt.match(/^(jarvis,?\s*)?(anot[ae]r?|anote a[ií]|lembre(-se)? que)\s*:?\s+(.{2,})$/i);
-    if(ma){$("ask").value="";hint("");bolha("u",txt);anotar(ma[4].replace(/[.!]+$/,""));var ok="Anotado no bloco de notas.";bolha("j",ok);falar(ok);return}
+    if(ma){$("ask").value="";hint("");bolha("u",txt);anotar(ma[4].replace(/[.!]+$/,""));var ok="Anotado no bloco de notas.";bolha("j",ok);falar(ok,null,true);return}
     var b=cerebro();
     $("ask").value="";hint("");bolha("u",txt);
-    if(!b){var m="Estou sem cérebro conectado. Abra AJUSTES e cole uma chave: a do Claude ou a gratuita do Gemini.";bolha("j err",m);falar(m);return}
+    if(!b){var m="Estou sem cérebro conectado. Abra AJUSTES e cole uma chave: a do Claude ou a gratuita do Gemini.";bolha("j err",m);falar(m,null,true);return}
     history.push({role:"user",content:txt});if(history.length>12)history=history.slice(-12);
     busy=true;thinking=true;setState("PROCESSANDO");var bub=bolha("j","…");
     (b==="api"?viaClaudeApi(history):b==="claude"?viaClaude(history):viaGemini(history)).then(function(resp){
@@ -569,7 +587,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
       thinking=false;busy=false;setState("");
       falar(resp,function(){if(talkMode&&!micBlocked)setTimeout(ouvir,350)})
     },function(err){
-      history.pop();thinking=false;busy=false;setState("");bub.textContent=err.message;bub.classList.add("err");falar(err.message)})}
+      history.pop();thinking=false;busy=false;setState("");bub.textContent=err.message;bub.classList.add("err");falar(err.message,null,true)})}
 
   /* ---------- briefing ---------- */
   function briefing(climas){var d=new Date();var t=saud(d)+", "+cfg.trat+". "+horaExtenso(d)+". Todos os sistemas estão online.";
@@ -581,7 +599,6 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   var started=false,seqOn=false;
   function iniciar(){
     if(seqOn)return;seqOn=true;destravarVoz();
-    falar(saud(new Date())+", "+cfg.trat+".");
     $("btnStart").hidden=true;$("btnReplay").hidden=false;$("chat").hidden=false;
     var diag=$("diag");diag.innerHTML="";var i=0,passo=reduce?0:240;
     (function linha(){
@@ -600,7 +617,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   bind($("btnMute"),function(){muted=!muted;$("btnMute").textContent="VOZ: "+(muted?"OFF":"ON");$("btnMute").classList.toggle("on",muted);if(muted)pararFala()});
   function rotuloTroca(){$("btnTroca").textContent="TIMBRE: "+(cfg.key.trim()&&cfg.gvoz?cfg.gvoz.toUpperCase():"APARELHO")}
   bind($("btnTroca"),function(){destravarVoz();
-    if(!cfg.key.trim()){rotuloTroca();var m="As vozes neurais usam a chave do Gemini. Cole a chave em AJUSTES; por enquanto uso a voz do aparelho.";hint(m);falar(m);return}
+    if(!cfg.key.trim()){rotuloTroca();var m="As vozes neurais usam a chave do Gemini. Cole a chave em AJUSTES; por enquanto uso a voz do aparelho.";hint(m);falar(m,null,true);return}
     var ids=GVOZES.map(function(x){return x[0]}),i=ids.indexOf(cfg.gvoz);cfg.gvoz=ids[(i+1)%ids.length];
     avisouG=false;gPausaAte=0;save();rotuloTroca();if($("fGvoz"))$("fGvoz").value=cfg.gvoz;$("vozInfo").textContent=descreverVoz();
     var nome=cfg.gvoz||"do aparelho";hint("Timbre: "+(GVOZES.filter(function(x){return x[0]===cfg.gvoz})[0]||["",nome])[1]);
@@ -642,19 +659,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
 
   /* ---------- pesquisa na web, dentro do painel ---------- */
   function sisBusca(){var d=new Date();return"Você é o J.A.R.V.I.S. Pesquise na web e responda em português do Brasil, em texto corrido de até 6 frases, sem markdown, sem listas e sem links no texto. Em notícias, diga a data dos fatos. Se as fontes divergirem ou não houver informação confiável, diga isso em vez de inventar. Hoje é "+DIAS[d.getDay()]+", "+d.getDate()+" de "+MESES[d.getMonth()]+" de "+d.getFullYear()+"."}
-  function buscaGemini(q){
-    function tentar(i){var body={system_instruction:{parts:[{text:sisBusca()}]},contents:[{role:"user",parts:[{text:q}]}],tools:[{google_search:{}}],generationConfig:{temperature:.3,maxOutputTokens:1500}};
-      return timeout(fetch("https://generativelanguage.googleapis.com/v1beta/models/"+MODELOS[i]+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(body)}),40000)
-        .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok,status:r.status,j:j}})})
-        .then(function(x){
-          if(x.ok){var c=(x.j.candidates&&x.j.candidates[0])||{},t=((c.content&&c.content.parts)||[]).map(function(p){return p.text||""}).join("").trim(),f=[],vistos={};
-            ((c.groundingMetadata&&c.groundingMetadata.groundingChunks)||[]).forEach(function(k){if(k.web&&k.web.uri&&!vistos[k.web.uri]){vistos[k.web.uri]=1;f.push({t:k.web.title||k.web.uri,u:k.web.uri})}});
-            if(!t)throw new Error("A pesquisa voltou vazia. Tente reformular.");return{texto:limparFala(t).trim(),fontes:f}}
-          if(x.status===404&&i+1<MODELOS.length)return tentar(i+1);
-          if(x.status===429)throw new Error("Limite gratuito do Gemini atingido. Tente daqui a pouco.");
-          if(x.status===400||x.status===403)throw new Error("A chave do Gemini foi recusada. Confira em AJUSTES.");
-          throw new Error("A pesquisa não respondeu ("+x.status+").")})}
-    return tentar(0)}
+  function buscaGemini(q){return geminiGerar({sistema:sisBusca(),contents:[{role:"user",parts:[{text:q}]}],busca:true,tokens:1500,temp:.3}).then(function(r){return{texto:limparFala(r.texto).trim(),fontes:r.fontes}})}
   function buscaClaude(q){
     function tentar(modelo){var body={model:modelo,max_tokens:1500,system:sisBusca(),messages:[{role:"user",content:q}],
         tools:[{type:"web_search_20250305",name:"web_search",max_uses:4,user_location:{type:"approximate",city:"São Paulo",country:"BR",timezone:"America/Sao_Paulo"}}]};
@@ -687,7 +692,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
       while(box.children.length>3)box.removeChild(box.lastChild);
       if(voz)falar(resumo(r.texto))},
     function(e){buscando=false;thinking=false;setState("");var m=erroRede(e);wait.lastChild.innerHTML="";wait.lastChild.appendChild(el("p","muted",m));
-      setTimeout(function(){if(wait.parentNode)wait.remove()},15000);if(voz)falar(m)})}
+      setTimeout(function(){if(wait.parentNode)wait.remove()},15000);if(voz)falar(m,null,true)})}
 
   /* ---------- widgets (ficam salvos neste aparelho) ---------- */
   var FUSOS=[["America/Sao_Paulo","Brasília"],["America/Manaus","Manaus"],["America/Noronha","Fernando de Noronha"],["America/Argentina/Buenos_Aires","Buenos Aires"],["America/New_York","Nova York"],["America/Chicago","Chicago"],["America/Los_Angeles","Los Angeles"],["America/Mexico_City","Cidade do México"],["Europe/Lisbon","Lisboa"],["Europe/London","Londres"],["Europe/Madrid","Madri"],["Europe/Paris","Paris"],["Europe/Rome","Roma"],["Europe/Berlin","Berlim"],["Asia/Dubai","Dubai"],["Asia/Kolkata","Nova Délhi"],["Asia/Shanghai","Xangai"],["Asia/Tokyo","Tóquio"],["Australia/Sydney","Sydney"]];
