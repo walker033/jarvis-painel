@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-uyPiCk1eP7+s9DbNVK8qNw7CLtYzSkSHc+DEPtbGglE='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mfs57CZGj0ueq99/ee3jOzs4UyOLY5uJPT+SOkjULVo='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Painel J.A.R.V.I.S.</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
@@ -340,11 +340,10 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     if(cfg.voz){var f=vs.find(function(v){return idVoz(v)===cfg.voz});if(f)return f}
     return vs.slice().sort(function(a,b){return notaVoz(b)-notaVoz(a)})[0]}
   var GVOZES=[["Charon","Charon: grave e informativo (padrão)"],["Orus","Orus: firme"],["Iapetus","Iapetus: claro"],["Algenib","Algenib: rouco"],["Sadaltager","Sadaltager: culto"],["Rasalgethi","Rasalgethi: informativo"],["Alnilam","Alnilam: firme"],["","Desligada (só voz do aparelho)"]];
-  var GTTS=["gemini-3.8-flash-tts","gemini-3.8-flash-lite-tts","gemini-3.1-flash-tts-preview"];
-  var gIdx=0,gPausaAte=0,avisouG=false;
+  var gPausaAte=0,avisouG=false;
   function geminiVozOk(){return!!(cfg.key.trim()&&cfg.gvoz&&Date.now()>gPausaAte)}
   function descreverVoz(){var v=vozSistema();
-    return(cfg.key.trim()&&cfg.gvoz?"Voz principal: "+cfg.gvoz+" (Gemini). Reserva: ":"Voz atual: ")+(v?v.name:"padrão do aparelho")+"."}
+    return(cfg.key.trim()&&cfg.gvoz?"Voz principal: "+cfg.gvoz+" (Gemini). Reserva: ":"Voz atual: ")+(v?v.name:"padrão do aparelho")+"."+(vozStatus?" "+vozStatus:"")}
   function preencherVozes(){var sel=$("fVoz");if(!sel)return;var vs=vozesPt().slice().sort(function(a,b){return notaVoz(b)-notaVoz(a)});
     sel.innerHTML="";var o=document.createElement("option");o.value="";o.textContent="Automática (melhor disponível)";sel.appendChild(o);
     vs.forEach(function(v){var op=document.createElement("option");op.value=idVoz(v);op.textContent=v.name+" ("+v.lang+")";sel.appendChild(op)});
@@ -372,19 +371,39 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   function pcmWav(b64){/* L16 sem cabeçalho -> WAV 24 kHz mono */var bin=atob(b64),n=bin.length,b=new ArrayBuffer(44+n),d=new DataView(b);function w(o,s){for(var i=0;i<s.length;i++)d.setUint8(o+i,s.charCodeAt(i))}
     w(0,"RIFF");d.setUint32(4,36+n,true);w(8,"WAVE");w(12,"fmt ");d.setUint32(16,16,true);d.setUint16(20,1,true);d.setUint16(22,1,true);d.setUint32(24,24000,true);d.setUint32(28,48000,true);d.setUint16(32,2,true);d.setUint16(34,16,true);w(36,"data");d.setUint32(40,n,true);
     for(var i=0;i<n;i++)d.setUint8(44+i,bin.charCodeAt(i));return new Blob([b],{type:"audio/wav"})}
+  var ESTILO_CURTO="Leia em português do Brasil, com voz calma, grave e elegante de mordomo britânico, como o JARVIS do Homem de Ferro:";
   var ESTILO="Fale em português do Brasil, com voz calma, grave e elegante, leve formalidade de mordomo britânico e um toque de ironia fina, como o JARVIS dos filmes do Homem de Ferro. Ritmo natural, sem pressa.";
-  function geminiAudio(txt,comEstilo){
-    var conteudo={type:"text",text:limparFala(txt).replace(/\s+/g," ").trim()};
-    if(comEstilo)conteudo.annotations=[{type:"speech_metadata",style:ESTILO}];
-    var body={model:GTTS[gIdx],input:[{type:"user_input",content:[conteudo]}],response_format:{type:"audio"},generation_config:{speech_config:[{voice:cfg.gvoz}]}};
-    return timeout(fetch("https://generativelanguage.googleapis.com/v1beta/interactions",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(body)}),30000)
+  /* Rotas da voz neural, em ordem: generateContent (formato clássico) e Interactions API, em vários modelos TTS.
+     A primeira que funcionar fica lembrada neste aparelho. */
+  var ROTAS=[["gc","gemini-3.8-flash-tts"],["gc","gemini-3.8-flash-lite-tts"],["gc","gemini-2.5-flash-preview-tts"],["ix","gemini-3.8-flash-tts"],["ix","gemini-3.8-flash-lite-tts"],["gc","gemini-3.1-flash-tts-preview"],["ix","gemini-3.1-flash-tts-preview"]];
+  var rotaOk=-1;try{var rs=+localStorage.getItem("jarvis_tts_rota");if(rs>=0&&rs<ROTAS.length)rotaOk=rs}catch(e){}
+  var cacheVoz=[],vozStatus="";
+  function corpoTTS(rota,texto){
+    if(rota[0]==="gc")return{url:"https://generativelanguage.googleapis.com/v1beta/models/"+rota[1]+":generateContent",
+      body:{contents:[{role:"user",parts:[{text:ESTILO_CURTO+" "+texto}]}],generationConfig:{responseModalities:["AUDIO"],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:cfg.gvoz}}}}}};
+    return{url:"https://generativelanguage.googleapis.com/v1beta/interactions",
+      body:{model:rota[1],input:[{type:"user_input",content:[{type:"text",text:texto,annotations:[{type:"speech_metadata",style:ESTILO}]}]}],response_format:{type:"audio"},generation_config:{speech_config:[{voice:cfg.gvoz}]}}}}
+  function tentarRota(k,texto){var c=corpoTTS(ROTAS[k],texto);
+    return timeout(fetch(c.url,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(c.body)}),30000)
       .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok,status:r.status,j:j}})})
       .then(function(x){
-        if(x.ok){var a=acharAudio(x.j,0);if(!a)throw new Error("O Gemini não devolveu áudio.");
-          return/l16|pcm/i.test(a.mime)?pcmWav(a.data):b64blob(a.data,a.mime||"audio/wav")}
-        if(x.status===400&&comEstilo)return geminiAudio(txt,false);
-        if(x.status===404&&gIdx+1<GTTS.length){gIdx++;return geminiAudio(txt,comEstilo)}
-        var e=new Error(x.status===429?"Limite gratuito da voz do Gemini atingido por agora.":x.status===403||x.status===401?"A chave do Gemini não tem acesso à voz neural.":"A voz do Gemini não respondeu ("+x.status+").");e.status=x.status;throw e})}
+        if(x.ok){var a=acharAudio(x.j,0);if(a)return/l16|pcm/i.test(a.mime)?pcmWav(a.data):b64blob(a.data,a.mime||"audio/wav");x.status=0}
+        var msg=((x.j&&x.j.error&&x.j.error.message)||"sem áudio na resposta").slice(0,140),e=new Error(msg);e.status=x.status;throw e})}
+  function geminiAudio(txt){
+    var texto=limparFala(txt).replace(/\s+/g," ").trim(),chave=cfg.gvoz+"|"+texto;
+    for(var c=0;c<cacheVoz.length;c++)if(cacheVoz[c][0]===chave)return Promise.resolve(cacheVoz[c][1]);
+    var ordem=[];if(rotaOk>=0)ordem.push(rotaOk);for(var k=0;k<ROTAS.length;k++)if(k!==rotaOk)ordem.push(k);
+    var ultimo=null;
+    function prox(n){if(n>=ordem.length){var e=new Error("A voz neural não está disponível para esta chave ("+(ultimo?(ultimo.status||"")+" "+ultimo.message:"sem resposta")+").");e.status=404;throw e}
+      var k=ordem[n];return tentarRota(k,texto).then(function(b){if(rotaOk!==k){rotaOk=k;try{localStorage.setItem("jarvis_tts_rota",String(k))}catch(e){}}
+          vozStatus="Voz neural funcionando ("+ROTAS[k][1]+").";cacheVoz.push([chave,b]);if(cacheVoz.length>12)cacheVoz.shift();return b},
+        function(e){if(e.status===429){var q=new Error("Limite gratuito da voz neural do Gemini atingido. Uso a voz do celular por 10 minutos.");q.status=429;throw q}
+          if(e.status===401){var a=new Error("A chave do Gemini foi recusada pela voz neural.");a.status=401;throw a}
+          if(!e.status&&/Failed to fetch|NetworkError|tempo|Load failed/i.test(e.message||""))throw e;
+          if(k===rotaOk){rotaOk=-1;try{localStorage.removeItem("jarvis_tts_rota")}catch(x){}}
+          ultimo=e;return prox(n+1)})}
+    return prox(0)}
+  function avisoVoz(m){vozStatus=m;hint(m);var d=$("dica3d");if(d){d.textContent=m;d.style.color="var(--amber)"}try{$("vozInfo").textContent=descreverVoz()}catch(e){}}
   function tocar(blob,id){return new Promise(function(res,rej){if(id!==falaId){res();return}
     var url=URL.createObjectURL(blob);if(!audioEl)audioEl=new Audio();audioEl.src=url;
     var feito=false;function f(){if(feito)return;feito=true;try{URL.revokeObjectURL(url)}catch(e){}res()}
@@ -396,10 +415,10 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     if(muted||!txt||!String(txt).trim()){fim();return}
     speaking=true;setState("FALANDO");
     try{
-      if(geminiVozOk()){geminiAudio(txt,true).then(function(b){return tocar(b,id)}).then(fim,function(e){if(id!==falaId)return;
+      if(geminiVozOk()){geminiAudio(txt).then(function(b){return tocar(b,id)}).then(fim,function(e){if(id!==falaId)return;
           if(e&&e.status===429)gPausaAte=Date.now()+10*60*1000;
-          if(e&&(e.status===403||e.status===401||e.status===404))gPausaAte=Date.now()+60*60*1000;
-          if(!avisouG){avisouG=true;var em=(e&&e.message)||"";if(/Failed to fetch|NetworkError|tempo|Load failed/i.test(em))em="Sem conexão com a voz do Gemini.";hint(em+" Usando a voz do aparelho.")}
+          if(e&&(e.status===401||e.status===404))gPausaAte=Date.now()+30*60*1000;
+          if(!avisouG){avisouG=true;var em=(e&&e.message)||"";if(/Failed to fetch|NetworkError|tempo|Load failed/i.test(em))em="Sem conexão com a voz neural do Gemini.";avisoVoz(em+(/celular/.test(em)?"":" Usando a voz do celular."))}
           falarSistema(txt,id,fim)});return}
       falarSistema(txt,id,fim)}
     catch(e){fim()}}
