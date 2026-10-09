@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-1IAeK37dz88plkqlLhzqVt6JnfZXQcokYaBolb4Gzrw='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-UdL8TEFTuj0jMvxyyOmdGuT756mJDwgLa3KldYxyvOc='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com https://*.tts.speech.microsoft.com; media-src blob:; img-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Painel J.A.R.V.I.S.</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
@@ -78,10 +78,11 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
 /* ajustes */
 .cfg{background:var(--panel);border:1px solid var(--cyan-dim);padding:16px;display:flex;flex-direction:column;gap:12px}
 .cfg label{font-family:var(--mono);font-size:11px;letter-spacing:.15em;color:var(--muted);display:flex;flex-direction:column;gap:6px}
-.cfg input,.cfg textarea{font-family:var(--display);font-size:17px;color:var(--text);background:var(--bg);border:1px solid var(--cyan-dim);padding:10px;border-radius:2px;width:100%;box-sizing:border-box}
+.cfg input,.cfg textarea,.cfg select{font-family:var(--display);font-size:17px;color:var(--text);background:var(--bg);border:1px solid var(--cyan-dim);padding:10px;border-radius:2px;width:100%;box-sizing:border-box}
 .cfg textarea{min-height:96px;resize:vertical}
 .cfg input.secret{-webkit-text-security:disc;text-security:disc;font-family:var(--mono)}
-.cfg .row{display:flex;gap:8px;justify-content:flex-end}
+.cfg .row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.cfg hr{border:0;border-top:1px solid var(--cyan-dim);margin:4px 0;width:100%}
 .cfg a{color:var(--cyan)}
 .nojs{border:1px solid var(--red);color:#ffd0d0;background:rgba(255,107,107,.08);padding:12px 14px;font-size:16px;line-height:1.35;border-radius:2px}
 @keyframes fadeIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
@@ -115,7 +116,13 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     <label for="fCkey">CHAVE DA API DO CLAUDE (cérebro principal, opcional)<input id="fCkey" class="secret" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="sk-ant-…"></label>
     <label for="fKey">CHAVE DO GEMINI (cérebro reserva, gratuito)<input id="fKey" class="secret" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="AIza…"></label>
     <p class="muted">Gemini grátis em <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>. As chaves ficam salvas só neste celular e não aparecem de novo na tela. Deixe o campo vazio para manter a chave atual.</p>
-    <div class="row"><button class="icon-btn" type="button" id="btnWipe">APAGAR CHAVES</button><button class="icon-btn" type="button" id="btnRedo">REFAZER PERFIL</button><button class="icon-btn" type="button" id="btnCancel">FECHAR</button><button class="icon-btn on" type="button" id="btnSave">SALVAR</button></div>
+    <hr>
+    <label for="fAkey">CHAVE DA AZURE SPEECH (voz Antonio, a mesma do Jarvis Mark 1, opcional)<input id="fAkey" class="secret" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="chave do recurso Speech"></label>
+    <label for="fAreg">REGIÃO DA AZURE<input id="fAreg" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="ex.: brazilsouth"></label>
+    <p class="muted">Crie um recurso "Speech" no plano gratuito F0 em <a href="https://portal.azure.com" target="_blank" rel="noopener">portal.azure.com</a> e copie a chave e a região. O plano F0 não gera cobrança. Sem chave, uso a melhor voz instalada no aparelho.</p>
+    <label for="fVoz">VOZ DO APARELHO (usada sem chave da Azure ou se ela falhar)<select id="fVoz"></select></label>
+    <p class="hint" id="vozInfo"></p>
+    <div class="row"><button class="icon-btn" type="button" id="btnTestVoz">TESTAR VOZ</button><button class="icon-btn" type="button" id="btnWipe">APAGAR CHAVES</button><button class="icon-btn" type="button" id="btnRedo">REFAZER PERFIL</button><button class="icon-btn" type="button" id="btnCancel">FECHAR</button><button class="icon-btn on" type="button" id="btnSave">SALVAR</button></div>
     <p class="hint" id="saveMsg"></p>
   </div>
 
@@ -150,7 +157,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
 })();
 (function(){
   "use strict";
-  var DEFAULTS={trat:"Senhora",cidades:"São Paulo",rotinas:"",sobre:"",perfil:"",feito:"",key:"",ckey:""};
+  var DEFAULTS={trat:"Senhora",cidades:"São Paulo",rotinas:"",sobre:"",perfil:"",feito:"",key:"",ckey:"",akey:"",areg:"",voz:""};
   var storageOk=true;
   var cfg=load(), muted=false, talkMode=false, speaking=false, listening=false, thinking=false, busy=false;
   var entrevista=null;
@@ -232,18 +239,69 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     return Promise.all(ps).then(function(r){climaCache=r.filter(Boolean);return climaCache})}
 
   /* ---------- voz (saída) ---------- */
-  function vozPt(){try{var v=speechSynthesis.getVoices()||[];return v.find(function(x){return/pt[-_]BR/i.test(x.lang)})||v.find(function(x){return/^pt/i.test(x.lang)})||null}catch(e){return null}}
-  try{speechSynthesis.getVoices()}catch(e){}
+  /* Voz do Jarvis Mark 1: pt-BR-AntonioNeural (Azure Speech, mesma voz do Edge-TTS), velocidade +0%, tom natural.
+     Sem chave da Azure, ou se ela falhar, usa a melhor voz instalada no aparelho, dando preferência a vozes masculinas e neurais. */
+  function vozesPt(){try{return(speechSynthesis.getVoices()||[]).filter(function(x){return/^pt/i.test(x.lang)})}catch(e){return[]}}
+  function idVoz(v){return v.voiceURI||v.name}
+  function notaVoz(v){var n=norm(v.name+" "+(v.voiceURI||"")),s=0;
+    if(/antonio/.test(n))s+=100;
+    if(/natural|neural|online|premium|enhanced|aprimorad|network/.test(n))s+=40;
+    if(/daniel|felipe|ricardo|thiago|donato|fabio|humberto|julio|nicolau|valerio|male|masculin/.test(n))s+=30;
+    if(/google/.test(n))s+=15;
+    if(/pt[-_]br/i.test(v.lang))s+=10;
+    if(/compact|eloquence/.test(n))s-=30;
+    return s}
+  function vozSistema(){var vs=vozesPt();if(!vs.length)return null;
+    if(cfg.voz){var f=vs.find(function(v){return idVoz(v)===cfg.voz});if(f)return f}
+    return vs.slice().sort(function(a,b){return notaVoz(b)-notaVoz(a)})[0]}
+  function azureOk(){return!!(cfg.akey.trim()&&cfg.areg.trim())}
+  function descreverVoz(){var v=vozSistema();
+    return(azureOk()?"Voz principal: Antonio (Azure), igual à do Jarvis Mark 1. Reserva: ":"Voz atual: ")+(v?v.name:"padrão do aparelho")+"."}
+  function preencherVozes(){var sel=$("fVoz");if(!sel)return;var vs=vozesPt().slice().sort(function(a,b){return notaVoz(b)-notaVoz(a)});
+    sel.innerHTML="";var o=document.createElement("option");o.value="";o.textContent="Automática (melhor disponível)";sel.appendChild(o);
+    vs.forEach(function(v){var op=document.createElement("option");op.value=idVoz(v);op.textContent=v.name+" ("+v.lang+")";sel.appendChild(op)});
+    sel.value=cfg.voz&&vs.some(function(v){return idVoz(v)===cfg.voz})?cfg.voz:"";$("vozInfo").textContent=descreverVoz()}
+  try{speechSynthesis.getVoices();speechSynthesis.addEventListener("voiceschanged",function(){if(!$("cfg").hidden)preencherVozes()})}catch(e){}
   function limparFala(t){return t.replace(/[*_#`>]/g,"").replace(/\[(.*?)\]\(.*?\)/g,"$1").replace(/https?:\/\/\S+/g,"")}
+  /* blocos de até ~220 caracteres: fala contínua, sem esbarrar no corte de falas longas do Chrome */
+  function blocos(t){var s=limparFala(t).replace(/\s+/g," ").trim();if(!s)return[];var fr=s.match(/[^.!?;]+[.!?;]*\s*/g)||[s],out=[],cur="";
+    fr.forEach(function(f){if(cur&&(cur+f).length>220){out.push(cur.trim());cur=""}cur+=f});if(cur.trim())out.push(cur.trim());return out}
+  var falaId=0,audioEl=null,avisouAzure=false;
+  function pararFala(){falaId++;try{speechSynthesis.cancel()}catch(e){}try{if(audioEl)audioEl.pause()}catch(e){}speaking=false;setState("")}
+  function falarSistema(txt,id,fim){
+    if(!("speechSynthesis" in window)){fim();return}
+    var partes=blocos(txt),i=0,v=vozSistema();
+    (function prox(){if(id!==falaId)return;if(i>=partes.length||muted){fim();return}
+      var u=new SpeechSynthesisUtterance(partes[i++]);u.lang=v?v.lang:"pt-BR";u.rate=1;u.pitch=1;if(v)u.voice=v;
+      var feito=false;function f(){if(feito)return;feito=true;prox()}
+      u.onend=f;u.onerror=f;setTimeout(f,Math.max(5000,u.text.length*110));speechSynthesis.speak(u)})()}
+  function xmlEsc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+  function falarAzure(txt,id){
+    var ssml='<speak version="1.0" xml:lang="pt-BR"><voice name="pt-BR-AntonioNeural"><prosody rate="+0%">'+xmlEsc(limparFala(txt).replace(/\s+/g," ").trim())+'</prosody></voice></speak>';
+    return timeout(fetch("https://"+cfg.areg.trim()+".tts.speech.microsoft.com/cognitiveservices/v1",{method:"POST",
+      headers:{"Ocp-Apim-Subscription-Key":cfg.akey.trim(),"Content-Type":"application/ssml+xml","X-Microsoft-OutputFormat":"audio-24khz-96kbitrate-mono-mp3"},body:ssml}),15000)
+      .then(function(r){if(!r.ok){throw new Error(r.status===401||r.status===403?"A chave da Azure foi recusada. Confira chave e região em AJUSTES.":r.status===429?"Limite gratuito da Azure atingido por agora.":"A Azure não gerou a voz ("+r.status+").")}return r.blob()})
+      .then(function(b){if(id!==falaId)return;return new Promise(function(res,rej){
+        var url=URL.createObjectURL(b);if(!audioEl)audioEl=new Audio();audioEl.src=url;
+        var feito=false;function f(){if(feito)return;feito=true;try{URL.revokeObjectURL(url)}catch(e){}res()}
+        audioEl.onended=f;audioEl.onerror=f;audioEl.onpause=function(){if(id!==falaId)f()};
+        var p=audioEl.play();if(p&&p.catch)p.catch(function(e){if(feito)return;feito=true;try{URL.revokeObjectURL(url)}catch(x){}rej(new Error("O navegador bloqueou o áudio. Toque no reator uma vez."))})})})}
   function falar(txt,depois){
-    if(muted||!("speechSynthesis" in window)){if(depois)depois();return}
-    try{speechSynthesis.cancel();var partes=limparFala(txt).match(/[^.!?;]+[.!?;]*/g)||[txt];var i=0;speaking=true;setState("FALANDO");
-      (function prox(){if(i>=partes.length||muted){speaking=false;setState("");if(depois)depois();return}
-        var u=new SpeechSynthesisUtterance(partes[i++].trim());u.lang="pt-BR";u.rate=1.02;u.pitch=.9;var v=vozPt();if(v)u.voice=v;
-        var feito=false;function fim(){if(feito)return;feito=true;prox()}
-        u.onend=fim;u.onerror=fim;setTimeout(fim,Math.max(4000,u.text.length*120));speechSynthesis.speak(u)})()}
-    catch(e){speaking=false;setState("");if(depois)depois()}}
-  function destravarVoz(){try{var u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}catch(e){}}
+    pararFala();var id=falaId;
+    function fim(){if(id!==falaId)return;speaking=false;setState("");if(depois)depois()}
+    if(muted||!txt||!String(txt).trim()){fim();return}
+    speaking=true;setState("FALANDO");
+    try{
+      if(azureOk()){falarAzure(txt,id).then(fim,function(e){if(id!==falaId)return;if(!avisouAzure){avisouAzure=true;var em=(e&&e.message)||"";if(/Failed to fetch|NetworkError|tempo|Load failed/i.test(em))em="Sem conexão com a voz da Azure.";hint(em+" Usando a voz do aparelho.")}falarSistema(txt,id,fim)});return}
+      falarSistema(txt,id,fim)}
+    catch(e){fim()}}
+  /* libera áudio e voz no primeiro toque (exigência do celular para tocar som depois de uma espera de rede) */
+  function silencio(){var n=800,b=new ArrayBuffer(44+n*2),d=new DataView(b);function w(o,s){for(var i=0;i<s.length;i++)d.setUint8(o+i,s.charCodeAt(i))}
+    w(0,"RIFF");d.setUint32(4,36+n*2,true);w(8,"WAVE");w(12,"fmt ");d.setUint32(16,16,true);d.setUint16(20,1,true);d.setUint16(22,1,true);d.setUint32(24,16000,true);d.setUint32(28,32000,true);d.setUint16(32,2,true);d.setUint16(34,16,true);w(36,"data");d.setUint32(40,n*2,true);
+    return URL.createObjectURL(new Blob([b],{type:"audio/wav"}))}
+  var audioLiberado=false;
+  function destravarVoz(){try{var u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}catch(e){}
+    if(!audioLiberado){try{if(!audioEl)audioEl=new Audio();audioEl.src=silencio();var p=audioEl.play();audioLiberado=true;if(p&&p.catch)p.catch(function(){audioLiberado=false})}catch(e){}}}
 
   /* ---------- voz (entrada) ---------- */
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -251,7 +309,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     if(busy)return;
     if(!SR||micBlocked){$("ask").focus();hint("Use o microfone do teclado para ditar e toque em ENVIAR.");return}
     if(listening){try{recog.stop()}catch(e){}return}
-    try{speechSynthesis.cancel()}catch(e){}speaking=false;
+    pararFala();
     try{recog=new SR();recog.lang="pt-BR";recog.interimResults=true;recog.maxAlternatives=1;recog.continuous=false}catch(e){micBlocked=true;ouvir();return}
     var final="";
     recog.onstart=function(){listening=true;$("btnMic").classList.add("live");setState("OUVINDO")};
@@ -406,26 +464,30 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   bind($("btnReplay"),iniciar);
   bind($("reactorBtn"),function(){destravarVoz();if(!started&&!seqOn){iniciar();return}if(started)ouvir()});
   bind($("btnMic"),function(){destravarVoz();ouvir()});
-  bind($("btnMute"),function(){muted=!muted;$("btnMute").textContent="VOZ: "+(muted?"OFF":"ON");$("btnMute").classList.toggle("on",muted);if(muted){try{speechSynthesis.cancel()}catch(e){}speaking=false;setState("")}});
+  bind($("btnMute"),function(){muted=!muted;$("btnMute").textContent="VOZ: "+(muted?"OFF":"ON");$("btnMute").classList.toggle("on",muted);if(muted)pararFala()});
   bind($("btnTalk"),function(){talkMode=!talkMode;$("btnTalk").textContent="CONVERSA: "+(talkMode?"ON":"OFF");$("btnTalk").classList.toggle("on",talkMode)});
   bind($("btnCfg"),function(){var f=$("cfg");f.hidden=!f.hidden;$("saveMsg").textContent="";
-    if(!f.hidden){$("fTrat").value=cfg.trat;$("fCid").value=cfg.cidades;$("fRot").value=cfg.rotinas;$("fSobre").value=cfg.sobre;$("fKey").value="";$("fCkey").value="";phKeys()}});
+    if(!f.hidden){$("fTrat").value=cfg.trat;$("fCid").value=cfg.cidades;$("fRot").value=cfg.rotinas;$("fSobre").value=cfg.sobre;$("fKey").value="";$("fCkey").value="";$("fAkey").value="";$("fAreg").value=cfg.areg;phKeys();preencherVozes()}});
+  $("fVoz").addEventListener("change",function(){cfg.voz=$("fVoz").value;$("vozInfo").textContent=descreverVoz()});
+  bind($("btnTestVoz"),function(){destravarVoz();falar("Às suas ordens, "+cfg.trat+". Todos os sistemas estão online.")});
   bind($("btnCancel"),function(){$("cfg").hidden=true});
   bind($("btnSave"),function(){
     cfg.trat=$("fTrat").value.trim()||DEFAULTS.trat;cfg.cidades=$("fCid").value.trim()||DEFAULTS.cidades;cfg.rotinas=$("fRot").value;
     cfg.sobre=$("fSobre").value;
-    var nk=$("fKey").value.replace(/\s+/g,""),nc=$("fCkey").value.replace(/\s+/g,"");
+    var lk=function(id){return $(id).value.replace(/[\s\u200B-\u200D\u2060\uFEFF"'`«»“”‘’]/g,"")};var nk=lk("fKey"),nc=lk("fCkey"),na=lk("fAkey"),nr=$("fAreg").value.replace(/\s+/g,"").toLowerCase();
+    if(na&&!/^[A-Za-z0-9]{32,}$/.test(na)){$("saveMsg").textContent="Isso não parece uma chave da Azure Speech. Nada foi salvo.";$("saveMsg").style.color="var(--red)";return}
+    if(nr&&!/^[a-z0-9]{3,30}$/.test(nr)){$("saveMsg").textContent="Região da Azure inválida (ex.: brazilsouth). Nada foi salvo.";$("saveMsg").style.color="var(--red)";return}
     if(nc&&!/^sk-ant-[\w-]{20,}$/.test(nc)){$("saveMsg").textContent="Isso não parece uma chave do Claude (começa com sk-ant-). Nada foi salvo.";$("saveMsg").style.color="var(--red)";return}
-    if(nk&&!/^AIza[\w-]{30,}$/.test(nk)){$("saveMsg").textContent="Isso não parece uma chave do Gemini (começa com AIza). Nada foi salvo.";$("saveMsg").style.color="var(--red)";return}
-    if(nc)cfg.ckey=nc;if(nk)cfg.key=nk;$("fKey").value="";$("fCkey").value="";phKeys();
+    if(nk&&!/^[\w.-]{30,}$/.test(nk)){$("saveMsg").textContent="Isso não parece uma chave do Gemini (curta demais ou com caracteres estranhos). Copie de novo pelo botão de copiar do AI Studio. Nada foi salvo.";$("saveMsg").style.color="var(--red)";return}
+    if(nc)cfg.ckey=nc;if(nk)cfg.key=nk;if(na)cfg.akey=na;cfg.areg=nr;cfg.voz=$("fVoz").value;avisouAzure=false;$("fKey").value="";$("fCkey").value="";$("fAkey").value="";phKeys();$("vozInfo").textContent=descreverVoz();
     if(cfg.perfil){cfg.perfil=cfg.perfil.replace(/^Tratamento:.*$/m,"Tratamento: "+cfg.trat)}
     var ok=save();tick();tagCerebro();
     $("saveMsg").textContent=ok?"Salvo neste celular.":MSG_NAO_SALVA;$("saveMsg").style.color=ok?"var(--amber)":"var(--red)";
     if(ok)setTimeout(function(){$("cfg").hidden=true;$("saveMsg").textContent=""},1200);
     if(started)buildCards()});
   function fim4(k){return k?"salva, termina em …"+k.slice(-4):""}
-  function phKeys(){$("fCkey").placeholder=cfg.ckey?fim4(cfg.ckey):"sk-ant-…";$("fKey").placeholder=cfg.key?fim4(cfg.key):"AIza…"}
-  bind($("btnWipe"),function(){cfg.key="";cfg.ckey="";var ok=save();phKeys();tagCerebro();$("saveMsg").textContent=ok?"Chaves apagadas deste celular.":MSG_NAO_SALVA;$("saveMsg").style.color=ok?"var(--amber)":"var(--red)"});
+  function phKeys(){$("fCkey").placeholder=cfg.ckey?fim4(cfg.ckey):"sk-ant-…";$("fKey").placeholder=cfg.key?fim4(cfg.key):"AIza…";$("fAkey").placeholder=cfg.akey?fim4(cfg.akey):"chave do recurso Speech"}
+  bind($("btnWipe"),function(){cfg.key="";cfg.ckey="";cfg.akey="";var ok=save();phKeys();tagCerebro();$("saveMsg").textContent=ok?"Chaves apagadas deste celular.":MSG_NAO_SALVA;$("saveMsg").style.color=ok?"var(--amber)":"var(--red)"});
   bind($("btnRedo"),function(){$("cfg").hidden=true;cfg.feito="";save();$("chat").hidden=false;$("btnStart").hidden=true;$("btnReplay").hidden=false;started=true;destravarVoz();iniciarEntrevista()});
   bind($("btnSend"),function(){destravarVoz();perguntar($("ask").value)});
   $("ask").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();destravarVoz();perguntar($("ask").value)}});
