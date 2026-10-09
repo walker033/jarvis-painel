@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-gF2FUlyfvWEwAMrAPC/qgzbcI4l3EfKfyoOQOAKo8EE='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-8QtILbnXN1HsicK5L4GZwknOOQG74tsT1BN9Dinv//k='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Painel J.A.R.V.I.S.</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
@@ -340,7 +340,8 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     if(cfg.voz){var f=vs.find(function(v){return idVoz(v)===cfg.voz});if(f)return f}
     return vs.slice().sort(function(a,b){return notaVoz(b)-notaVoz(a)})[0]}
   var GVOZES=[["Charon","Charon: grave e informativo (padrão)"],["Orus","Orus: firme"],["Iapetus","Iapetus: claro"],["Algenib","Algenib: rouco"],["Sadaltager","Sadaltager: culto"],["Rasalgethi","Rasalgethi: informativo"],["Alnilam","Alnilam: firme"],["","Desligada (só voz do aparelho)"]];
-  var gPausaAte=0,avisouG=false;
+  var gPausaAte=0,avisouG=false;try{gPausaAte=+localStorage.getItem("jarvis_voz_pausa")||0}catch(e){}
+  function pausaVoz(ms){gPausaAte=ms?Date.now()+ms:0;try{localStorage.setItem("jarvis_voz_pausa",String(gPausaAte))}catch(e){}}
   function geminiVozOk(){return!!(cfg.key.trim()&&cfg.gvoz&&Date.now()>gPausaAte)}
   function descreverVoz(){var v=vozSistema();
     return(cfg.key.trim()&&cfg.gvoz?"Voz principal: "+cfg.gvoz+" (Gemini). Reserva: ":"Voz atual: ")+(v?v.name:"padrão do aparelho")+"."+(vozStatus?" "+vozStatus:"")}
@@ -413,9 +414,9 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     if(muted||!txt||!String(txt).trim()){fim();return}
     speaking=true;setState("FALANDO");
     try{
-      if(!simples&&geminiVozOk()){geminiAudio(txt).then(function(b){return tocar(b,id)}).then(fim,function(e){if(id!==falaId)return;
-          if(e&&e.status===429){gPausaAte=Date.now()+(e.lim&&e.lim.dia?6*3600:Math.max(20,(e.lim&&e.lim.seg)||60))*1000;if(!(e.lim&&e.lim.dia))avisouG=false}
-          if(e&&(e.status===401||e.status===404))gPausaAte=Date.now()+30*60*1000;
+      if(geminiVozOk()){geminiAudio(txt).then(function(b){return tocar(b,id)}).then(fim,function(e){if(id!==falaId)return;
+          if(e&&e.status===429){pausaVoz((e.lim&&e.lim.dia?6*3600:Math.max(20,(e.lim&&e.lim.seg)||60))*1000);if(!(e.lim&&e.lim.dia))avisouG=false}
+          if(e&&(e.status===401||e.status===404))pausaVoz(30*60*1000);
           if(!avisouG){avisouG=true;var em=(e&&e.message)||"";if(/Failed to fetch|NetworkError|tempo|Load failed/i.test(em))em="Sem conexão com a voz neural do Gemini.";avisoVoz(em+(/celular/.test(em)?"":" Usando a voz do celular."))}
           falarSistema(txt,id,fim)});return}
       falarSistema(txt,id,fim)}
@@ -456,7 +457,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     try{var rw=resumoWidgets();if(rw)c+="Widgets da usuária (notas, tarefas, contagens): "+rw+"\n"}catch(e){}
     if(cfg.perfil.trim())c+="\nPERFIL DA USUÁRIA (use para personalizar tudo):\n"+cfg.perfil.trim()+"\n";
     if(cfg.sobre.trim())c+="Outras informações: "+cfg.sobre.trim()+"\n";
-    c+="\nO painel tem pesquisa na web (ela diz \"pesquise ...\"), widgets de relógio, contagem, notas, tarefas e clima (botão + WIDGET), e \"anote ...\" grava no bloco de notas.\n";
+    c+="\nVocê tem acesso à pesquisa do Google nesta conversa: quando precisar de algo atual, pesquise você mesmo e responda direto. Nunca peça para ela usar a barra de busca nem para confirmar se pode pesquisar. O painel também tem widgets (relógio, contagem, notas, tarefas, clima) e \"anote ...\" grava no bloco de notas.\n";
     c+="\nComandos: se ela pedir briefing ou relatório, dê saudação, hora por extenso, \"Todos os sistemas estão online.\", clima (chuva só se acima de 30%) e rotinas do dia. Para notícias, trânsito, resultados ou qualquer coisa atual, pesquise antes de responder. \"Jarvis, encerrar\": responda \"Até logo,\" e o tratamento.\n";
     return c}
   function cerebro(){return cfg.ckey.trim()?"api":sampleFn?"claude":(cfg.key.trim()?"gemini":null)}
@@ -501,13 +502,14 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     function tentar(i,comBusca){if(i>=lista.length){
         if(ultimo429){var d=ultimo429.dia,e=new Error(d?"A cota diária gratuita do Gemini acabou em todos os modelos. Ela renova amanhã.":"O Gemini está no limite por minuto. Espere uns segundos e fale de novo.");e.status=429;throw e}
         throw new Error("Nenhum modelo do Gemini respondeu. Confira a chave em AJUSTES.")}
-      var m=lista[i],body={system_instruction:{parts:[{text:o.sistema}]},contents:o.contents,generationConfig:{temperature:o.temp==null?.6:o.temp,maxOutputTokens:o.tokens||500}};
+      var m=lista[i],body={system_instruction:{parts:[{text:o.sistema}]},contents:o.contents,generationConfig:{temperature:o.temp==null?.6:o.temp,maxOutputTokens:o.tokens||2048}};
       if(comBusca)body.tools=[{google_search:{}}];
       return timeout(fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(body)}),o.busca?40000:25000)
         .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok,status:r.status,j:j}})})
         .then(function(x){
           if(x.ok){var c=(x.j.candidates&&x.j.candidates[0])||{},t=((c.content&&c.content.parts)||[]).map(function(q){return q.text||""}).join("").trim(),f=[],vistos={};
             ((c.groundingMetadata&&c.groundingMetadata.groundingChunks)||[]).forEach(function(k){if(k.web&&k.web.uri&&!vistos[k.web.uri]){vistos[k.web.uri]=1;f.push({t:k.web.title||k.web.uri,u:k.web.uri})}});
+            if(t&&c.finishReason==="MAX_TOKENS"&&!/[.!?…]["”)]?\s*$/.test(t))t=t.replace(/[,;:\s]+$/,"")+"…";
             if(t)return{texto:t,fontes:f,modelo:m};return tentar(i+1,comBusca)}
           if(x.status===429){var li=infoLimite(x.j);
             if(comBusca&&!o.busca)return tentar(i,false);
@@ -519,7 +521,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     return tentar(0,!!o.busca||!!o.buscaSeAjudar).catch(function(e){if(e&&/Failed to fetch|NetworkError|tempo/i.test(e.message))throw new Error("Sem conexão com o Gemini agora.");throw e})}
   function viaGemini(msgs){
     var contents=msgs.map(function(m){return{role:m.role==="assistant"?"model":"user",parts:[{text:m.content}]}}),ult=msgs[msgs.length-1];
-    return geminiGerar({sistema:contexto(),contents:contents,buscaSeAjudar:precisaBusca(ult&&ult.content),tokens:500}).then(function(r){return r.texto})}
+    return geminiGerar({sistema:contexto(),contents:contents,buscaSeAjudar:true,tokens:2048}).then(function(r){return r.texto})}
 
   /* lê a resposta 429 do Google: cota diária ou por minuto, e quanto esperar */
   function infoLimite(j){var d=(j&&j.error&&j.error.details)||[],dia=false,seg=0;
@@ -619,14 +621,15 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   bind($("btnTroca"),function(){destravarVoz();
     if(!cfg.key.trim()){rotuloTroca();var m="As vozes neurais usam a chave do Gemini. Cole a chave em AJUSTES; por enquanto uso a voz do aparelho.";hint(m);falar(m,null,true);return}
     var ids=GVOZES.map(function(x){return x[0]}),i=ids.indexOf(cfg.gvoz);cfg.gvoz=ids[(i+1)%ids.length];
-    avisouG=false;gPausaAte=0;save();rotuloTroca();if($("fGvoz"))$("fGvoz").value=cfg.gvoz;$("vozInfo").textContent=descreverVoz();
+    avisouG=false;pausaVoz(0);save();rotuloTroca();if($("fGvoz"))$("fGvoz").value=cfg.gvoz;$("vozInfo").textContent=descreverVoz();
     var nome=cfg.gvoz||"do aparelho";hint("Timbre: "+(GVOZES.filter(function(x){return x[0]===cfg.gvoz})[0]||["",nome])[1]);
     falar("Voz "+nome+" ativada. Às suas ordens, "+cfg.trat+".")});
   rotuloTroca();
+  if(cfg.key.trim()&&cfg.gvoz&&gPausaAte>Date.now()){var hrs=Math.ceil((gPausaAte-Date.now())/3600000);avisouG=true;setTimeout(function(){avisoVoz("Voz neural em pausa por limite gratuito (cerca de "+hrs+"h). Até lá, uso só a voz do celular. Para forçar nova tentativa, toque em TIMBRE.")},300)}
   bind($("btnTalk"),function(){talkMode=!talkMode;$("btnTalk").textContent="CONVERSA: "+(talkMode?"ON":"OFF");$("btnTalk").classList.toggle("on",talkMode)});
   bind($("btnCfg"),function(){var f=$("cfg");f.hidden=!f.hidden;$("saveMsg").textContent="";
     if(!f.hidden){$("fTrat").value=cfg.trat;$("fCid").value=cfg.cidades;$("fRot").value=cfg.rotinas;$("fSobre").value=cfg.sobre;$("fKey").value="";$("fCkey").value="";phKeys();preencherVozes()}});
-  $("fGvoz").addEventListener("change",function(){cfg.gvoz=$("fGvoz").value;avisouG=false;gPausaAte=0;$("vozInfo").textContent=descreverVoz();rotuloTroca()});
+  $("fGvoz").addEventListener("change",function(){cfg.gvoz=$("fGvoz").value;avisouG=false;pausaVoz(0);$("vozInfo").textContent=descreverVoz();rotuloTroca()});
   $("fVoz").addEventListener("change",function(){cfg.voz=$("fVoz").value;$("vozInfo").textContent=descreverVoz()});
   bind($("btnTestVoz"),function(){destravarVoz();falar("Às suas ordens, "+cfg.trat+". Todos os sistemas estão online.")});
   bind($("btnCancel"),function(){$("cfg").hidden=true});
@@ -636,7 +639,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     var lk=function(id){return $(id).value.replace(/[\s\u200B-\u200D\u2060\uFEFF"'`«»“”‘’]/g,"")};var nk=lk("fKey"),nc=lk("fCkey");
     if(nc&&!/^sk-ant-[\w-]{20,}$/.test(nc)){$("saveMsg").textContent="Isso não parece uma chave do Claude (começa com sk-ant-). Nada foi salvo.";$("saveMsg").style.color="var(--red)";return}
     if(nk&&!/^[\w.-]{30,}$/.test(nk)){$("saveMsg").textContent="Isso não parece uma chave do Gemini (curta demais ou com caracteres estranhos). Copie de novo pelo botão de copiar do AI Studio. Nada foi salvo.";$("saveMsg").style.color="var(--red)";return}
-    if(nc)cfg.ckey=nc;if(nk)cfg.key=nk;cfg.voz=$("fVoz").value;cfg.gvoz=$("fGvoz").value;avisouG=false;gPausaAte=0;$("fKey").value="";$("fCkey").value="";phKeys();$("vozInfo").textContent=descreverVoz();
+    if(nc)cfg.ckey=nc;if(nk)cfg.key=nk;cfg.voz=$("fVoz").value;cfg.gvoz=$("fGvoz").value;avisouG=false;pausaVoz(0);$("fKey").value="";$("fCkey").value="";phKeys();$("vozInfo").textContent=descreverVoz();
     if(cfg.perfil){cfg.perfil=cfg.perfil.replace(/^Tratamento:.*$/m,"Tratamento: "+cfg.trat)}
     var ok=save();tick();tagCerebro();rotuloTroca();
     $("saveMsg").textContent=ok?"Salvo neste celular.":MSG_NAO_SALVA;$("saveMsg").style.color=ok?"var(--amber)":"var(--red)";
@@ -659,7 +662,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
 
   /* ---------- pesquisa na web, dentro do painel ---------- */
   function sisBusca(){var d=new Date();return"Você é o J.A.R.V.I.S. Pesquise na web e responda em português do Brasil, em texto corrido de até 6 frases, sem markdown, sem listas e sem links no texto. Em notícias, diga a data dos fatos. Se as fontes divergirem ou não houver informação confiável, diga isso em vez de inventar. Hoje é "+DIAS[d.getDay()]+", "+d.getDate()+" de "+MESES[d.getMonth()]+" de "+d.getFullYear()+"."}
-  function buscaGemini(q){return geminiGerar({sistema:sisBusca(),contents:[{role:"user",parts:[{text:q}]}],busca:true,tokens:1500,temp:.3}).then(function(r){return{texto:limparFala(r.texto).trim(),fontes:r.fontes}})}
+  function buscaGemini(q){return geminiGerar({sistema:sisBusca(),contents:[{role:"user",parts:[{text:q}]}],busca:true,tokens:4096,temp:.3}).then(function(r){return{texto:limparFala(r.texto).trim(),fontes:r.fontes}})}
   function buscaClaude(q){
     function tentar(modelo){var body={model:modelo,max_tokens:1500,system:sisBusca(),messages:[{role:"user",content:q}],
         tools:[{type:"web_search_20250305",name:"web_search",max_uses:4,user_location:{type:"approximate",city:"São Paulo",country:"BR",timezone:"America/Sao_Paulo"}}]};
