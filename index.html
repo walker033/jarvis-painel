@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-EW1nbWEH3KENSVShDLuDUHixTf9lsGzm7klxlFJdQfA='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OpmdXJJzLove/JW+K5gZ5VB4REDMo2E3JRgt0M6jnIw='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Painel J.A.R.V.I.S.</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -211,6 +211,34 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
 .ok-t{color:#7dffb0}.erro-t{color:var(--red)}
 .linhas{display:flex;flex-direction:column;gap:8px}
 .linha{border-left:2px solid var(--cyan-dim);padding:4px 8px;font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+.ficha{display:flex;flex-direction:column;gap:4px}
+.ficha h3{margin:0;font-size:21px;color:#fff;letter-spacing:.02em}
+.ficha h5{margin:10px 0 2px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--amber);font-weight:400}
+.ficha p{margin:0;font-size:14px;line-height:1.4;overflow-wrap:anywhere}
+.ficha p b{color:var(--cyan);font-weight:600}
+.ficha details{font-size:13px;color:var(--muted)}
+.ficha details summary{padding:4px 0}
+.efeito{white-space:pre-wrap;font-size:13px;line-height:1.4;color:var(--muted);margin:0}
+.prog{display:flex;flex-wrap:wrap;gap:4px 14px}
+.prog label{font-size:13px;letter-spacing:.06em}
+.grupo{border:1px solid var(--cyan-dim);padding:4px 10px}
+.item-chk{display:flex!important;flex-direction:row!important;align-items:flex-start;gap:10px!important;padding:6px 0;font-family:var(--display)!important;font-size:14px!important;letter-spacing:0!important;color:var(--text)!important;line-height:1.35}
+.item-chk input{width:20px!important;height:20px;flex:none;accent-color:var(--amber);margin:0}
+.item-chk span{flex:1;overflow-wrap:anywhere}
+.item-chk.feito span{color:var(--muted);text-decoration:line-through}
+.freq{flex:none;background:none;border:1px solid var(--cyan-dim);color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:3px 6px;border-radius:2px;cursor:pointer}
+.nomes-t{display:flex;flex-wrap:wrap;gap:6px}
+.nomes-t button{font-family:var(--display);font-size:13px;color:var(--text);background:var(--bg);border:1px solid var(--cyan-dim);border-radius:999px;padding:5px 10px;cursor:pointer}
+.reset{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--cyan-dim);padding-top:8px}
+.conta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-start!important}
+.conta input{width:62px!important;padding:8px!important;text-align:center}
+.conta span{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.conta .icon-btn{margin-left:auto}
+.lnk{background:none;border:0;padding:0;margin:0;font:inherit;color:var(--text);text-decoration:underline dotted var(--cyan-dim);text-underline-offset:3px;cursor:pointer}
+.linha p{margin:2px 0}
+.linha p b{color:var(--cyan);font-weight:600}
+#gRes>*+*,#gTimesRes>*+*,#gArtRes>*+*,#gTierRes>*+*,#gCheckRes>*+*{margin-top:8px}
+.reset .sub{color:var(--text)}
 .linha b{color:var(--muted);font-weight:600}
 .linha .aba-n{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--amber)}
 @keyframes fadeIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
@@ -362,15 +390,26 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     <h4 class="sec">JOGOS</h4>
     <div class="abas" id="gAbas"><button class="icon-btn on" type="button" data-aba="gMff">FUTURE FIGHT</button><button class="icon-btn" type="button" data-aba="gSnap">MARVEL SNAP</button></div>
     <div class="aba" id="gMff">
-      <p class="muted">Base: <a href="https://docs.google.com/spreadsheets/d/1H0Hcl9oVZV9gA266xkJAqPv5bD1qwqhC5NeVbLj_-FE/edit" target="_blank" rel="noopener noreferrer">Cynicalex Mega Guides</a>, de CynicalEx e colaboradores. Baixe a sua cópia (Arquivo, Fazer download, Microsoft Excel) e importe aqui. O guia fica só neste celular; para a IA vão só as linhas que interessam à pergunta.</p>
+      <p class="muted">Base: <a href="https://docs.google.com/spreadsheets/d/1H0Hcl9oVZV9gA266xkJAqPv5bD1qwqhC5NeVbLj_-FE/edit" target="_blank" rel="noopener noreferrer">Cynicalex Mega Guides</a>, de CynicalEx e colaboradores. Importe uma vez a sua cópia (no computador: Arquivo, Fazer download, Microsoft Excel). O guia fica só neste celular; para a IA vão só as linhas que interessam à pergunta.</p>
       <div class="row"><button class="icon-btn on" type="button" id="gImp">IMPORTAR GUIA (.XLSX OU .CSV)</button><input type="file" id="gArq" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden></div>
       <p class="hint" id="gInfo"></p>
-      <div class="bar"><input id="gQ" placeholder="Ex.: melhor uniforme do Thor" autocomplete="off" enterkeyhint="search"><button class="send" type="button" id="gBuscar">BUSCAR</button></div>
-      <div id="gRes"></div>
-      <h4 class="sec">LEMBRETES DO JOGO</h4>
-      <p class="muted">Reset semanal dos modos competitivos: quinta, 22h (Brasília). O horário do reset diário diverge entre as fontes; confira no jogo e anote abaixo.</p>
-      <label for="gDiario">RESET DIÁRIO<input id="gDiario" type="time"></label>
-      <div class="row"><button class="icon-btn" type="button" id="gSemanal">SEMANAL NA AGENDA</button><button class="icon-btn" type="button" id="gDiarioBtn">DIÁRIO NA AGENDA</button></div>
+      <div class="abas" id="gSub"><button class="icon-btn on" type="button" data-v="pers">PERSONAGEM</button><button class="icon-btn" type="button" data-v="times">TIMES</button><button class="icon-btn" type="button" data-v="art">ARTEFATOS</button><button class="icon-btn" type="button" data-v="tier">TIER LIST</button><button class="icon-btn" type="button" data-v="check">CHECKLIST</button></div>
+      <div class="aba" id="gvpers">
+        <div class="bar"><input id="gQ" list="gNomes" placeholder="Personagem ou pergunta (ex.: Thor)" autocomplete="off" enterkeyhint="search"><button class="send" type="button" id="gBuscar">VER</button></div>
+        <datalist id="gNomes"></datalist>
+        <div id="gRes"></div>
+      </div>
+      <div class="aba" id="gvtimes" hidden><label for="gModo">MODO<select id="gModo"></select></label><div id="gTimesRes"></div></div>
+      <div class="aba" id="gvart" hidden><div class="bar"><input id="gArtQ" placeholder="Filtrar por personagem, artefato ou efeito" autocomplete="off" enterkeyhint="search"></div><div id="gArtRes"></div></div>
+      <div class="aba" id="gvtier" hidden><div id="gTierRes"></div></div>
+      <div class="aba" id="gvcheck" hidden>
+        <p class="hint" id="gCheckInfo"></p>
+        <div id="gCheckRes"></div>
+        <div class="bar"><input id="gCheckNovo" placeholder="Outro item (ex.: Danger Room)" autocomplete="off" enterkeyhint="done"><button class="send" type="button" id="gCheckAdd">+</button></div>
+      </div>
+      <h4 class="sec">HORÁRIOS DO JOGO</h4>
+      <p class="muted">Cada horário sai da contagem que o próprio jogo mostra: digite quanto falta e o Jarvis calcula a hora exata. Se o jogo mudar o horário, acerte de novo.</p>
+      <div id="gResets"></div>
     </div>
     <div class="aba" id="gSnap" hidden>
       <label for="sCod">CÓDIGO DO DECK<textarea id="sCod" placeholder="Cole aqui o código copiado no jogo"></textarea></label>
@@ -378,9 +417,10 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
       <div id="sRes"></div>
       <label for="sNomes">MONTAR CÓDIGO (12 cartas em inglês, uma por linha)<textarea id="sNomes"></textarea></label>
       <div class="row"><button class="icon-btn" type="button" id="sGerar">GERAR CÓDIGO</button></div>
-      <h4 class="sec">LEMBRETES DO JOGO</h4>
-      <p class="muted">Missões diárias renovam às 16h (Brasília). A temporada troca na primeira terça do mês, provavelmente no mesmo horário. Ajustes de equilíbrio costumam sair às quintas, sem frequência fixa.</p>
-      <div class="row"><button class="icon-btn" type="button" id="sDiario">RESET NA AGENDA</button><button class="icon-btn" type="button" id="sTemp">FIM DA TEMPORADA</button><button class="icon-btn" type="button" id="sNews">NOVIDADES DA SEMANA</button></div>
+      <h4 class="sec">HORÁRIOS DO JOGO</h4>
+      <p class="muted">O reset diário segue as notas oficiais do jogo. O fim da temporada sai da contagem do passe de temporada: digite quanto falta e o Jarvis calcula a data e a hora.</p>
+      <div id="sResets"></div>
+      <div class="row"><button class="icon-btn" type="button" id="sNews">NOVIDADES DA SEMANA</button></div>
     </div>
     <div class="row"><button class="icon-btn" type="button" id="gFechar">FECHAR</button></div>
   </div>
@@ -433,7 +473,7 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
 (function(){
   "use strict";
   var DEFAULTS={trat:"Senhora",cidades:"São Paulo",rotinas:"",sobre:"",perfil:"",feito:"",key:"",ckey:"",voz:"",gvoz:"Charon",widgets:"[]",intro:"",avisos:"",lembretes:"[]",
-    sigilo:"",gplano:"gratis",nomes:"",estudo:"{}",focolog:"[]",prazoscfg:"{}",termo:"{}",gdiario:""};
+    sigilo:"",gplano:"gratis",nomes:"",estudo:"{}",focolog:"[]",prazoscfg:"{}",termo:"{}",gresets:"{}",mffcheck:"{}",mffprog:"{}"};
   var storageOk=true;
   var cfg=load(), muted=false, talkMode=false, speaking=false, listening=false, thinking=false, busy=false;
   var entrevista=null;
@@ -1245,7 +1285,7 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     ["Prazos","\"prazo de 15 dias a partir de 19/11\", ou MENU, PRAZOS. Marque uma vez os feriados do seu tribunal."],
     ["Sigilo","MENU, SIGILOSO: bloqueia a chave gratuita e mascara CPF, processo e nomes antes de enviar."],
     ["Estudo","MENU, ESTUDO: cartões com revisão espaçada, lei seca em áudio e questões certo ou errado sem IA. \"Pomodoro de constitucional\" soma horas na meta da matéria."],
-    ["Jogos","\"no MFF, melhor uniforme do Thor\" consulta a sua cópia do guia do CynicalEx; em JOGOS, códigos de deck do Marvel Snap."],
+    ["Jogos","\"melhor uniforme do Thor\" abre a ficha do personagem no guia do CynicalEx que você importou; \"no MFF, time contra Knull\" mostra os times; \"no MFF, o que fazer hoje\" lê o checklist. Em JOGOS ficam também os códigos de deck e os horários do Marvel Snap."],
     ["Compartilhar","no app instalado, compartilhe um PDF ou uma foto com o Jarvis para resumir ou tirar datas e valores."],
     ["Agenda","\"o que tenho amanhã?\"; o botão AGENDA põe lembretes e prazos no Google Agenda, que avisa mesmo com o app fechado."],
     ["Modo mesa","dobre o Flip em L: relógio em cima, conversa embaixo, tela ligada."],["Cota","toque em J.A.R.V.I.S. no topo para ver o uso do Gemini hoje."]];
@@ -1326,6 +1366,8 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     if(/^(o que (eu )?tenho (para |pra )?amanha|minha agenda de amanha|agenda de amanha|e amanha|como (e|esta|fica) amanha)$/.test(s)){limpa(txt);dizerAmanha();return true}
     var pz=lerPrazoVoz(txt);if(pz){limpa(txt);calcularPorVoz(pz);return true}
     if(/^(?:no |sobre o |sobre )?(?:marvel future fight|future fight|mff)\b[\s,:-]*.{3,}$/.test(s)){limpa(txt);perguntarGuia(txt.replace(/^\s*(?:jarvis,?\s*)?(?:no |sobre o |sobre )?(?:marvel future fight|future fight|mff)\b[\s,:-]*/i,""),true);return true}
+    /* sem dizer "MFF": pergunta de montagem com nome de personagem do guia importado também vai para a ficha (zero chamada à IA) */
+    if(guia&&/\b(uniforme|iso ?8|ctp|artefato|obelisco|t4|t3|tier list)\b/.test(s)&&detectarPers(txt)){limpa(txt);perguntarGuia(txt,true);return true}
     var t=lerTimer(txt);if(t){limpa(txt);
       if(t.tipo==="foco"){var mm=/(?:pomodoro|foco)\s+(?:de|em)\s+(.+)$/i.exec(txt);if(mm&&!duracao(norm(mm[1]))){var e=lerE(),mat=mm[1].replace(/[.!?]+$/,"").trim();
         e.foco=mat.charAt(0).toUpperCase()+mat.slice(1);gravarE(e);dizer(iniciarTimer(t.ms,"Foco: "+e.foco,"foco"));return true}}
@@ -1713,11 +1755,15 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
       if(e.met!==8||!window.DecompressionStream)return Promise.reject(new Error("compressão não suportada neste navegador"));
       return new Response(new Blob([dados]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text()}}
   function colNum(ref){var m=/^([A-Z]+)/.exec(ref||""),n=0;if(!m)return-1;for(var i=0;i<m[1].length;i++)n=n*26+(m[1].charCodeAt(i)-64);return n-1}
-  function linhasDaAba(doc,strs){var out=[];Array.prototype.forEach.call(doc.getElementsByTagName("row"),function(r){var l=[],c0=0;
+  /* lê as linhas pela numeração da planilha e repete o valor das células mescladas (cabeçalho de tier que ocupa duas colunas, tier de conteúdo que ocupa várias linhas) */
+  function linhasDaAba(doc,strs){var rows={},n=0;Array.prototype.forEach.call(doc.getElementsByTagName("row"),function(r){var ri=parseInt(r.getAttribute("r"),10);if(!(ri>0))ri=n+1;n=ri;var l=[],c0=0;
       Array.prototype.forEach.call(r.getElementsByTagName("c"),function(c){var t=c.getAttribute("t"),v=c.getElementsByTagName("v")[0],val,col=colNum(c.getAttribute("r"));if(col<0)col=c0;c0=col+1;
         if(t==="s")val=strs[+(v&&v.textContent)]||"";else if(t==="inlineStr")val=Array.prototype.map.call(c.getElementsByTagName("t"),function(x){return x.textContent}).join("");else val=v?v.textContent:"";
-        l[col]=String(val).trim()});
-      for(var i=0;i<l.length;i++)if(l[i]==null)l[i]="";if(l.some(Boolean))out.push(l)});return out}
+        l[col]=String(val).trim()});rows[ri]=l});
+    Array.prototype.forEach.call(doc.getElementsByTagName("mergeCell"),function(m){var p=/^([A-Z]+)(\d+):([A-Z]+)(\d+)$/.exec(m.getAttribute("ref")||"");if(!p)return;
+      var c1=colNum(p[1]),r1=+p[2],c2=colNum(p[3]),r2=+p[4];if(c1<0||c2<c1||r2<r1||(r2-r1+1)*(c2-c1+1)>600)return;var v=(rows[r1]||[])[c1];if(!v)return;
+      for(var rr=r1;rr<=r2;rr++){var l=rows[rr]||(rows[rr]=[]);for(var cc=c1;cc<=c2;cc++)if(!l[cc])l[cc]=v}});
+    var out=[];Object.keys(rows).map(Number).sort(function(x,y){return x-y}).forEach(function(k){var l=rows[k];for(var i=0;i<l.length;i++)if(l[i]==null)l[i]="";if(l.some(Boolean))out.push(l)});return out}
   function lerXlsx(buf){var abrir=lerZip(buf),xml=function(s){return new DOMParser().parseFromString(s,"application/xml")};
     return Promise.all([abrir("xl/workbook.xml"),abrir("xl/_rels/workbook.xml.rels"),abrir("xl/sharedStrings.xml")]).then(function(r){if(!r[0])throw new Error("não encontrei as abas da planilha");
       var wb=xml(r[0]),rels=xml(r[1]||"<Relationships/>"),strs=[],alvo={};
@@ -1731,48 +1777,345 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     l.push(c.trim());if(l.some(Boolean))linhas.push(l);return linhas}
 
   /* ---------- Marvel Future Fight: a cópia do guia do CynicalEx que ela importa fica só no aparelho ---------- */
-  var guia=null,guiaCarregado=false;
-  function abaJogos(id){Array.prototype.forEach.call($("gAbas").children,function(b){b.classList.toggle("on",b.getAttribute("data-aba")===id)});["gMff","gSnap"].forEach(function(a){$(a).hidden=a!==id});if(id==="gMff")carregarGuia()}
+  var guia=null,guiaCarregado=false,gIdx=null,gVista="pers",gArtT=0,chkAbertos={S:1,A:1,"+":1};
+  function abaJogos(id){Array.prototype.forEach.call($("gAbas").children,function(b){b.classList.toggle("on",b.getAttribute("data-aba")===id)});["gMff","gSnap"].forEach(function(a){$(a).hidden=a!==id});if(id==="gMff")carregarGuia().then(montarGuia)}
   $("gAbas").addEventListener("click",function(e){var b=e.target.closest("button");if(b)abaJogos(b.getAttribute("data-aba"))});
-  function abrirJogos(){var cur=Array.prototype.filter.call($("gAbas").children,function(b){return b.classList.contains("on")})[0];abaJogos(cur?cur.getAttribute("data-aba"):"gMff");$("gDiario").value=cfg.gdiario||""}
-  function carregarGuia(){if(guiaCarregado){infoGuia();return Promise.resolve(guia)}return idbGet("guia_mff").then(function(g){guiaCarregado=true;guia=g||null;infoGuia();return guia},function(){guiaCarregado=true;infoGuia();return null})}
+  function abrirJogos(){var cur=Array.prototype.filter.call($("gAbas").children,function(b){return b.classList.contains("on")})[0];abaJogos(cur?cur.getAttribute("data-aba"):"gMff");renderResets()}
+  function carregarGuia(){if(guiaCarregado){infoGuia();return Promise.resolve(guia)}return idbGet("guia_mff").then(function(g){guiaCarregado=true;guia=g||null;gIdx=null;infoGuia();return guia},function(){guiaCarregado=true;infoGuia();return null})}
   function infoGuia(){$("gInfo").textContent=guia?"Guia importado em "+dataHora(guia.em)+": "+guia.abas.length+" abas, "+guia.abas.reduce(function(s,a){return s+Math.max(0,a.linhas.length-1)},0)+" linhas (sem contar os cabeçalhos).":"Nenhum guia importado ainda."}
   bind($("gImp"),function(){$("gArq").value="";$("gArq").click()});
-  $("gArq").addEventListener("change",function(){var f=this.files&&this.files[0];if(!f)return;$("gInfo").textContent="Lendo "+f.name+"…";var csv=/\.csv$/i.test(f.name)||/csv/.test(f.type);
-    (csv?f.text().then(function(t){return[{nome:f.name.replace(/\.csv$/i,""),linhas:lerCsv(t)}]}):f.arrayBuffer().then(lerXlsx)).then(function(abas){
+  $("gArq").addEventListener("change",function(){var f=this.files&&this.files[0];if(!f)return;$("gInfo").textContent="Lendo "+f.name+"… O guia completo pode levar alguns segundos.";var csv=/\.csv$/i.test(f.name)||/csv/.test(f.type);
+    /* CSV baixado de uma aba vem como "Cynicalex Mega Guides - CHAMP BUILDING.csv": o nome da aba é o que vem depois do último " - " */
+    (csv?f.text().then(function(t){return[{nome:f.name.replace(/\.csv$/i,"").replace(/^.*\s-\s/,"").trim(),linhas:lerCsv(t)}]}):f.arrayBuffer().then(lerXlsx)).then(function(abas){
       abas=abas.filter(function(a){return a.linhas.length>1});if(!abas.length)throw new Error("planilha vazia");
       /* .csv soma uma aba ao guia já importado; .xlsx substitui tudo */
       var g=csv&&guia?{abas:guia.abas.filter(function(a){return a.nome!==abas[0].nome}).concat(abas),em:Date.now(),arq:f.name}:{abas:abas,em:Date.now(),arq:f.name};
-      return idbSet("guia_mff",g).then(function(){guia=g;guiaCarregado=true;infoGuia();hint("Guia importado. Pergunte, por exemplo: melhor uniforme do Thor.")})})
+      return idbSet("guia_mff",g).then(function(){guia=g;gIdx=null;guiaCarregado=true;infoGuia();montarGuia();var I=idxGuia();
+        hint("Guia importado"+(I&&I.pers.length?": "+I.pers.length+" personagens":"")+". Pesquise um personagem, por exemplo Thor.")})})
     .catch(function(e){$("gInfo").textContent="Não consegui ler o arquivo ("+((e&&e.message)||e)+"). Baixe de novo como Microsoft Excel (.xlsx) ou como CSV."})});
+
+  /* ---------- índice do guia: acha cada aba pelo nome e cada coluna pelo cabeçalho, não pela posição ---------- */
+  function tx(v){return String(v==null?"":v).trim()}
+  function nrm(s){return norm(tx(s)).replace(/[^a-z0-9]+/g," ").trim()}
+  function chaveNome(s){return nrm(s).replace(/ /g,"")}
+  function vazio(v){v=tx(v);return!v||v==="-"||v==="—"||v==="–"}
+  function nomesLista(v){return tx(v).split(/\s{2,}|\n|;|,/).map(function(x){return x.trim()}).filter(function(x){return x&&!vazio(x)})}
+  function abaG(re){if(!guia)return null;for(var i=0;i<guia.abas.length;i++)if(re.test(tx(guia.abas[i].nome)))return guia.abas[i];return null}
+  function linhaCab(L,fn,max){for(var i=0;i<Math.min(L.length,max||10);i++)if(fn(L[i].map(tx)))return i;return-1}
+  function preencher(cab){var out=[],ult="";for(var i=0;i<cab.length;i++){var c=tx(cab[i]);if(c)ult=c;out[i]=c||ult}return out}
+  function colDe(cab,re){for(var i=0;i<cab.length;i++)if(re.test(tx(cab[i])))return i;return-1}
+  /* legendas do guia: "🤝 = SUPPORT     🧩 = NEEDS ARTIFACT"; siglas como "SLS = Shadowland Selectors" viram glossário */
+  var RE_LEG=/(\S+)\s*=\s*([^=]+?)(?=\s+\S+\s*=|$)/g;
+  function lerLegenda(txt,leg,glos){var s=tx(txt).replace(/\s+/g," "),m;RE_LEG.lastIndex=0;
+    while((m=RE_LEG.exec(s))){var k=m[1].replace(/️/g,""),v=m[2].trim();if(!v||!k)continue;
+      if(/[a-z0-9]/i.test(k)){if(glos&&/^[A-Z0-9]{2,6}$/.test(k)&&v.length<=60&&!glos[k])glos[k]=v}
+      else if(leg&&!leg.some(function(x){return x.k===k}))leg.push({k:k,v:v})}}
+  function tagsDe(c,leg){var s=tx(c).replace(/️/g,""),tags=[];(leg||[]).forEach(function(x){if(s.indexOf(x.k)>=0){tags.push(x);s=s.split(x.k).join(" ")}});
+    return{nome:s.replace(/[\p{Extended_Pictographic}‍*]/gu," ").replace(/\s+/g," ").trim(),tags:tags}}
+  var TAGPT={"support":"suporte","pvp":"PvP","needs artifact":"precisa de artefato","doesn t need tier 4":"não precisa de T4","good leadership":"boa liderança","seasonal uniform":"uniforme sazonal","very easy to play pve":"muito fácil de jogar (PvE)","abx abl mostly":"mais para ABX/ABL",
+    "crystal reward":"dá cristais","t4 rewards":"dá material de T4","costs crystals or money":"custa cristais ou dinheiro","grindable content":"dá para repetir (farm)","one time rewards":"recompensa única","passive rewards":"recompensa passiva","token shop":"loja de fichas","random rewards":"recompensa aleatória"};
+  function tagTxt(x){return x.k+" "+(TAGPT[nrm(x.v)]||x.v.toLowerCase())}
+  /* nomes em português que ela pode falar; o guia usa os nomes em inglês */
+  var NOMES_PT={"homem aranha":"spider man","homem de ferro":"iron man","capitao america":"captain america","capita marvel":"captain marvel","capitao marvel":"captain marvel","viuva negra":"black widow","feiticeira escarlate":"scarlet witch","pantera negra":"black panther","gaviao arqueiro":"hawkeye","doutor estranho":"doctor strange","mulher hulk":"she hulk","senhor fantastico":"mister fantastic","mulher invisivel":"invisible woman","tocha humana":"human torch","motoqueiro fantasma":"ghost rider","surfista prateado":"silver surfer","garota esquilo":"squirrel girl","gata negra":"black cat","duende verde":"green goblin","mulher aranha":"spider woman","senhor das estrelas":"star lord","homem formiga":"ant man","soldado invernal":"winter soldier","ciclope":"cyclops","noturno":"nightcrawler","vampira":"rogue","justiceiro":"punisher","demolidor":"daredevil","tempestade":"storm","vespa":"wasp"};
+  function trocarPt(q){var s=" "+nrm(q)+" ";Object.keys(NOMES_PT).forEach(function(k){s=s.split(" "+k+" ").join(" "+NOMES_PT[k]+" ")});return s.trim()}
+  /* distância de edição com troca de letras vizinhas: "APOCAYLPSE" ainda acha "Apocalypse" */
+  function distancia(a,b){var d=[],i,j;for(i=0;i<=a.length;i++)d[i]=[i];for(j=0;j<=b.length;j++)d[0][j]=j;
+    for(i=1;i<=a.length;i++)for(j=1;j<=b.length;j++){d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1)}
+    return d[a.length][b.length]}
+  function acharExato(I,nome){return I.mapa[chaveNome(nome)]||null}
+  function aproximado(I,k){var lim=k.length>=10?2:k.length>=7?1:0,melhor=null,md=9,empate=false;if(!lim)return null;var n=Object.keys(I.mapa).length;
+    /* o guia real tem milhares de nomes nas listas do WBL: guarda a resposta enquanto o índice não muda de tamanho */
+    if(!I.ap||I.apN!==n){I.ap={};I.apN=n}if(k in I.ap)return I.ap[k];
+    Object.keys(I.mapa).forEach(function(x){if(Math.abs(x.length-k.length)>lim)return;var dd=distancia(k,x);if(dd>lim)return;if(dd<md){md=dd;melhor=I.mapa[x];empate=false}else if(dd===md&&I.mapa[x]!==melhor)empate=true});
+    return(I.ap[k]=empate?null:melhor)}
+  function apelido(I,p,a){var k=chaveNome(a);if(!k||k.length<2)return;if(!I.mapa[k]){I.mapa[k]=p;p.chaves.push(k)}nrm(a).split(" ").forEach(function(w){if(w)p.palavras[w]=1})}
+  function novoPers(I,nome){var p={nome:tx(nome),chaves:[],palavras:{},pk:"",build:null,tier:null,t4:[],art:null,wbl:[],times:[]};I.pers.push(p);apelido(I,p,nome);return p}
+  function ligar(I,nome){return acharExato(I,nome)||aproximado(I,chaveNome(nome))||novoPers(I,nome)}
+  function idxGuia(){if(!guia)return null;if(gIdx&&gIdx.em===guia.em)return gIdx;
+    var I={em:guia.em,pers:[],mapa:{},tier:null,conteudo:null,art:[],wbl:[],tabs:[],ctps:{},glos:{},t4seg:[],buildVer:"",buildNota:""};
+    [idxBuild,idxIndice,idxArt,idxTier,idxT4,idxWbl,idxConteudo,idxCtp,idxTabelas].forEach(function(f){try{f(I)}catch(e){try{console.warn("guia",e)}catch(x){}}});
+    I.pers.sort(function(a,b){return a.nome.localeCompare(b.nome)});gIdx=I;return I}
+  /* CHAMP BUILDING: uma linha por personagem, colunas achadas pelo cabeçalho */
+  function idxBuild(I){var a=abaG(/champ\s*build/i);if(!a)return;var L=a.linhas,h=linhaCab(L,function(r){return r.some(function(c){return/character name/i.test(c)})},12);if(h<0)return;
+    var topo=L.slice(0,h).map(function(r){return r.map(tx).join(" ")}).join(" "),v=/\bV\d+(?:\.\d+)+/i.exec(topo);I.buildVer=v?v[0]:"";if(/assumes latest uniform/i.test(topo))I.buildNota="os dados consideram o uniforme mais recente";
+    var cab=L[h].map(tx),iN=colDe(cab,/character name/i),iPK=colDe(cab,/^pk$/i);
+    L.slice(h+1).forEach(function(r){var n=tx(r[iN]);if(vazio(n)||/character name/i.test(n)||n.length>50)return;var p=acharExato(I,n)||novoPers(I,n),campos=[];
+      if(iPK>=0&&!vazio(r[iPK])){p.pk=tx(r[iPK]);apelido(I,p,p.pk)}
+      cab.forEach(function(hd,j){if(!hd||j===iN||j===iPK)return;var x=tx(r[j]);if(vazio(x))return;if(/^guide$/i.test(hd)){lerLegenda(x,null,I.glos);return}campos.push([hd,x])});
+      p.build=campos})}
+  /* CHARINDEX: nomes alternativos (nome no jogo, nome na tier list, apelidos do bot) */
+  function idxIndice(I){var a=abaG(/charindex/i);if(!a)return;var L=a.linhas,h=linhaCab(L,function(r){return r.some(function(c){return/^pk$/i.test(c)})&&r.some(function(c){return/name/i.test(c)})},6);if(h<0)return;
+    var cab=L[h].map(tx),iPK=colDe(cab,/^pk$/i),iB=colDe(cab,/best uni character name/i),cs=[],porPk={};
+    cab.forEach(function(c,j){if(/original in-?game name|tier ?list name|bot short ?names?/i.test(c))cs.push(j)});I.pers.forEach(function(p){if(p.pk)porPk[p.pk]=p});
+    L.slice(h+1).forEach(function(r){var pk=tx(r[iPK]),b=iB>=0?tx(r[iB]):"",p=(pk&&porPk[pk])||(!vazio(b)&&acharExato(I,b))||null;
+      if(!p){var nm=!vazio(b)?b:(cs.length?tx(r[cs[0]]):"");if(vazio(nm)||nm.length>50)return;p=novoPers(I,nm);if(pk){p.pk=pk;porPk[pk]=p}}
+      cs.forEach(function(j){nomesLista(r[j]).forEach(function(x){apelido(I,p,x)})})})}
+  function idxArt(I){var a=abaG(/^artifacts?$/i);if(!a)return;var L=a.linhas,h=linhaCab(L,function(r){return r.some(function(c){return/^name$/i.test(c)})&&r.some(function(c){return/effect/i.test(c)})},6);if(h<0)return;
+    var cab=L[h].map(tx),iN=colDe(cab,/^name$/i),iA=colDe(cab,/nickname/i),iI=colDe(cab,/instinct/i),iE=colDe(cab,/effect/i),iR=colDe(cab,/artifact name/i),iO=colDe(cab,/^notes?$/i);
+    function g(r,j){return j>=0&&!vazio(r[j])?tx(r[j]):""}
+    L.slice(h+1).forEach(function(r){var n=g(r,iN);if(!n||n.length>50)return;var p=acharExato(I,n)||(g(r,iA)&&acharExato(I,g(r,iA)))||aproximado(I,chaveNome(n))||novoPers(I,n);
+      var x={p:p,nome:n,instinto:g(r,iI),efeito:g(r,iE),artefato:g(r,iR),notas:g(r,iO)};I.art.push(x);p.art=x;if(g(r,iA))apelido(I,p,g(r,iA))})}
+  /* TIER LIST: cada tier ocupa uma ou mais colunas (cabeçalho mesclado); os emojis vêm da legenda da própria aba */
+  function idxTier(I){var a=abaG(/^tier\s*list/i);if(!a)return;var L=a.linhas,h=linhaCab(L,function(r){return r.filter(function(c){return c.length<45&&/meta|useful|useable|usable|support|gods?\b/i.test(c)}).length>=3},12);if(h<0)return;
+    var leg=[],titulo="";L.slice(0,h).forEach(function(r){r.forEach(function(c){c=tx(c);if(!c)return;if(/=/.test(c))lerLegenda(c,leg,null);else if(!titulo&&/tier/i.test(c)&&c.length<60)titulo=c})});
+    var cab=preencher(L[h]),ordem=[],tiers={};
+    L.slice(h+1).forEach(function(r){r.forEach(function(c,j){c=tx(c);var t=cab[j];if(!c||!t||c.length>45||/[:=]/.test(c))return;var it=tagsDe(c,leg);if(!it.nome||it.nome.length<2)return;
+      if(!tiers[t]){tiers[t]=[];ordem.push(t)}var p=ligar(I,it.nome);tiers[t].push({p:p,nome:it.nome,tags:it.tags});if(!p.tier)p.tier={t:t,tags:it.tags}})});
+    I.tier={titulo:titulo,leg:leg,ordem:ordem,tiers:tiers}}
+  /* T4 RANK: duas tabelas lado a lado (por modo e por chefe), cada uma com a sua coluna de nomes */
+  function idxT4(I){var a=abaG(/t4\s*rank/i);if(!a)return;var L=a.linhas,h=linhaCab(L,function(r){return r.some(function(c){return/^(wbl|pvp|abx|abl|gbr)$/i.test(c)})},6);if(h<0)return;
+    var cab=L[h].map(tx),segs=[],ehNome=function(x){return!x||/^(character|name|hero)e?s?$/i.test(x)};
+    for(var j=0;j<cab.length;j++){if(!ehNome(cab[j])||!cab[j+1]||ehNome(cab[j+1]))continue;var e=j+1;while(e<cab.length&&!ehNome(cab[e]))e++;segs.push({n:j,de:j+1,ate:e});j=e-1}
+    I.t4seg=segs.map(function(s){return cab.slice(s.de,s.ate).some(function(x){return/^(wbl|pvp|abx)$/i.test(x)})?"por modo":"por chefe"});
+    L.slice(h+1).forEach(function(r){segs.forEach(function(s,k){var n=tx(r[s.n]);if(vazio(n)||/^[\d.,%]+$/.test(n)||n.length>45)return;var vals=[];
+      for(var c=s.de;c<s.ate;c++){if(!vazio(r[c]))vals.push([cab[c],tx(r[c])])}if(vals.length)ligar(I,n).t4[k]=vals})})}
+  /* WBL GUIDE: um bloco de colunas por chefe (tipo exigido, atacantes, suportes, perfuração, CTP, personagem obrigatório) */
+  function idxWbl(I){var a=abaG(/wbl/i);if(!a)return;var L=a.linhas,h=linhaCab(L,function(r){return r.some(function(c){return/^stages?$/i.test(c)})&&r.some(function(c){return/^supports?$/i.test(c)})},6);if(h<0)return;
+    var cab=L[h].map(tx),iSt=colDe(cab,/^stages?$/i),chefes=[],cur=null;
+    cab.forEach(function(c,j){if(j===iSt||!c)return;var u=c.toUpperCase();
+      if(/^SUPPORTS?$/.test(u)){if(cur&&cur.sup<0)cur.sup=j}else if(/^PIERCE/.test(u)){if(cur&&cur.pie<0)cur.pie=j}else if(/^CTP/.test(u)){if(cur&&cur.ctp<0)cur.ctp=j}else if(/REQUIRED/.test(u)){if(cur&&cur.req<0)cur.req=j}
+      else if(cur&&c===cur.rot&&j===cur.ult+1)cur.ult=j;
+      else{cur={rot:c,nome:c.replace(/\?+$/,"").trim(),col:j,ult:j,sup:-1,pie:-1,ctp:-1,req:-1,est:[]};chefes.push(cur)}});
+    chefes.forEach(function(ch,k){ch.fim=k+1<chefes.length?chefes[k+1].col:cab.length});
+    L.slice(h+1).forEach(function(r){var st=tx(r[iSt]);if(vazio(st))return;
+      chefes.forEach(function(ch){function g(j){return j>=0&&!vazio(r[j])?tx(r[j]):""}
+        var lim=[ch.sup,ch.pie,ch.ctp,ch.req,ch.fim].filter(function(x){return x>ch.col}).sort(function(x,y){return x-y})[0],atk=[];
+        for(var c=ch.col+1;c<lim;c++)atk=atk.concat(nomesLista(g(c)));
+        var e={st:st,tipo:g(ch.col),atk:atk,sup:nomesLista(g(ch.sup)),pie:g(ch.pie),ctp:g(ch.ctp),req:g(ch.req)};if(!e.tipo&&!e.atk.length&&!e.sup.length)return;ch.est.push(e);
+        e.atk.forEach(function(n){ligar(I,n).wbl.push({chefe:ch.nome,st:st,papel:"atacante"})});e.sup.forEach(function(n){ligar(I,n).wbl.push({chefe:ch.nome,st:st,papel:"suporte"})})})});
+    I.wbl=chefes.filter(function(ch){return ch.est.length})}
+  /* CONTENT: tier de conteúdo (S a F) mesclado na primeira coluna; item e selos nas seguintes */
+  function freqDe(t){var s=nrm(t);return/\bone time\b|first clear|100 completion/.test(s)?"unica":/week/.test(s)?"semana":"dia"}
+  function idxConteudo(I){var a=abaG(/^content$/i);if(!a)return;var L=a.linhas,ct=-1,i0=-1,re=/^[SABCDF]\s*(\(|$)/;
+    for(var i=0;i<Math.min(L.length,15)&&i0<0;i++)for(var j=0;j<Math.min(L[i].length,4);j++){if(re.test(tx(L[i][j]))){ct=j;i0=i;break}}if(i0<0)return;
+    var leg=[],titulo="",grupos=[],g=null;
+    L.slice(0,i0).forEach(function(r){r.forEach(function(c){c=tx(c);if(!c)return;if(/=/.test(c))lerLegenda(c,leg,null);else if(!titulo)titulo=c})});
+    L.slice(i0).forEach(function(r){var t=tx(r[ct]),m=/^([SABCDF])\s*(?:\(([^)]*)\))?/.exec(t);if(m&&(!g||g.tier!==m[1])){g={tier:m[1],rot:tx(m[2]),itens:[]};grupos.push(g)}if(!g)return;
+      var txt="",resto=[];for(var j=ct+1;j<r.length;j++){var c=tx(r[j]);if(!c)continue;if(!txt&&/[a-z]{3}/i.test(c))txt=c;else resto.push(c)}if(!txt)return;
+      txt=txt.replace(/\*\*/g,"");g.itens.push({id:"c:"+nrm(txt).slice(0,60),txt:txt,tags:tagsDe(txt+" "+resto.join(" "),leg).tags,freq:freqDe(txt)})});
+    I.conteudo={titulo:titulo,leg:leg,grupos:grupos.filter(function(x){return x.itens.length})}}
+  function idxCtp(I){var a=abaG(/bot-?ctps?/i);if(!a)return;var L=a.linhas,h=linhaCab(L,function(r){return r.some(function(c){return/^ctp$/i.test(c)})&&r.some(function(c){return/description/i.test(c)})},5);if(h<0)return;
+    var cab=L[h].map(tx),iC=colDe(cab,/^ctp$/i),iS=colDe(cab,/max stats/i),iD=colDe(cab,/description/i);
+    L.slice(h+1).forEach(function(r){var n=tx(r[iC]);if(vazio(n)||n.length>30)return;I.ctps[chaveNome(n)]={nome:n,stats:iS>=0?tx(r[iS]):"",desc:iD>=0?tx(r[iD]):""}})}
+  /* SHADOWLAND+ e DISPATCH: tabela por estágio; colunas sem título ficam com o título da esquerda (cabeçalho mesclado) */
+  var ROT_TAB=[[/shadowland\s*\+/i,"Shadowland: modo desafio"],[/^dispatch$/i,"Despacho (Dispatch)"]];
+  var ROT_T={"restrictions":"Restrições","recommended characters not a complete list":"Personagens recomendados","recommended supports not a complete list":"Suportes recomendados","recommended characters":"Personagens recomendados","recommended supports":"Suportes recomendados","tips to win spoilers":"Como vencer","tips to win":"Como vencer","challenges":"Desafios","challenge characters":"Personagens para os desafios"};
+  function rotT(h){return ROT_T[nrm(h)]||h}
+  function idxTabelas(I){ROT_TAB.forEach(function(x){var a=abaG(x[0]);if(!a)return;var L=a.linhas,h=linhaCab(L,function(r){return r.some(function(c){return/^stages?$/i.test(c)})&&r.filter(Boolean).length>=3},8);if(h<0)return;
+      var cab=preencher(L[h]),iSt=colDe(cab,/^stages?$/i),nomes=[],linhas=[];cab.forEach(function(c,j){if(j!==iSt&&c&&nomes.indexOf(c)<0)nomes.push(c)});
+      var notas=L.slice(0,h).map(function(r){return r.map(tx).filter(Boolean).join(" ")}).filter(Boolean);
+      L.slice(h+1).forEach(function(r){var st=tx(r[iSt]);if(vazio(st))return;var o={st:st,campos:[]};
+        nomes.forEach(function(nm){var vs=[];cab.forEach(function(c,j){if(c===nm&&j!==iSt&&!vazio(r[j]))vs.push(tx(r[j]))});if(vs.length)o.campos.push([nm,vs])});if(o.campos.length)linhas.push(o)});
+      if(!linhas.length)return;I.tabs.push({aba:a.nome,rot:x[1],notas:notas,linhas:linhas});
+      linhas.forEach(function(o){o.campos.forEach(function(cv){if(!/character|support/i.test(cv[0]))return;cv[1].forEach(function(v){nomesLista(v).forEach(function(n){var p=acharExato(I,n)||aproximado(I,chaveNome(n));
+        if(p&&!p.times.some(function(w){return w.tab===x[1]&&w.st===o.st}))p.times.push({tab:x[1],st:o.st,papel:/support/i.test(cv[0])?"suporte":"recomendado"})})})})})})}
+
+  /* ---------- telas do guia ---------- */
+  function montarGuia(){var I=idxGuia(),dl=$("gNomes");dl.innerHTML="";if(I)I.pers.forEach(function(p){var o=el("option");o.value=p.nome;dl.appendChild(o)});opcoesTimes();vistaGuia(gVista)}
+  $("gSub").addEventListener("click",function(e){var b=e.target.closest("button");if(b)vistaGuia(b.getAttribute("data-v"))});
+  function vistaGuia(v){gVista=v;Array.prototype.forEach.call($("gSub").children,function(b){b.classList.toggle("on",b.getAttribute("data-v")===v)});
+    ["pers","times","art","tier","check"].forEach(function(x){$("gv"+x).hidden=x!==v});
+    if(v==="times")renderTimes();else if(v==="art")renderArt();else if(v==="tier")renderTier();else if(v==="check")renderCheck();
+    else if(!$("gRes").firstChild)$("gRes").appendChild(el("p","muted",guia?"Digite ou escolha um personagem para ver a ficha: montagem, CTP, artefato, T4 e onde ele entra nos times.":"Importe primeiro a sua cópia do guia (botão acima)."))}
+  function semGuia(box,aba){box.innerHTML="";box.appendChild(el("p","muted",guia?"Não achei a aba "+aba+" na sua cópia do guia.":"Importe primeiro a sua cópia do guia (botão acima)."))}
+  function linhaF(box,rot,val){var p=el("p");p.appendChild(el("b",null,rot+": "));p.appendChild(document.createTextNode(val));box.appendChild(p);return p}
+  function fonteGuia(box,aba){box.appendChild(el("p","muted","Fonte: aba "+aba+" do Cynicalex Mega Guides, na sua cópia importada em "+dataHora(guia.em)+"."))}
+  var ROT_CB={"best uniform":"Melhor uniforme","highest tier":"Tier máximo","acquisition":"Como conseguir","atk type":"Tipo de ataque","best iso-8 set":"Conjunto de ISO-8","obelisk (sl/ac)":"Obelisco (SL/AC)","proc rotation":"Rotação para proc","best ctp rotation":"Rotação para o CTP","proc/frenzy skill":"Habilidade de proc/frenesi","best ctp":"Melhor CTP","2nd best ctp":"2º melhor CTP","meta ctp (pve)":"CTP do meta (PvE)","off-meta ctp (pve)":"CTP alternativo (PvE)","meta ctp (pvp)":"CTP do meta (PvP)","off-meta ctp (pvp)":"CTP alternativo (PvP)","needs artifact?":"Precisa de artefato?","allies, gender, side, instinct, elite gear, abilities":"Aliados, gênero, lado, instinto, equipamento de elite e habilidades","tier list rank":"Na tier list","tier list bling":"Selos","story mode":"Modo história","this month's sm stages":"Estágios do modo história neste mês","uniform options":"Opções de uniforme","notes":"Notas","best uni type":"Tipo com o melhor uniforme","original type":"Tipo original"};
+  var SEC_FICHA=[["MONTAGEM",["best iso-8 set","obelisk (sl/ac)","best ctp","2nd best ctp","meta ctp (pve)","off-meta ctp (pve)","meta ctp (pvp)","off-meta ctp (pvp)","needs artifact?","atk type","proc rotation","best ctp rotation","proc/frenzy skill"]],["COMO CONSEGUIR",["acquisition","highest tier","best uni type","original type","uniform options"]],["MODO HISTÓRIA",["story mode","this month's sm stages"]],["OUTROS DADOS",["allies, gender, side, instinct, elite gear, abilities"]],["NOTAS",["notes"]]];
+  var IGN_CB=/^(pk|image ?url|image|sort|guide|best uni character name)$/i;
+  function chaveCab(h){return tx(h).toLowerCase().replace(/[’`]/g,"'").replace(/\s+/g," ")}
+  function mapaBuild(p){var b={};(p.build||[]).forEach(function(c){b[chaveCab(c[0])]=c[1]});return b}
+  function valorCb(I,k,v){if(/^allies, gender/.test(k))v=v.split(",").map(function(x){return x.trim()}).filter(function(x){return x&&x!=="-"}).join(", ");if(k==="needs artifact?")v=v.replace(/^y\b/i,"sim").replace(/^n\b/i,"não");
+    if(k==="acquisition")v=v.replace(/\b[A-Z]{2,6}\b/g,function(m){return I.glos[m]?m+" ("+I.glos[m]+")":m});
+    if(k==="tier list bling"&&I.tier){var t=tagsDe(v,I.tier.leg).tags;if(t.length)v=t.map(tagTxt).join(" · ")}return v}
+  function ctpsDetalhe(I,f,vals){var vistos={};vals.forEach(function(v){v.split(/[\/,]| or /i).forEach(function(n){var k=chaveNome(n.replace(/\+/g,""));if(!k||vistos[k]||!I.ctps[k])return;vistos[k]=1;
+      var c=I.ctps[k],d=el("details");d.appendChild(el("summary",null,"EFEITO DO CTP "+c.nome.toUpperCase()));if(c.stats)d.appendChild(el("p","efeito",c.stats));if(c.desc)d.appendChild(el("p","efeito",c.desc));f.appendChild(d)})})}
+  var PROG=[["uni","Uniforme"],["iso","ISO-8"],["ctp","CTP"],["art","Artefato"],["t3","T3"],["t4","T4"]];
+  function lerProg(){try{return JSON.parse(cfg.mffprog||"{}")||{}}catch(e){return{}}}
+  function progresso(f,p){var k=p.pk||chaveNome(p.nome),me=lerProg()[k]||{},w=el("div","prog");f.appendChild(el("h5",null,"MEU PROGRESSO"));
+    PROG.forEach(function(x){var lab=el("label","chk"),cb=el("input");cb.type="checkbox";cb.checked=!!me[x[0]];
+      cb.addEventListener("change",function(){var a=lerProg(),m=a[k]||{};if(cb.checked)m[x[0]]=1;else delete m[x[0]];if(Object.keys(m).length)a[k]=m;else delete a[k];cfg.mffprog=JSON.stringify(a);save()});
+      lab.appendChild(cb);lab.appendChild(document.createTextNode(x[1]));w.appendChild(lab)});f.appendChild(w)}
+  function agrupar(lista,chave,valor){var g={},ordem=[];lista.forEach(function(w){var k=chave(w);if(!g[k]){g[k]=[];ordem.push(k)}if(g[k].indexOf(valor(w))<0)g[k].push(valor(w))});return ordem.map(function(k){return[k,g[k]]})}
+  function mostrarFicha(p,q){var I=idxGuia(),box=$("gRes"),b=mapaBuild(p),usados={"best uniform":1,"highest tier":1,"tier list rank":1,"tier list bling":1},f=el("div","ficha");box.innerHTML="";box.appendChild(f);
+    f.appendChild(el("h3",null,p.nome));var topo=[];if(b["best uniform"])topo.push("Melhor uniforme: "+b["best uniform"]);if(b["highest tier"])topo.push("tier máximo: "+b["highest tier"]);if(topo.length)f.appendChild(el("p","sub",topo.join(" · ")));
+    if(p.tier)linhaF(f,I.tier.titulo||"Tier list",p.tier.t+(p.tier.tags.length?" · "+p.tier.tags.map(tagTxt).join(" · "):""));
+    else if(b["tier list rank"])linhaF(f,"Na tier list",b["tier list rank"]+(b["tier list bling"]?" · "+valorCb(I,"tier list bling",b["tier list bling"]):""));
+    if(!p.build)f.appendChild(el("p","muted","Este personagem não aparece na aba de montagem (CHAMP BUILDING) da sua cópia."));
+    SEC_FICHA.forEach(function(sc){var ks=sc[1].filter(function(k){return b[k]&&!usados[k]});if(!ks.length)return;f.appendChild(el("h5",null,sc[0]));ks.forEach(function(k){usados[k]=1;linhaF(f,ROT_CB[k]||k,valorCb(I,k,b[k]))});
+      if(sc[0]==="MONTAGEM")ctpsDetalhe(I,f,ks.filter(function(k){return/ctp\b/.test(k)&&!/rotation/.test(k)}).map(function(k){return b[k]}))});
+    var resto=(p.build||[]).filter(function(c){var k=chaveCab(c[0]);return!usados[k]&&!IGN_CB.test(k)});if(resto.length){f.appendChild(el("h5",null,"MAIS DO GUIA"));resto.forEach(function(c){linhaF(f,c[0],c[1])})}
+    if(p.art){f.appendChild(el("h5",null,"ARTEFATO"));linhaF(f,"Artefato",(p.art.artefato||"sem nome na planilha")+(p.art.instinto?" (instinto "+p.art.instinto+")":""));if(p.art.efeito)f.appendChild(el("p","efeito",p.art.efeito));if(p.art.notas)linhaF(f,"Nota",p.art.notas)}
+    if(p.t4.some(Boolean)){f.appendChild(el("h5",null,"VALOR DO T4 (ABA T4 RANK)"));p.t4.forEach(function(vals,k){if(vals)linhaF(f,"Notas "+(I.t4seg[k]||""),vals.map(function(v){return v[0]+" "+v[1]}).join(" · "))})}
+    if(p.wbl.length){f.appendChild(el("h5",null,"WORLD BOSS LEGEND"));agrupar(p.wbl,function(w){return w.chefe+" ("+w.papel+")"},function(w){return w.st}).forEach(function(x){linhaF(f,x[0],"estágios "+x[1].join(", "))})}
+    if(p.times.length){f.appendChild(el("h5",null,"OUTROS MODOS"));agrupar(p.times,function(w){return w.tab+" ("+w.papel+")"},function(w){return w.st}).forEach(function(x){linhaF(f,x[0],"estágio "+x[1].join(", "))})}
+    progresso(f,p);
+    var row=el("div","row");if(cerebro())row.appendChild(btn("PERGUNTAR À IA",function(){explicarFicha(q&&detectarPers(q)===p?q:"Como montar e quando usar "+p.nome+"?",p,box,false)},"on"));
+    row.appendChild(btn("COPIAR FICHA",function(){copiarLimpo(fichaTexto(p))}));f.appendChild(row);
+    f.appendChild(el("p","muted","Fonte: Cynicalex Mega Guides"+(I.buildVer?", guia de montagem "+I.buildVer:"")+(I.buildNota?" ("+I.buildNota+")":"")+"; sua cópia importada em "+dataHora(guia.em)+"."))}
+  function fichaTexto(p){var I=idxGuia(),L=[p.nome];(p.build||[]).forEach(function(c){var k=chaveCab(c[0]);if(!IGN_CB.test(k))L.push((ROT_CB[k]||c[0])+": "+valorCb(I,k,c[1]))});
+    if(p.tier)L.push((I.tier.titulo||"Tier list")+": "+p.tier.t+(p.tier.tags.length?" ("+p.tier.tags.map(tagTxt).join(", ")+")":""));
+    if(p.art)L.push("Artefato: "+(p.art.artefato||"")+(p.art.instinto?" (instinto "+p.art.instinto+")":"")+(p.art.efeito?". Efeito: "+p.art.efeito.replace(/\s+/g," "):"")+(p.art.notas?". Nota: "+p.art.notas:""));
+    p.t4.forEach(function(vals,k){if(vals)L.push("T4 RANK "+(I.t4seg[k]||"")+": "+vals.map(function(v){return v[0]+" "+v[1]}).join(", "))});
+    if(p.wbl.length)L.push("World Boss Legend: "+agrupar(p.wbl,function(w){return w.chefe+" ("+w.papel+")"},function(w){return w.st}).map(function(x){return x[0]+" estágios "+x[1].join(", ")}).join("; "));
+    if(p.times.length)L.push("Outros modos: "+agrupar(p.times,function(w){return w.tab+" ("+w.papel+")"},function(w){return w.st}).map(function(x){return x[0]+" estágio "+x[1].join(", ")}).join("; "));
+    return L.join("\n")}
+  function resumoVoz(p){var b=mapaBuild(p),s=[p.nome+"."];if(b["best uniform"])s.push("Melhor uniforme: "+b["best uniform"]+".");if(b["best iso-8 set"])s.push("ISO-8: "+b["best iso-8 set"]+".");
+    if(b["best ctp"])s.push("Melhor CTP: "+b["best ctp"].toLowerCase()+".");if(p.tier)s.push("Na tier list do guia: "+p.tier.t+".");else if(b["tier list rank"])s.push("Na tier list do guia: "+b["tier list rank"]+".");
+    if(p.art&&p.art.artefato)s.push("Artefato: "+p.art.artefato+".");return s.join(" ")+" O resto está na tela."}
+  var SIS_MFF="Você é especialista em Marvel Future Fight e responde em português do Brasil, em até 6 frases, só com base nos dados do guia do CynicalEx enviados. Diga de qual aba veio cada informação e avise quando a aba parecer desatualizada (versão antiga no nome ou no conteúdo). Mantenha em inglês os nomes de personagens, uniformes e itens. Aqui, JARVIS é o sistema de chips do jogo, não você.";
+  function explicarFicha(q,p,box,voz){var res=el("div");box.appendChild(res);res.appendChild(el("p","muted","Consultando…"));
+    var env=prepararEnvio(q);if(env.bloq){res.innerHTML="";res.appendChild(el("p","muted",env.bloq));return}registrarEnvio("jogo (MFF)",env.d,env.n);
+    perguntaUnica(SIS_MFF,"Pergunta: "+env.t+"\n\nFicha do guia (abas CHAMP BUILDING, TIER LIST, ARTIFACTS, T4 RANK e WBL GUIDE):\n"+fichaTexto(p).slice(0,6000),{tokens:1024,temp:.2})
+    .then(function(t){t=desmascarar(limparFala(t).trim());res.innerHTML="";res.appendChild(el("p","res",t));res.appendChild(el("p","cit","Resposta de IA a partir da ficha acima; confira no guia."));if(voz)falar(t,null,true)},
+      function(e){res.innerHTML="";res.appendChild(el("p","muted",erroRede(e)))})}
+  function abrirFichaNome(n){var I=idxGuia();if(!I)return;var p=acharExato(I,n)||aproximado(I,chaveNome(n));vistaGuia("pers");$("gQ").value=p?p.nome:n;
+    if(p)mostrarFicha(p,"");else{var b=$("gRes");b.innerHTML="";b.appendChild(el("p","muted","Não achei a ficha de "+n+" na aba de montagem."))}
+    try{$("gvpers").scrollIntoView({block:"start",behavior:reduce?"auto":"smooth"})}catch(e){}}
+  /* acha o personagem dentro da pergunta: "melhor uniforme do Captain Marvel" → Captain Marvel */
+  function detectarPers(q){var I=idxGuia();if(!I)return null;var ws=trocarPt(q).split(" ").filter(Boolean),i,n,k;
+    for(n=Math.min(4,ws.length);n>=1;n--)for(i=0;i+n<=ws.length;i++){if(n===1&&(PARADAS[ws[i]]||ws[i].length<3))continue;k=ws.slice(i,i+n).join("");if(I.mapa[k])return I.mapa[k]}
+    for(i=0;i<ws.length;i++){if(ws[i].length>=7&&!PARADAS[ws[i]]){var p=aproximado(I,ws[i]);if(p)return p}}
+    for(i=0;i+1<ws.length;i++){k=ws[i]+ws[i+1];if(k.length>=9){var p2=aproximado(I,k);if(p2)return p2}}return null}
+  function rotaGuia(q){var s=" "+trocarPt(q)+" ",I=idxGuia();if(!I)return null;
+    if(/ (checklist|diarias|tarefas|o que fazer|prioridades?) /.test(s))return{v:"check"};
+    if(/ tier list /.test(s)&&!detectarPers(q.replace(/tier list/ig,"")))return{v:"tier"};
+    if(/ (artefatos) /.test(s)&&!detectarPers(q))return{v:"art"};
+    if(/ (time|times|equipe|equipes|contra|boss|chefe|wbl|world boss|estagio|estagios|stage) /.test(s)){for(var k=0;k<I.wbl.length;k++)if(s.indexOf(" "+nrm(I.wbl[k].nome)+" ")>=0)return{v:"times",m:"w"+k}}
+    for(var t=0;t<I.tabs.length;t++){if((/shadowland/i.test(I.tabs[t].rot)&&/ shadowland /.test(s))||(/dispatch/i.test(I.tabs[t].rot)&&/ (dispatch|despacho) /.test(s)))return{v:"times",m:"t"+t}}
+    return null}
+  function perguntarGuia(q,voz){abrirPainel("jogos");abaJogos("gMff");carregarGuia().then(function(){montarGuia();
+      if(!guia){vistaGuia("pers");$("gQ").value=q;semGuia($("gRes"),"");if(voz)dizer("Importe primeiro a sua cópia do guia do CynicalEx, em JOGOS.");return}
+      var r=rotaGuia(q);if(r){if(r.m)$("gModo").value=r.m;vistaGuia(r.v);
+        if(voz){if(r.v==="check"){var pend=pendentes();dizer(pend.length?"Faltam "+pend.length+" itens dos tiers S e A. Os primeiros: "+pend.slice(0,3).join("; ")+".":"Os itens dos tiers S e A estão feitos.")}
+          else dizer(r.v==="tier"?"Abri a tier list do guia.":r.v==="art"?"Abri a lista de artefatos.":"Abri os times de "+$("gModo").selectedOptions[0].textContent+".")}return}
+      vistaGuia("pers");$("gQ").value=q;var p=detectarPers(q);
+      if(p){mostrarFicha(p,q);if(voz){var extra=termosBusca(q).filter(function(t){return!p.palavras[t]&&!/^(uniforme|uniformes|build|montar|monto|monta|ficha|personagem|iso|iso8|ctp|artefato|bom|boa|forte|presta|meta|tier|list|lista)$/.test(t)});
+          if(extra.length&&cerebro())explicarFicha(q,p,$("gRes"),true);else dizer(resumoVoz(p))}return}
+      var rs=buscarGuia(q,8);mostrarLinhas(q,rs,$("gRes"));if(!voz)return;if(!rs.length)dizer("Não achei isso no guia.");else if(cerebro())explicarGuia(q,rs,$("gRes"),true);else dizer("Mostrei as linhas do guia na tela.")})}
+  bind($("gBuscar"),function(){var q=$("gQ").value.trim();if(q)perguntarGuia(q,false)});
+  $("gQ").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();var q=$("gQ").value.trim();if(q)perguntarGuia(q,false)}});
+  $("gQ").addEventListener("change",function(){var I=idxGuia(),p=I&&acharExato(I,this.value);if(p)mostrarFicha(p,"")});
+
+  /* busca livre, para o que não é ficha de personagem: pontua linhas pelas palavras da pergunta; só as melhores vão para a IA */
   var PARADAS={de:1,da:1,do:1,das:1,dos:1,o:1,a:1,os:1,as:1,e:1,em:1,no:1,na:1,nos:1,nas:1,um:1,uma:1,qual:1,quais:1,que:1,como:1,eu:1,meu:1,minha:1,para:1,pra:1,pro:1,com:1,por:1,the:1,of:1,is:1,me:1,mff:1,future:1,fight:1,guia:1,melhor:1,melhores:1,devo:1,vale:1,pena:1};
   function termosBusca(q){return norm(q).replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>1&&!PARADAS[w]})}
-  /* busca local: pontua linhas pelas palavras da pergunta; só as melhores vão para a IA */
+  function cabDe(a){if(a._h!=null)return a._h;var h=linhaCab(a.linhas,function(r){var n=r.filter(Boolean);return n.length>=3&&n.every(function(c){return c.length<=40})},8);a._h=h<0?0:h;return a._h}
   function buscarGuia(q,max){if(!guia)return[];var ts=termosBusca(q),res=[];if(!ts.length)return[];
-    guia.abas.forEach(function(a){var cab=a.linhas[0]||[];a.linhas.forEach(function(l,i){if(!i)return;var txt=" "+norm(l.join(" | ")).replace(/[^a-z0-9| ]/g," ")+" ",s=0;
+    guia.abas.forEach(function(a){var hi=cabDe(a),cab=a.linhas[hi]||[];a.linhas.forEach(function(l,i){if(i<=hi)return;var txt=" "+norm(l.join(" | ")).replace(/[^a-z0-9| ]/g," ")+" ",s=0;
       ts.forEach(function(t){if(txt.indexOf(" "+t)>=0)s+=t.length>3?2:1});if(s)res.push({s:s,aba:a.nome,cab:cab,l:l})})});
     res.sort(function(x,y){return y.s-x.s});var top=res.length?res[0].s:0;return res.filter(function(r){return r.s>=top/2}).slice(0,max||8)}
   function linhaTexto(r,lim){var partes=[];r.l.forEach(function(v,i){if(v)partes.push((r.cab[i]&&r.cab[i]!==v?r.cab[i]+": ":"")+v)});var s=partes.join(" | ");return lim&&s.length>lim?s.slice(0,lim)+"…":s}
   function mostrarLinhas(q,rs,box){box.innerHTML="";if(!guia){box.appendChild(el("p","muted","Importe primeiro a sua cópia do guia (botão acima)."));return}
-    if(!rs.length){box.appendChild(el("p","muted","Não achei linhas sobre isso no guia. Tente o nome como aparece no jogo, em inglês."));return}
+    if(!rs.length){box.appendChild(el("p","muted","Não achei isso no guia. Para ficha de personagem, use o nome como aparece no jogo, em inglês."));return}
     var lw=el("div","linhas");rs.forEach(function(r){var d=el("div","linha");d.appendChild(el("span","aba-n",String(r.aba).toUpperCase()));d.appendChild(document.createTextNode(linhaTexto(r,600)));lw.appendChild(d)});box.appendChild(lw);
     var row=el("div","row");row.appendChild(btn("EXPLICAR COM IA",function(){explicarGuia(q,rs,box,false)},"on"));box.appendChild(row)}
   function explicarGuia(q,rs,box,voz){var res=el("div");box.appendChild(res);res.appendChild(el("p","muted","Consultando…"));
     var env=prepararEnvio(q);if(env.bloq){res.innerHTML="";res.appendChild(el("p","muted",env.bloq));return}registrarEnvio("jogo (MFF)",env.d,env.n);
     var trecho=rs.map(function(r){return"Aba \""+r.aba+"\": "+linhaTexto(r,900)}).join("\n").slice(0,7000);
-    perguntaUnica("Você é especialista em Marvel Future Fight e responde em português do Brasil, em até 6 frases, só com base nas linhas do guia do CynicalEx enviadas. Diga de qual aba veio cada informação e avise quando a aba parecer desatualizada (versão antiga no nome ou no conteúdo). Mantenha em inglês os nomes de personagens, uniformes e itens. Aqui, JARVIS é o sistema de chips do jogo, não você.",
-      "Pergunta: "+env.t+"\n\nLinhas do guia:\n"+trecho,{tokens:1024,temp:.2})
+    perguntaUnica(SIS_MFF,"Pergunta: "+env.t+"\n\nLinhas do guia:\n"+trecho,{tokens:1024,temp:.2})
     .then(function(t){t=desmascarar(limparFala(t).trim());res.innerHTML="";res.appendChild(el("p","res",t));res.appendChild(el("p","sub","Fonte: Cynicalex Mega Guides, cópia importada em "+dataHora(guia.em)+"."));if(voz)falar(t,null,true)},
       function(e){res.innerHTML="";res.appendChild(el("p","muted",erroRede(e)))})}
-  function perguntarGuia(q,voz){abrirPainel("jogos");abaJogos("gMff");$("gQ").value=q;carregarGuia().then(function(){var rs=buscarGuia(q,8);mostrarLinhas(q,rs,$("gRes"));
-      if(!voz)return;if(!guia)dizer("Importe primeiro a sua cópia do guia do CynicalEx, em JOGOS.");else if(!rs.length)dizer("Não achei isso no guia.");else if(cerebro())explicarGuia(q,rs,$("gRes"),true);else dizer("Mostrei as linhas do guia na tela.")})}
-  bind($("gBuscar"),function(){var q=$("gQ").value.trim();if(q)perguntarGuia(q,false)});
-  $("gQ").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();var q=$("gQ").value.trim();if(q)perguntarGuia(q,false)}});
-  function proxSemanaUtc(dow,h){var x=new Date(),t=Date.UTC(x.getUTCFullYear(),x.getUTCMonth(),x.getUTCDate(),h);while(new Date(t).getUTCDay()!==dow||t<=Date.now())t+=864e5;return t}
-  bind($("gSemanal"),function(){abrirAgenda({titulo:"MFF: reset semanal dos modos competitivos",inicio:proxSemanaUtc(5,1),rrule:"FREQ=WEEKLY",detalhes:"Sexta, 01:00 UTC (quinta, 22h em Brasília), segundo as notas oficiais de 2025. Confira no jogo."})});
-  bind($("gDiarioBtn"),function(){var v=$("gDiario").value;if(!/^\d{2}:\d{2}$/.test(v)){hint("Escolha o horário do reset diário (confira no jogo).");return}cfg.gdiario=v;save();
-    var p=v.split(":"),x=new Date();x.setHours(+p[0],+p[1],0,0);if(x.getTime()<=Date.now())x.setDate(x.getDate()+1);
-    abrirAgenda({titulo:"MFF: reset diário",inicio:x.getTime(),rrule:"FREQ=DAILY",detalhes:"Horário anotado por você no J.A.R.V.I.S."})});
+
+  /* TIMES: World Boss Legend por chefe, Shadowland (desafio) e Dispatch */
+  function opcoesTimes(){var I=idxGuia(),s=$("gModo"),cur=s.value;s.innerHTML="";if(!I)return;
+    I.wbl.forEach(function(ch,k){var o=el("option",null,"World Boss Legend: "+ch.nome);o.value="w"+k;s.appendChild(o)});
+    I.tabs.forEach(function(t,k){var o=el("option",null,t.rot);o.value="t"+k;s.appendChild(o)});
+    if(cur&&Array.prototype.some.call(s.options,function(o){return o.value===cur}))s.value=cur}
+  $("gModo").addEventListener("change",renderTimes);
+  function listaNomes(rot,ns){var p=el("p");p.appendChild(el("b",null,rot+": "));ns.forEach(function(n,i){var a=el("button","lnk",n);a.type="button";a.addEventListener("click",function(){abrirFichaNome(n)});p.appendChild(a);if(i<ns.length-1)p.appendChild(document.createTextNode(", "))});return p}
+  function renderTimes(){var I=idxGuia(),box=$("gTimesRes");box.innerHTML="";if(!I||(!I.wbl.length&&!I.tabs.length))return semGuia(box,"WBL GUIDE, SHADOWLAND+ ou DISPATCH");
+    if(!$("gModo").value)opcoesTimes();var v=$("gModo").value||"";
+    if(v[0]==="w"){var ch=I.wbl[+v.slice(1)];if(!ch)return;
+      ch.est.forEach(function(e){var c=el("div","linha"),t=el("p"),info=[];t.appendChild(el("b",null,"Estágios "+e.st));if(e.tipo)info.push("exige: "+e.tipo);if(e.pie)info.push("perfuração: "+e.pie);if(e.ctp)info.push("CTP: "+e.ctp);if(e.req)info.push("obrigatório: "+e.req);
+        if(info.length)t.appendChild(document.createTextNode(" · "+info.join(" · ")));c.appendChild(t);if(e.atk.length)c.appendChild(listaNomes("Atacantes",e.atk));if(e.sup.length)c.appendChild(listaNomes("Suportes",e.sup));box.appendChild(c)});
+      fonteGuia(box,"WBL GUIDE")}
+    else{var T=I.tabs[+v.slice(1)];if(!T)return;T.notas.forEach(function(n){box.appendChild(el("p","muted",n))});
+      T.linhas.forEach(function(o){var c=el("div","linha"),t=el("p");t.appendChild(el("b",null,"Estágio "+o.st));c.appendChild(t);
+        o.campos.forEach(function(cv){if(/character|support/i.test(cv[0]))c.appendChild(listaNomes(rotT(cv[0]),[].concat.apply([],cv[1].map(nomesLista))));else linhaF(c,rotT(cv[0]),cv[1].join(" · "))});box.appendChild(c)});
+      fonteGuia(box,T.aba)}}
+  /* ARTEFATOS: busca por personagem, nome do artefato ou efeito */
+  function renderArt(){var I=idxGuia(),box=$("gArtRes"),q=nrm($("gArtQ").value);box.innerHTML="";if(!I||!I.art.length)return semGuia(box,"ARTIFACTS");
+    var lista=I.art.filter(function(a){return!q||nrm([a.p.nome,a.nome,a.artefato,a.instinto,a.efeito,a.notas].join(" ")).indexOf(q)>=0});
+    box.appendChild(el("p","hint",lista.length+" de "+I.art.length+" artefatos"+(lista.length>40?"; mostrando 40. Digite para filtrar.":".")));
+    lista.slice(0,40).forEach(function(a){var c=el("div","linha"),t=el("p"),bn=el("button","lnk",a.p.nome);bn.type="button";bn.addEventListener("click",function(){abrirFichaNome(a.p.nome)});t.appendChild(bn);
+      t.appendChild(document.createTextNode(" · "+(a.artefato||"artefato")+(a.instinto?" ("+a.instinto+")":"")));c.appendChild(t);if(a.efeito)c.appendChild(el("p","efeito",a.efeito));if(a.notas)linhaF(c,"Nota",a.notas);box.appendChild(c)});
+    fonteGuia(box,"ARTIFACTS")}
+  $("gArtQ").addEventListener("input",function(){clearTimeout(gArtT);gArtT=setTimeout(renderArt,200)});
+  function renderTier(){var I=idxGuia(),box=$("gTierRes");box.innerHTML="";if(!I||!I.tier)return semGuia(box,"TIER LIST");var T=I.tier;
+    if(T.titulo)box.appendChild(el("p","sub",T.titulo));if(T.leg.length)box.appendChild(el("p","muted",T.leg.map(tagTxt).join(" · ")));
+    T.ordem.forEach(function(t,k){var d=el("details","grupo"),w=el("div","nomes-t");if(k<2)d.open=true;d.appendChild(el("summary",null,t.toUpperCase()+" ("+T.tiers[t].length+")"));
+      T.tiers[t].forEach(function(it){var b=el("button",null,it.nome+(it.tags.length?" "+it.tags.map(function(x){return x.k}).join(""):""));b.type="button";b.title=it.tags.map(tagTxt).join(", ");b.addEventListener("click",function(){abrirFichaNome(it.p.nome)});w.appendChild(b)});
+      d.appendChild(w);box.appendChild(d)});
+    box.appendChild(el("p","muted","O guia ordena os personagens dentro de cada tier, da esquerda para a direita, e por tipo, de cima para baixo; tipos diferentes não se comparam. Toque num nome para abrir a ficha."));fonteGuia(box,"TIER LIST")}
+
+  /* CHECKLIST: lista de conteúdo do CynicalEx; o que é diário desmarca no reset diário, o semanal no reset semanal */
+  var ROT_TIER={"must":"obrigatório","recommend":"recomendado","good":"bom","so-so":"mais ou menos","specific goal":"objetivo específico","skip":"pule"},FREQ_ROT={dia:"DIÁRIO",semana:"SEMANAL",unica:"UMA VEZ"};
+  function lerChk(){try{return JSON.parse(cfg.mffcheck||"{}")||{}}catch(e){return{}}}
+  function gravarChk(c){cfg.mffcheck=JSON.stringify(c);save()}
+  function ultimoReset(freq){var R=lerResets(),agora=Date.now(),x=new Date(),t;
+    if(freq==="dia"){var r=R.mffDia;if(r&&r.utcMin!=null){t=Date.UTC(x.getUTCFullYear(),x.getUTCMonth(),x.getUTCDate())+r.utcMin*60000;while(t>agora)t-=864e5;return t}x.setHours(0,0,0,0);return x.getTime()}
+    if(freq==="semana"){var s=R.mffSem;if(s&&s.utcMin!=null){t=Date.UTC(x.getUTCFullYear(),x.getUTCMonth(),x.getUTCDate())+s.utcMin*60000;while(new Date(t).getUTCDay()!==s.dow||t>agora)t-=864e5;return t}
+      x.setHours(0,0,0,0);x.setDate(x.getDate()-((x.getDay()+6)%7));return x.getTime()}return 0}
+  function freqItem(c,it){return(c.freq&&c.freq[it.id])||it.freq}
+  function feito(c,it){var ts=c.feitos&&c.feitos[it.id];if(!ts)return false;var f=freqItem(c,it);return f==="unica"||ts>ultimoReset(f)}
+  function gruposChk(){var I=idxGuia(),c=lerChk(),gs=(I&&I.conteudo?I.conteudo.grupos:[]).slice();if((c.extras||[]).length)gs.push({tier:"+",rot:"",itens:c.extras});return gs}
+  function pendentes(){var c=lerChk(),out=[];gruposChk().forEach(function(g){if(g.tier==="S"||g.tier==="A")g.itens.forEach(function(it){if(!feito(c,it))out.push(it.txt.replace(/\s*\(.*$/,""))})});return out}
+  function renderCheck(){var I=idxGuia(),box=$("gCheckRes"),c=lerChk(),R=lerResets(),gs=gruposChk();box.innerHTML="";
+    $("gCheckInfo").textContent=(R.mffDia&&R.mffDia.utcMin!=null?"O que é diário desmarca sozinho no reset das "+hm(proxReset("mffDia",R.mffDia))+", conferido no jogo.":"Enquanto o reset diário não for acertado em HORÁRIOS DO JOGO, o que é diário desmarca à meia-noite.")+" Toque no selo DIÁRIO, SEMANAL ou UMA VEZ para trocar.";
+    if(!gs.length){box.appendChild(el("p","muted",guia?"Não achei a aba CONTENT na sua cópia. Adicione seus próprios itens abaixo.":"Importe o guia para ver a lista de conteúdo do CynicalEx, ou adicione seus próprios itens abaixo."));return}
+    if(I&&I.conteudo){if(I.conteudo.titulo)box.appendChild(el("p","sub",I.conteudo.titulo+" (CynicalEx)"));if(I.conteudo.leg.length)box.appendChild(el("p","muted",I.conteudo.leg.map(tagTxt).join(" · ")))}
+    gs.forEach(function(g){var d=el("details","grupo"),n=g.itens.filter(function(it){return feito(c,it)}).length;d.open=!!chkAbertos[g.tier];d.addEventListener("toggle",function(){if(d.open)chkAbertos[g.tier]=1;else delete chkAbertos[g.tier]});
+      d.appendChild(el("summary",null,(g.tier==="+"?"SEUS ITENS":g.tier+" · "+(ROT_TIER[g.rot.toLowerCase()]||g.rot))+" ("+n+"/"+g.itens.length+")"));
+      g.itens.forEach(function(it){var ok=feito(c,it),lab=el("label","item-chk"+(ok?" feito":"")),cb=el("input"),f=freqItem(c,it),bf=el("button","freq",FREQ_ROT[f]);cb.type="checkbox";cb.checked=ok;
+        cb.addEventListener("change",function(){var cc=lerChk();cc.feitos=cc.feitos||{};if(cb.checked)cc.feitos[it.id]=Date.now();else delete cc.feitos[it.id];gravarChk(cc);renderCheck()});
+        lab.appendChild(cb);lab.appendChild(el("span",null,it.txt+(it.tags&&it.tags.length?" "+it.tags.map(function(x){return x.k}).join(""):"")));
+        bf.type="button";bf.title="Toque para trocar: diário, semanal ou uma vez";bf.addEventListener("click",function(e){e.preventDefault();var cc=lerChk(),ord=["dia","semana","unica"];cc.freq=cc.freq||{};cc.freq[it.id]=ord[(ord.indexOf(f)+1)%3];gravarChk(cc);renderCheck()});lab.appendChild(bf);
+        if(g.tier==="+"){var bx=el("button","freq","×");bx.type="button";bx.setAttribute("aria-label","Apagar item");bx.addEventListener("click",function(e){e.preventDefault();var cc=lerChk();cc.extras=(cc.extras||[]).filter(function(x){return x.id!==it.id});if(cc.feitos)delete cc.feitos[it.id];gravarChk(cc);renderCheck()});lab.appendChild(bx)}
+        d.appendChild(lab)});box.appendChild(d)});
+    if(I&&I.conteudo)fonteGuia(box,"CONTENT")}
+  function addChk(){var t=$("gCheckNovo").value.trim();if(!t)return;var c=lerChk();c.extras=c.extras||[];c.extras.push({id:"x:"+Date.now(),txt:t,freq:"dia",tags:[]});gravarChk(c);$("gCheckNovo").value="";chkAbertos["+"]=1;renderCheck()}
+  bind($("gCheckAdd"),addChk);$("gCheckNovo").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addChk()}});
+
+  /* ---------- horários dos jogos: saem da contagem que o próprio jogo mostra (ou de nota oficial), nunca de estimativa ----------
+     Ela digita quanto falta; o Jarvis soma ao relógio e encaixa na hora cheia que cabe na contagem (resets caem em hora cheia). */
+  var RESETS={
+    mffDia:{jogo:"mff",nome:"Reset diário",tipo:"dia",unid:["h","min"],ajuda:"Na tela de missões diárias do jogo, veja quanto falta para renovar.",antes:30,titulo:"MFF: diárias, reset em 30 minutos"},
+    mffSem:{jogo:"mff",nome:"Reset semanal",tipo:"semana",unid:["d","h","min"],ajuda:"Na Timeline Battle ou na Team Battle Arena, veja quanto falta para a semana fechar.",antes:60,titulo:"MFF: a semana fecha em 1 hora"},
+    snapDia:{jogo:"snap",nome:"Reset diário",tipo:"dia",unid:["h","min"],oficial:{utcMin:1140,fonte:"oficial: notas do jogo de 03/10/2023 (19:00 UTC)"},ajuda:"Para conferir, veja no jogo quanto falta para as missões diárias renovarem.",antes:30,titulo:"Marvel Snap: reset diário em 30 minutos"},
+    snapTemp:{jogo:"snap",nome:"Fim da temporada",tipo:"unico",unid:["d","h"],alinhar:1140,ajuda:"No passe de temporada, veja quanto falta para acabar (dias e horas).",antes:1440,titulo:"Marvel Snap: último dia da temporada"}};
+  var ROT_U={d:"dias",h:"horas",min:"minutos"};
+  function lerResets(){try{return JSON.parse(cfg.gresets||"{}")||{}}catch(e){return{}}}
+  function gravarResets(R){cfg.gresets=JSON.stringify(R);save()}
+  function proxReset(k,v){var d=RESETS[k],agora=Date.now();if(d.tipo==="unico")return v&&v.quando>agora?v.quando:null;
+    var m=v&&v.utcMin!=null?v.utcMin:(d.oficial?d.oficial.utcMin:null);if(m==null)return null;var x=new Date(),t=Date.UTC(x.getUTCFullYear(),x.getUTCMonth(),x.getUTCDate())+m*60000;
+    if(d.tipo==="dia"){while(t<=agora)t+=864e5;return t}if(!v||v.dow==null)return null;while(new Date(t).getUTCDay()!==v.dow||t<=agora)t+=864e5;return t}
+  function quandoTxt(k,t){var d=RESETS[k],x=new Date(t),w=x.getDay();if(d.tipo==="dia")return"todo dia às "+hm(t);if(d.tipo==="semana")return(w===0||w===6?"todo ":"toda ")+DIAS[w]+" às "+hm(t);
+    return DIAS[w]+", "+pad(x.getDate())+"/"+pad(x.getMonth()+1)+"/"+x.getFullYear()+" às "+hm(t)}
+  /* lo = agora + contagem. Se o jogo corta a fração, o evento fica em [lo − 5 min (tempo de ler e digitar), lo + unidade); a hora cheia dentro da janela é o horário.
+     Com horário oficial de reset (Snap), a janela vai de lo − unidade a lo + unidade, para servir também a jogo que arredonda para cima, e o horário oficial desempata */
+  function momentoReset(lo,unid,alinhar){var folga=300000,de=alinhar!=null?lo-unid:lo-folga,cands=[];for(var t=Math.ceil(de/3600000)*3600000;t<lo+unid;t+=3600000)cands.push(t);
+    if(alinhar!=null){var a=cands.filter(function(x){var z=new Date(x);return z.getUTCHours()*60+z.getUTCMinutes()===alinhar});
+      if(a.length){var f=a.filter(function(x){return x>=lo-folga});return f.length?f[0]:a[a.length-1]}cands=cands.filter(function(x){return x>=lo-folga})}
+    return cands.length?cands[0]:Math.round(lo/60000)*60000}
+  function acertarReset(k,row){var d=RESETS[k],v={},unid=864e5,algum=false;
+    Array.prototype.forEach.call(row.querySelectorAll("input"),function(i){var u=i.getAttribute("data-u"),n=parseInt(i.value,10);v[u]=n>=0?n:0;if(i.value.trim()!==""&&n>=0){algum=true;var um=u==="min"?60000:u==="h"?3600000:864e5;if(um<unid)unid=um}});
+    var ms=((v.d||0)*1440+(v.h||0)*60+(v.min||0))*60000;if(!algum||ms<=0){hint("Digite quanto falta, como aparece no jogo.");return}if(ms>62*864e5){hint("Confira os números: o máximo é 62 dias.");return}
+    var t=momentoReset(Date.now()+ms,unid,d.alinhar),z=new Date(t),R=lerResets();
+    R[k]=d.tipo==="unico"?{quando:t,em:Date.now()}:d.tipo==="semana"?{dow:z.getUTCDay(),utcMin:z.getUTCHours()*60+z.getUTCMinutes(),em:Date.now()}:{utcMin:z.getUTCHours()*60+z.getUTCMinutes(),em:Date.now()};
+    gravarResets(R);renderResets();if(!$("gvcheck").hidden)renderCheck();hint(d.nome+": "+quandoTxt(k,proxReset(k,R[k])||t)+".")}
+  function agendaReset(k){var d=RESETS[k],R=lerResets(),t=proxReset(k,R[k]);if(!t)return;var ini=t-d.antes*60000,passo=d.tipo==="semana"?7*864e5:864e5;
+    if(d.tipo==="unico"){if(ini<=Date.now())ini=Math.max(Date.now()+300000,t-2*3600000)}else while(ini<=Date.now())ini+=passo;
+    abrirAgenda({titulo:d.titulo,inicio:ini,fim:ini+Math.min(d.antes,60)*60000,rrule:d.tipo==="dia"?"FREQ=DAILY":d.tipo==="semana"?"FREQ=WEEKLY":"",
+      detalhes:d.nome+": "+quandoTxt(k,t)+". "+(R[k]?"Conferido na contagem do jogo em "+dataHora(R[k].em)+".":d.oficial?"Fonte: "+d.oficial.fonte+".":"")})}
+  function renderResets(){var R=lerResets();["mff","snap"].forEach(function(j){var box=$(j==="mff"?"gResets":"sResets");if(!box)return;box.innerHTML="";
+    Object.keys(RESETS).forEach(function(k){var d=RESETS[k];if(d.jogo!==j)return;var v=R[k],t=proxReset(k,v),w=el("div","reset"),row=el("div","row conta");
+      w.appendChild(el("p","sub",d.nome+": "+(t?quandoTxt(k,t)+" · "+(v?"conferido no jogo em "+dataHora(v.em):d.oficial.fonte):v&&d.tipo==="unico"?"a data acertada já passou; acerte a nova":"ainda não acertado")));
+      w.appendChild(el("p","muted",d.ajuda));
+      d.unid.forEach(function(u){var i=el("input");i.type="number";i.min="0";i.max=u==="d"?"62":u==="h"?"23":"59";i.inputMode="numeric";i.setAttribute("data-u",u);i.setAttribute("aria-label",ROT_U[u]+" que faltam");row.appendChild(i);row.appendChild(el("span",null,u))});
+      row.appendChild(btn("ACERTAR",function(){acertarReset(k,row)}));w.appendChild(row);
+      if(t){var r2=el("div","row");r2.appendChild(btn("AGENDA",function(){agendaReset(k)}));if(d.tipo==="unico")r2.appendChild(btn("CONTAGEM",function(){addWidget({tipo:"contagem",titulo:d.nome+" (Snap)",alvo:t});hint("Contagem regressiva criada nos widgets.")}));w.appendChild(r2)}
+      box.appendChild(w)})})}
 
   /* ---------- Marvel Snap: códigos de deck lidos e montados no aparelho; a IA só entra na análise ---------- */
   function b64texto(s){var b=atob(s.replace(/-/g,"+").replace(/_/g,"/")),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new TextDecoder().decode(u)}
@@ -1801,13 +2144,6 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     if(nomes.length!==12){box.appendChild(el("p","muted","Um deck tem 12 cartas; você listou "+nomes.length+"."));return}var cod=gerarDeck(nomes);
     box.appendChild(el("p","sub","Código gerado no formato completo. No jogo, importe o deck e confira se as 12 cartas foram reconhecidas."));
     var p=el("p","res",cod);p.style.fontFamily="var(--mono)";p.style.fontSize="12px";box.appendChild(p);box.appendChild(btn("COPIAR CÓDIGO",function(){copiarLimpo(cod)},"on"))});
-  /* temporada troca na primeira terça do mês, provavelmente no reset das 19:00 UTC (16h em Brasília) */
-  function proxTempSnap(){function primTerca(a,m){var t=Date.UTC(a,m,1,19);while(new Date(t).getUTCDay()!==2)t+=864e5;return t}
-    var n=new Date(),a=n.getUTCFullYear(),m=n.getUTCMonth(),t=primTerca(a,m);if(t<=Date.now())t=primTerca(m===11?a+1:a,(m+1)%12);return t}
-  bind($("sDiario"),function(){var d=new Date(),x=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),19);if(x-30*60000<=Date.now())x+=864e5;
-    abrirAgenda({titulo:"Marvel Snap: reset diário em 30 minutos",inicio:x-30*60000,fim:x,rrule:"FREQ=DAILY",detalhes:"Missões renovam às 19:00 UTC (16h em Brasília)."})});
-  bind($("sTemp"),function(){var t=proxTempSnap();addWidget({tipo:"contagem",titulo:"Troca de temporada (Snap)",alvo:t});
-    abrirAgenda({titulo:"Marvel Snap: último dia da temporada",inicio:t-24*3600000,fim:t-23*3600000,detalhes:"A temporada troca na primeira terça do mês, provavelmente às 16h (Brasília). Termine o passe e gaste o ouro."});hint("Contagem regressiva criada nos widgets.")});
   bind($("sNews"),function(){executarBusca("Marvel Snap: novidades desta semana (novas cartas, ajustes de equilíbrio e eventos), com datas",true)});
 
   /* ---------- atalhos do ícone (toque longo): ?acao=falar|lembrete|timer|estudo ---------- */
@@ -1818,6 +2154,8 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
       if(a==="falar"){pararFala();ouvir()}else if(a==="estudo")abrirPainel("estudo");else acaoChip(a)})()}
 
   mostrarDestino();lerCompartilhado();
+  /* guia do MFF carregado em segundo plano, para a voz achar a ficha sem abrir JOGOS */
+  setTimeout(function(){carregarGuia()},2500);
 
   /* ---------- utilidades de interface ---------- */
   function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
