@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iOjki/LzIPZPPir26J/FsDItFkMWKk9kHGhNrg5Bb8Q='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-EW1nbWEH3KENSVShDLuDUHixTf9lsGzm7klxlFJdQfA='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Painel J.A.R.V.I.S.</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -157,7 +157,7 @@ ul.ajuda b{color:var(--amber);font-weight:600}
 .ubar i.desc{background:repeating-linear-gradient(45deg,var(--cyan-dim) 0 6px,transparent 6px 12px)}
 /* Flex Window (tela externa do Z Flip): só o essencial */
 body.capa .wrap{gap:10px;padding-top:6px}
-body.capa .tools .icon-btn:not(#btnMute):not(#btnCfg){display:none}
+body.capa .menu{grid-template-columns:repeat(2,minmax(0,1fr))}
 body.capa .reactor{max-width:min(220px,48vh)}
 body.capa .greet{font-size:18px}
 body.capa .time{font-size:34px}
@@ -171,6 +171,48 @@ body.flex .top,body.flex .greet,body.flex .dica,body.flex .busca{display:none!im
 body.flex .reactor{position:fixed;z-index:2;left:50%;top:calc(env(viewport-segment-top 0 0,0px) + 12px);transform:translateX(-50%);width:min(calc(env(viewport-segment-height 0 0,50vh) - 24px),calc(100vw - 32px));max-width:none;margin:0}
 body.flex .wrap{padding-top:calc(env(viewport-segment-top 0 1,50vh) + 10px)}
 body.flex .log{max-height:24vh}
+/* menu do topo: uma linha só no Flip, mesmo com zoom de tela maior */
+.top{flex-wrap:nowrap}
+.tag{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tools{flex:none;flex-wrap:nowrap}
+.menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.menu .icon-btn{min-height:44px;padding:0 4px;font-size:11px;letter-spacing:.06em}
+.menu .icon-btn[hidden]{display:none}
+#btnMenu.on{color:var(--amber);border-color:var(--amber)}
+.sec{margin:6px 0 0;font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.18em;color:var(--amber)}
+.cfg details{display:flex;flex-direction:column;gap:10px}
+.cfg details[open]{padding-bottom:4px}
+.cfg details summary{cursor:pointer;color:var(--cyan);font-family:var(--mono);font-size:11px;letter-spacing:.12em;padding:8px 0}
+.cfg label.inline{flex-direction:row;align-items:center;gap:8px;margin-right:auto}
+.cfg label.inline select{width:auto}
+.abas{display:flex;gap:6px;flex-wrap:wrap}
+.abas .icon-btn{flex:1 1 auto}
+.aba{display:flex;flex-direction:column;gap:10px}
+.destino{margin:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);text-align:center;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.destino.alerta{color:var(--amber)}
+.destino.bloq{color:var(--red)}
+.msg .acoes{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.cit{margin:6px 0 0;font-size:12px;color:var(--amber)}
+.msg .masc{display:block;margin-top:4px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted)}
+.venc{font-size:22px;font-weight:700;color:#fff;margin:0}
+ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2px;max-height:180px;overflow:auto}
+#pRes{display:flex;flex-direction:column;gap:8px}
+#pRes p{margin:0}
+#pRes ul.dias{max-height:none;gap:6px}
+#pRes ul.dias li{border-left:2px solid var(--cyan-dim);padding-left:8px}
+.flash{border:1px solid var(--cyan-dim);padding:14px;font-size:18px;line-height:1.4;white-space:pre-wrap;overflow-wrap:anywhere}
+.flash.verso{border-color:var(--amber)}
+.notas4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.notas4 .icon-btn{min-height:48px;padding:0 2px;line-height:1.2}
+.lei-atual{border-left:3px solid var(--amber);padding:6px 10px;font-size:16px;line-height:1.45;max-height:170px;overflow:auto;white-space:pre-wrap}
+.lei-atual:empty{display:none}
+.item{border:1px solid var(--cyan-dim);padding:12px;font-size:17px;line-height:1.4}
+.item .art{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted);margin-bottom:6px}
+.ok-t{color:#7dffb0}.erro-t{color:var(--red)}
+.linhas{display:flex;flex-direction:column;gap:8px}
+.linha{border-left:2px solid var(--cyan-dim);padding:4px 8px;font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+.linha b{color:var(--muted);font-weight:600}
+.linha .aba-n{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--amber)}
 @keyframes fadeIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
 @keyframes slideL{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
 @keyframes slideR{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
@@ -189,13 +231,21 @@ body.flex .log{max-height:24vh}
   <div class="top">
     <button class="tag" id="tagBtn" type="button" title="Uso do Gemini hoje">J.A.R.V.I.S. // <b id="brainTag">OFFLINE</b><span class="cota" id="cotaMini" hidden><i id="cotaMiniBar"></i></span></button>
     <div class="tools">
-      <button class="icon-btn" id="btnReplay" type="button" hidden>BRIEFING</button>
-      <button class="icon-btn" id="btnTalk" type="button" title="Depois de responder, volta a ouvir sozinho">CONVERSA: OFF</button>
-      <button class="icon-btn" id="btnTroca" type="button" title="Troca a voz do Jarvis e fala uma amostra">TIMBRE: CHARON</button>
       <button class="icon-btn" id="btnMute" type="button">VOZ: ON</button>
-      <button class="icon-btn" id="btnWid" type="button">+ WIDGET</button>
-      <button class="icon-btn" id="btnCfg" type="button">AJUSTES</button>
+      <button class="icon-btn" id="btnMenu" type="button" aria-expanded="false" aria-controls="menu">MENU</button>
     </div>
+  </div>
+
+  <div class="menu" id="menu" hidden>
+    <button class="icon-btn" id="btnReplay" type="button" hidden>BRIEFING</button>
+    <button class="icon-btn" id="btnTalk" type="button" title="Depois de responder, volta a ouvir sozinho">CONVERSA: OFF</button>
+    <button class="icon-btn" id="btnTroca" type="button" title="Troca a voz do Jarvis e fala uma amostra">TIMBRE: CHARON</button>
+    <button class="icon-btn" id="btnSigilo" type="button" title="Bloqueia a chave gratuita e mascara dados de clientes">SIGILOSO: OFF</button>
+    <button class="icon-btn" id="btnPrazos" type="button">PRAZOS</button>
+    <button class="icon-btn" id="btnEstudo" type="button">ESTUDO</button>
+    <button class="icon-btn" id="btnJogos" type="button">JOGOS</button>
+    <button class="icon-btn" id="btnWid" type="button">+ WIDGET</button>
+    <button class="icon-btn" id="btnCfg" type="button">AJUSTES</button>
   </div>
 
   <div class="cfg" id="cfg" hidden>
@@ -207,6 +257,17 @@ body.flex .log{max-height:24vh}
     <label for="fKey">CHAVE DO GEMINI (cérebro reserva, gratuito)<input id="fKey" class="secret" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="AIza…"></label>
     <p class="muted">Gemini grátis em <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>. As chaves ficam salvas só neste celular e não aparecem de novo na tela. Deixe o campo vazio para manter a chave atual.</p>
     <div class="uso" id="uso"></div>
+    <hr>
+    <h4 class="sec">SIGILO E PRIVACIDADE</h4>
+    <label for="fGplano">PLANO DA CHAVE DO GEMINI<select id="fGplano"><option value="gratis">Gratuito (Google usa os dados)</option><option value="pago">Pago (faturamento ativo)</option></select></label>
+    <p class="muted">No plano gratuito, o Google pode usar o conteúdo enviado para melhorar os produtos, e revisores humanos podem ler. Escolha "Pago" só se o projeto da chave tiver faturamento ativo.</p>
+    <label class="chk" for="fSigilo"><input type="checkbox" id="fSigilo"> MODO SIGILOSO</label>
+    <p class="muted">No modo sigiloso, a chave gratuita fica bloqueada, notas e rotinas não vão junto e os dados abaixo saem mascarados para a Claude ou para uma chave paga. A voz neural fica desligada, porque ela também enviaria o texto.</p>
+    <label for="fNomes">NOMES A MASCARAR (clientes e partes, um por linha)<textarea id="fNomes" placeholder="Maria da Silva&#10;Construtora Exemplo Ltda."></textarea></label>
+    <p class="muted">CPF, CNPJ, número de processo (CNJ), OAB, e-mail e telefone são mascarados sozinhos: o provedor recebe [CPF 1] e a resposta volta com o dado real, trocado aqui no celular. No Gemini gratuito, mensagem com esses dados não é enviada.</p>
+    <div class="row"><button class="icon-btn" type="button" id="btnLog">REGISTRO DE ENVIOS</button><button class="icon-btn" type="button" id="btnTermo">TERMO DE CIÊNCIA (IA)</button></div>
+    <div id="logBox" hidden></div>
+    <p class="muted">Segurança da chave: para o Jarvis, use uma chave de projeto sem faturamento, restrita à "Generative Language API" no Google Cloud. Outros sites publicados na mesma conta do GitHub Pages enxergam este armazenamento; publique-os em outra conta.</p>
     <hr>
     <label for="fGvoz">VOZ NEURAL DO GEMINI (usa a mesma chave gratuita)<select id="fGvoz"></select></label>
     <p class="muted">A voz neural soa bem mais humana, mas o plano gratuito tem limite diário. Quando o limite acaba ou a internet falha, o Jarvis usa a voz do aparelho abaixo.</p>
@@ -232,6 +293,96 @@ body.flex .log{max-height:24vh}
     <label for="wData" id="wLData">DATA E HORA<input id="wData" type="datetime-local"></label>
     <div class="row"><button class="icon-btn" type="button" id="wFechar">FECHAR</button><button class="icon-btn on" type="button" id="wAdd">ADICIONAR</button></div>
     <p class="hint" id="wMsg"></p>
+  </div>
+
+  <div class="cfg" id="termo" hidden>
+    <h4 class="sec">TERMO DE CIÊNCIA SOBRE USO DE IA</h4>
+    <p class="muted">Modelo para avisar o cliente antes de usar IA no caso, como pede a Recomendação 001/2024 do Conselho Federal da OAB. Revise o texto antes de usar.</p>
+    <label for="tCliente">CLIENTE<input id="tCliente" autocomplete="off"></label>
+    <label for="tObjeto">SERVIÇO OU CASO<input id="tObjeto" autocomplete="off" placeholder="ação de cobrança contra…"></label>
+    <label for="tAdv">ADVOGADA<input id="tAdv" autocomplete="off"></label>
+    <label for="tOab">OAB<input id="tOab" autocomplete="off" placeholder="OAB/SP 000.000"></label>
+    <label for="tCidade">CIDADE<input id="tCidade" autocomplete="off"></label>
+    <label for="tTexto">TEXTO<textarea id="tTexto" rows="12"></textarea></label>
+    <div class="row"><button class="icon-btn" type="button" id="tFechar">FECHAR</button><button class="icon-btn" type="button" id="tGerar">GERAR</button><button class="icon-btn on" type="button" id="tCopiar">COPIAR</button></div>
+  </div>
+
+  <div class="cfg" id="prazos" hidden>
+    <h4 class="sec">CALCULADORA DE PRAZOS</h4>
+    <label for="pDesc">DESCRIÇÃO (opcional)<input id="pDesc" autocomplete="off" placeholder="Contestação, processo de…"></label>
+    <label for="pMarco">MARCO INICIAL<select id="pMarco"><option value="dje">Disponibilização no DJe ou DJEN</option><option value="ciencia">Intimação ou ciência em data certa</option><option value="portal">Intimação no portal, não aberta (ciência no 10º dia)</option></select></label>
+    <label for="pData">DATA DO MARCO<input id="pData" type="date"></label>
+    <label for="pDias">PRAZO EM DIAS<input id="pDias" type="number" min="1" max="365" value="15" inputmode="numeric"></label>
+    <label for="pRegime">REGIME<select id="pRegime"><option value="cpc">Cível, CPC (dias úteis)</option><option value="clt">Trabalho, CLT (dias úteis)</option><option value="jec">Juizados JEC, JEF e JEFP (dias úteis)</option><option value="cpp">Penal, CPP (dias corridos)</option><option value="corridos">Outros em dias corridos (ECA, falência)</option></select></label>
+    <label for="pJustica">JUSTIÇA<select id="pJustica"><option value="estadual">Estadual</option><option value="federal">Federal (feriados da Lei 5.010/66)</option><option value="trabalho">Trabalho</option></select></label>
+    <label class="chk" for="pDobro"><input type="checkbox" id="pDobro"> PRAZO EM DOBRO (Fazenda, MP, Defensoria)</label>
+    <label class="chk" for="pPreso"><input type="checkbox" id="pPreso"> PENAL COM RÉU PRESO OU LEI MARIA DA PENHA</label>
+    <details id="pTrib"><summary>DIAS SEM EXPEDIENTE DO SEU TRIBUNAL</summary>
+      <label class="chk" for="pCarnaval"><input type="checkbox" id="pCarnaval"> CARNAVAL (segunda e terça)</label>
+      <label class="chk" for="pCinzas"><input type="checkbox" id="pCinzas"> QUARTA-FEIRA DE CINZAS</label>
+      <label class="chk" for="pSexta"><input type="checkbox" id="pSexta"> SEXTA-FEIRA SANTA</label>
+      <label class="chk" for="pCorpus"><input type="checkbox" id="pCorpus"> CORPUS CHRISTI</label>
+      <label for="pLocais">FERIADOS LOCAIS E SUSPENSÕES (um por linha: "25/01 aniversário da cidade" ou "10/03/2027 sistema fora do ar")<textarea id="pLocais"></textarea></label>
+      <p class="muted">Sem marcar, o dia conta como útil. Assim o prazo calculado nunca fica mais longo que o real: na dúvida, ele vence antes.</p>
+    </details>
+    <div class="row"><button class="icon-btn" type="button" id="pFechar">FECHAR</button><button class="icon-btn on" type="button" id="pCalc">CALCULAR</button></div>
+    <div id="pRes"></div>
+  </div>
+
+  <div class="cfg" id="estudo" hidden>
+    <h4 class="sec">ESTUDO</h4>
+    <div class="abas" id="eAbas"><button class="icon-btn on" type="button" data-aba="eRev">REVISÃO</button><button class="icon-btn" type="button" data-aba="eCartoes">CARTÕES</button><button class="icon-btn" type="button" data-aba="eLei">LEI SECA</button><button class="icon-btn" type="button" data-aba="eMetas">METAS</button></div>
+    <div class="aba" id="eRev"><p class="hint" id="eRevInfo"></p><div id="eCard"></div></div>
+    <div class="aba" id="eCartoes" hidden>
+      <label for="eMat">MATÉRIA<input id="eMat" list="eMats" autocomplete="off"></label>
+      <label for="eFrente">FRENTE (pergunta)<textarea id="eFrente"></textarea></label>
+      <label for="eVerso">VERSO (resposta)<textarea id="eVerso"></textarea></label>
+      <div class="row"><button class="icon-btn" type="button" id="eLimpar">LIMPAR</button><button class="icon-btn on" type="button" id="eSalvar">SALVAR CARTÃO</button></div>
+      <ul class="tl" id="eLista"></ul>
+    </div>
+    <div class="aba" id="eLei" hidden>
+      <label for="eLeiTxt">TEXTO DA LEI (cole aqui, ou abra um .txt)<textarea id="eLeiTxt" rows="6"></textarea></label>
+      <div class="row"><button class="icon-btn" type="button" id="eLeiArq">ABRIR .TXT</button><input type="file" id="eLeiFile" accept=".txt,text/plain" hidden><button class="icon-btn" type="button" id="eLeiSalvar">SALVAR TEXTO</button></div>
+      <div class="lei-atual" id="eLeiAtual"></div>
+      <div class="row"><label for="eVel" class="inline">VELOCIDADE<select id="eVel"><option value="0.8">0,8×</option><option value="1" selected>1×</option><option value="1.2">1,2×</option><option value="1.5">1,5×</option></select></label><button class="icon-btn" type="button" id="eLeiVolta">‹ VOLTAR</button><button class="icon-btn" type="button" id="eLeiPausa">PAUSAR</button><button class="icon-btn on" type="button" id="eLeiOuvir">OUVIR</button></div>
+      <div class="row"><button class="icon-btn on" type="button" id="eQGerar">QUESTÕES CERTO OU ERRADO (SEM IA)</button></div>
+      <div id="eQ"></div>
+    </div>
+    <div class="aba" id="eMetas" hidden>
+      <label for="eFoco">MATÉRIA DO PRÓXIMO FOCO (Pomodoro)<input id="eFoco" list="eMats" autocomplete="off"></label>
+      <label for="eMetasTxt">METAS SEMANAIS (uma por linha: "Constitucional: 5h")<textarea id="eMetasTxt"></textarea></label>
+      <div class="row"><button class="icon-btn on" type="button" id="eMetasSalvar">SALVAR</button></div>
+      <div id="eSem"></div>
+    </div>
+    <datalist id="eMats"></datalist>
+    <div class="row"><button class="icon-btn" type="button" id="eFechar">FECHAR</button></div>
+  </div>
+
+  <div class="cfg" id="jogos" hidden>
+    <h4 class="sec">JOGOS</h4>
+    <div class="abas" id="gAbas"><button class="icon-btn on" type="button" data-aba="gMff">FUTURE FIGHT</button><button class="icon-btn" type="button" data-aba="gSnap">MARVEL SNAP</button></div>
+    <div class="aba" id="gMff">
+      <p class="muted">Base: <a href="https://docs.google.com/spreadsheets/d/1H0Hcl9oVZV9gA266xkJAqPv5bD1qwqhC5NeVbLj_-FE/edit" target="_blank" rel="noopener noreferrer">Cynicalex Mega Guides</a>, de CynicalEx e colaboradores. Baixe a sua cópia (Arquivo, Fazer download, Microsoft Excel) e importe aqui. O guia fica só neste celular; para a IA vão só as linhas que interessam à pergunta.</p>
+      <div class="row"><button class="icon-btn on" type="button" id="gImp">IMPORTAR GUIA (.XLSX OU .CSV)</button><input type="file" id="gArq" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden></div>
+      <p class="hint" id="gInfo"></p>
+      <div class="bar"><input id="gQ" placeholder="Ex.: melhor uniforme do Thor" autocomplete="off" enterkeyhint="search"><button class="send" type="button" id="gBuscar">BUSCAR</button></div>
+      <div id="gRes"></div>
+      <h4 class="sec">LEMBRETES DO JOGO</h4>
+      <p class="muted">Reset semanal dos modos competitivos: quinta, 22h (Brasília). O horário do reset diário diverge entre as fontes; confira no jogo e anote abaixo.</p>
+      <label for="gDiario">RESET DIÁRIO<input id="gDiario" type="time"></label>
+      <div class="row"><button class="icon-btn" type="button" id="gSemanal">SEMANAL NA AGENDA</button><button class="icon-btn" type="button" id="gDiarioBtn">DIÁRIO NA AGENDA</button></div>
+    </div>
+    <div class="aba" id="gSnap" hidden>
+      <label for="sCod">CÓDIGO DO DECK<textarea id="sCod" placeholder="Cole aqui o código copiado no jogo"></textarea></label>
+      <div class="row"><button class="icon-btn" type="button" id="sLer">LER DECK</button><button class="icon-btn on" type="button" id="sAnalisar">ANALISAR COM IA</button></div>
+      <div id="sRes"></div>
+      <label for="sNomes">MONTAR CÓDIGO (12 cartas em inglês, uma por linha)<textarea id="sNomes"></textarea></label>
+      <div class="row"><button class="icon-btn" type="button" id="sGerar">GERAR CÓDIGO</button></div>
+      <h4 class="sec">LEMBRETES DO JOGO</h4>
+      <p class="muted">Missões diárias renovam às 16h (Brasília). A temporada troca na primeira terça do mês, provavelmente no mesmo horário. Ajustes de equilíbrio costumam sair às quintas, sem frequência fixa.</p>
+      <div class="row"><button class="icon-btn" type="button" id="sDiario">RESET NA AGENDA</button><button class="icon-btn" type="button" id="sTemp">FIM DA TEMPORADA</button><button class="icon-btn" type="button" id="sNews">NOVIDADES DA SEMANA</button></div>
+    </div>
+    <div class="row"><button class="icon-btn" type="button" id="gFechar">FECHAR</button></div>
   </div>
 
   <button class="reactor" id="reactorBtn" type="button" aria-label="Falar com o Jarvis">
@@ -269,6 +420,7 @@ body.flex .log{max-height:24vh}
     <input id="ask" placeholder="Fale ou digite…" autocomplete="off" enterkeyhint="send">
     <button class="send" type="button" id="btnSend">ENVIAR</button>
   </div>
+  <p class="destino" id="destino" role="button" tabindex="0"></p>
 </div></div>
 
 <script>
@@ -280,7 +432,8 @@ body.flex .log{max-height:24vh}
 })();
 (function(){
   "use strict";
-  var DEFAULTS={trat:"Senhora",cidades:"São Paulo",rotinas:"",sobre:"",perfil:"",feito:"",key:"",ckey:"",voz:"",gvoz:"Charon",widgets:"[]",intro:"",avisos:"",lembretes:"[]"};
+  var DEFAULTS={trat:"Senhora",cidades:"São Paulo",rotinas:"",sobre:"",perfil:"",feito:"",key:"",ckey:"",voz:"",gvoz:"Charon",widgets:"[]",intro:"",avisos:"",lembretes:"[]",
+    sigilo:"",gplano:"gratis",nomes:"",estudo:"{}",focolog:"[]",prazoscfg:"{}",termo:"{}",gdiario:""};
   var storageOk=true;
   var cfg=load(), muted=false, talkMode=false, speaking=false, listening=false, thinking=false, busy=false;
   var entrevista=null;
@@ -423,7 +576,8 @@ body.flex .log{max-height:24vh}
   var gPausaAte=0,gPausaCota=false,avisouG=false;try{gPausaAte=+localStorage.getItem("jarvis_voz_pausa")||0;gPausaCota=localStorage.getItem("jarvis_voz_cota")==="1"}catch(e){}
   /* cota=true só quando o Google recusou por cota diária; outras pausas (chave, conexão) não contam como "esgotada" */
   function pausaVoz(ms,cota){gPausaAte=ms?Date.now()+ms:0;gPausaCota=!!(ms&&cota);try{localStorage.setItem("jarvis_voz_pausa",String(gPausaAte));localStorage.setItem("jarvis_voz_cota",gPausaCota?"1":"")}catch(e){}}
-  function geminiVozOk(){return!!(cfg.key.trim()&&cfg.gvoz&&Date.now()>gPausaAte)}
+  /* no modo sigiloso a voz neural fica desligada: ela enviaria ao Google o texto da resposta já com os dados reais */
+  function geminiVozOk(){return!!(cfg.key.trim()&&cfg.gvoz&&Date.now()>gPausaAte&&cfg.sigilo!=="1")}
   function descreverVoz(){var v=vozSistema();
     return(cfg.key.trim()&&cfg.gvoz?"Voz principal: "+cfg.gvoz+" (Gemini). Reserva: ":"Voz atual: ")+(v?v.name:"padrão do aparelho")+"."+(vozStatus?" "+vozStatus:"")}
   function preencherVozes(){var sel=$("fVoz");if(!sel)return;var vs=vozesPt().slice().sort(function(a,b){return notaVoz(b)-notaVoz(a)});
@@ -473,6 +627,7 @@ body.flex .log{max-height:24vh}
   function geminiAudio(txt){
     var texto=limparFala(txt).replace(/\s+/g," ").trim(),chave=cfg.gvoz+"|"+texto;
     for(var c=0;c<cacheVoz.length;c++)if(cacheVoz[c][0]===chave)return Promise.resolve(cacheVoz[c][1]);
+    registrarEnvio("voz neural",{prov:"Gemini",plano:cfg.gplano==="pago"?"pago":"gratuito"},0);
     var ordem=[];if(rotaOk>=0)ordem.push(rotaOk);for(var k=0;k<ROTAS.length;k++)if(k!==rotaOk)ordem.push(k);
     var ultimo=null;
     function prox(n){if(n>=ordem.length){var e=new Error("A voz neural não está disponível para esta chave ("+(ultimo?(ultimo.status||"")+" "+ultimo.message:"sem resposta")+").");e.status=404;throw e}
@@ -533,6 +688,9 @@ body.flex .log{max-height:24vh}
     var c="Você é o J.A.R.V.I.S., assistente pessoal da usuária, no estilo do JARVIS dos filmes do Homem de Ferro: português do Brasil, calmo, elegante, direto, leve formalidade britânica e ironia fina. Sem bajulação. Suas respostas serão LIDAS EM VOZ ALTA: responda em 1 a 3 frases curtas, sem listas, sem markdown, sem emojis, sem links; escreva números e horas como se fala (\"oito e meia da noite\"). Se não souber ou não puder verificar algo, diga em uma frase. Nunca invente.\n\n";
     c+="Agora: "+DIAS[d.getDay()]+", "+d.getDate()+" de "+MESES[d.getMonth()]+" de "+d.getFullYear()+", "+pad(d.getHours())+":"+pad(d.getMinutes())+" (horário de Brasília).\n";
     c+="Trate a usuária por: "+cfg.trat+".\n";
+    c+="Trechos entre colchetes como [CPF 1], [NOME 2] ou [PROCESSO 1] são pseudônimos de dados protegidos: repita-os exatamente como estão e não tente adivinhar o conteúdo. Nunca calcule prazos processuais: diga que a calculadora de PRAZOS do painel faz essa conta.\n";
+    /* modo sigiloso: só o mínimo sai do aparelho (sem perfil, rotinas, notas, listas ou lembretes) */
+    if(cfg.sigilo==="1")return c+"Modo sigiloso: você não recebe o perfil nem as anotações dela; peça só o que for indispensável.\n";
     if(climaCache.length)c+="Clima agora: "+climaCache.map(function(w){return w.nome+" "+w.temp+" graus, "+w.ceu+(w.chuva!=null?", chuva "+w.chuva+"%":"")}).join("; ")+".\n";
     else c+="Cidades de interesse: "+cfg.cidades+" (clima ao vivo indisponível nesta tela).\n";
     var rot=rotinasHoje();c+="Rotinas de hoje: "+(rot.length?rot.join("; "):"nenhuma")+".\n";
@@ -588,7 +746,7 @@ body.flex .log{max-height:24vh}
         if(ultimo429){var d=ultimo429.dia,e=new Error(d?"A cota diária gratuita do Gemini acabou em todos os modelos. Ela renova amanhã.":"O Gemini está no limite por minuto. Espere uns segundos e fale de novo.");e.status=429;throw e}
         throw new Error("Nenhum modelo do Gemini respondeu. Confira a chave em AJUSTES.")}
       var m=lista[i],body={system_instruction:{parts:[{text:o.sistema}]},contents:o.contents,generationConfig:{temperature:o.temp==null?.6:o.temp,maxOutputTokens:o.tokens||2048}};
-      if(comBusca)body.tools=[{google_search:{}}];
+      var ferr=[];if(comBusca)ferr.push({google_search:{}});if(o.urlctx)ferr.push({url_context:{}});if(ferr.length)body.tools=ferr;
       return timeout(fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(body)}),o.busca?40000:25000)
         .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok,status:r.status,j:j}})})
         .then(function(x){
@@ -674,12 +832,17 @@ body.flex .log{max-height:24vh}
     var b=cerebro();
     limpa(txt,exibir);
     if(!b){var m="Estou sem cérebro conectado. Abra AJUSTES e cole uma chave: a do Claude ou a gratuita do Gemini.";bolha("j err",m);falar(m,null,true);return}
-    history.push({role:"user",content:txt});if(history.length>12)history=history.slice(-12);
+    var ub=$("log").lastElementChild,env=prepararEnvio(txt);
+    if(env.bloq){bolha("j err",env.bloq);falar(env.fala||env.bloq,null,true);if(env.chipSig)renderChips([["sigilo","Ativar modo sigiloso",1],["voltar","‹ Voltar"]]);return}
+    if(env.n&&ub)ub.appendChild(el("span","masc","enviado com máscara: "+resumoMasc(env.tipos)));
+    registrarEnvio("conversa",env.d,env.n);
+    history.push({role:"user",content:env.t});if(history.length>12)history=history.slice(-12);
     busy=true;thinking=true;setState("PROCESSANDO");var bub=bolha("j","…");
     (b==="api"?viaClaudeApi(history):b==="claude"?viaClaude(history):viaGemini(history)).then(function(resp){
-      resp=limparFala(resp).trim();bub.textContent=resp;history.push({role:"assistant",content:resp});
+      resp=limparFala(resp).trim();history.push({role:"assistant",content:resp});
+      var real=desmascarar(resp);bub.textContent=real;acoesResposta(bub,real);
       thinking=false;busy=false;setState("");
-      falar(resp,function(){if(talkMode&&!micBlocked)setTimeout(ouvir,350)})
+      falar(real,function(){if(talkMode&&!micBlocked)setTimeout(ouvir,350)})
     },function(err){
       history.pop();thinking=false;busy=false;setState("");bub.textContent=err.message;bub.classList.add("err");falar(err.message,null,true)})}
 
@@ -693,6 +856,7 @@ body.flex .log{max-height:24vh}
     var nl=0;lerW().forEach(function(w){
       if(w.tipo==="contagem"){var dias=Math.ceil((w.alvo-Date.now())/864e5);if(dias>0&&dias<=30)t+=" Faltam "+dias+(dias>1?" dias":" dia")+" para "+w.titulo+"."}
       if(w.tipo==="tarefas"&&nl<2){var p=(w.itens||[]).filter(function(i){return!i.ok}).length;if(p){nl++;t+=" Na lista "+w.titulo+", "+p+(p>1?" itens pendentes.":" item pendente.")}}});
+    try{var rv=vencidos().length;if(rv)t+=" Há "+rv+(rv>1?" cartões":" cartão")+" de estudo para revisar."}catch(e){}
     if(cerebro())t+=" Toque no reator quando quiser falar comigo.";return t}
 
   var LINHAS=["Inicializando núcleo do reator…","Calibrando interface holográfica…","Sincronizando relógio…","Conectando satélites meteorológicos…","Carregando rotinas…","Estabelecendo link neural…"];
@@ -813,7 +977,8 @@ body.flex .log{max-height:24vh}
   if(cfg.key.trim()&&cfg.gvoz&&gPausaAte>Date.now()){var hrs=Math.ceil((gPausaAte-Date.now())/3600000);avisouG=true;setTimeout(function(){avisoVoz("Voz neural em pausa por limite gratuito (cerca de "+hrs+"h). Até lá, uso só a voz do celular. Para forçar nova tentativa, toque em TIMBRE.")},300)}
   bind($("btnTalk"),function(){talkMode=!talkMode;$("btnTalk").textContent="CONVERSA: "+(talkMode?"ON":"OFF");$("btnTalk").classList.toggle("on",talkMode)});
   bind($("btnCfg"),function(){var f=$("cfg");f.hidden=!f.hidden;$("saveMsg").textContent="";
-    if(!f.hidden){$("fIntro").checked=cfg.intro!=="off";$("fAvisos").checked=cfg.avisos==="1";$("fTrat").value=cfg.trat;$("fCid").value=cfg.cidades;$("fRot").value=cfg.rotinas;$("fSobre").value=cfg.sobre;$("fKey").value="";$("fCkey").value="";phKeys();preencherVozes();mostrarUso()}});
+    if(!f.hidden){$("fIntro").checked=cfg.intro!=="off";$("fAvisos").checked=cfg.avisos==="1";$("fTrat").value=cfg.trat;$("fCid").value=cfg.cidades;$("fRot").value=cfg.rotinas;$("fSobre").value=cfg.sobre;$("fKey").value="";$("fCkey").value="";phKeys();preencherVozes();mostrarUso();
+      $("fGplano").value=cfg.gplano==="pago"?"pago":"gratis";$("fSigilo").checked=cfg.sigilo==="1";$("fNomes").value=cfg.nomes}});
   $("fGvoz").addEventListener("change",function(){cfg.gvoz=$("fGvoz").value;avisouG=false;pausaVoz(0);$("vozInfo").textContent=descreverVoz();rotuloTroca()});
   $("fVoz").addEventListener("change",function(){cfg.voz=$("fVoz").value;$("vozInfo").textContent=descreverVoz()});
   bind($("btnTestVoz"),function(){destravarVoz();falar("Às suas ordens, "+cfg.trat+". Todos os sistemas estão online.")});
@@ -825,8 +990,9 @@ body.flex .log{max-height:24vh}
     if(nc&&!/^sk-ant-[\w-]{20,}$/.test(nc)){$("saveMsg").textContent="Isso não parece uma chave do Claude (começa com sk-ant-). Nada foi salvo.";$("saveMsg").style.color="var(--red)";return}
     if(nk&&!/^[\w.-]{30,}$/.test(nk)){$("saveMsg").textContent="Isso não parece uma chave do Gemini (curta demais ou com caracteres estranhos). Copie de novo pelo botão de copiar do AI Studio. Nada foi salvo.";$("saveMsg").style.color="var(--red)";return}
     if(nc)cfg.ckey=nc;if(nk)cfg.key=nk;cfg.voz=$("fVoz").value;cfg.gvoz=$("fGvoz").value;cfg.intro=$("fIntro").checked?"":"off";cfg.avisos=$("fAvisos").checked?"1":"";if(cfg.avisos)pedirPermissaoAviso();avisouG=false;pausaVoz(0);$("fKey").value="";$("fCkey").value="";phKeys();$("vozInfo").textContent=descreverVoz();
+    cfg.gplano=$("fGplano").value==="pago"?"pago":"gratis";cfg.sigilo=$("fSigilo").checked?"1":"";cfg.nomes=$("fNomes").value;
     if(cfg.perfil){cfg.perfil=cfg.perfil.replace(/^Tratamento:.*$/m,"Tratamento: "+cfg.trat)}
-    var ok=save();tick();tagCerebro();rotuloTroca();
+    var ok=save();tick();tagCerebro();rotuloTroca();mostrarDestino();renderChips();
     $("saveMsg").textContent=ok?"Salvo neste celular.":MSG_NAO_SALVA;$("saveMsg").style.color=ok?"var(--amber)":"var(--red)";
     if(ok)setTimeout(function(){$("cfg").hidden=true;$("saveMsg").textContent=""},1200);
     if(started)buildCards()});
@@ -881,7 +1047,7 @@ body.flex .log{max-height:24vh}
       g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(.4,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+.22);o.connect(g);g.connect(acBip.destination);o.start(t0);o.stop(t0+.25)}}catch(e){}}
   /* aviso completo: notificação, vibração, bipes (alarmes), balão na conversa e fala */
   function alertar(txt,fala,alarme){notificacao(txt);if(alarme)bipes();
-    try{if(navigator.vibrate)navigator.vibrate(alarme?[500,250,500,250,500]:[250,120,250])}catch(e){}
+    try{var ua=navigator.userActivation;if(navigator.vibrate&&(!ua||ua.hasBeenActive))navigator.vibrate(alarme?[500,250,500,250,500]:[250,120,250])}catch(e){}
     hint(txt);if(started){bolha("j",txt);if(!listening&&!busy)setTimeout(function(){falar(fala||txt,null,true)},alarme?2300:0)}}
   function verificarAvisos(){var d=new Date(),agora=d.getHours()*60+d.getMinutes(),dia=hojeId(d),feitos={};
     var ls=lerL(),venceu=ls.filter(function(x){return x.quando<=Date.now()});
@@ -942,12 +1108,15 @@ body.flex .log{max-height:24vh}
   function quandoFalado(ms){var d=new Date(ms),h=new Date(),dia=Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-new Date(h.getFullYear(),h.getMonth(),h.getDate()))/864e5);
     return(dia===0?"hoje":dia===1?"amanhã":DIAS[d.getDay()]+", "+d.getDate()+"/"+(d.getMonth()+1))+" às "+hm(ms)}
   function renderLembretes(){var box=$("lembretesBox");if(!box)return;box.innerHTML="";var a=lerL().sort(function(x,y){return x.quando-y.quando});if(!a.length)return;
-    var c=el("section","card"),hd=el("div","hd"),ul=el("ul","tl");hd.appendChild(el("h3",null,"LEMBRETES"));c.appendChild(hd);
+    var c=el("section","card"),hd=el("div","hd"),acts=el("div","acts"),ul=el("ul","tl");hd.appendChild(el("h3",null,"LEMBRETES"));
+    acts.appendChild(mini(".ICS",function(){baixarICS(lerL().map(function(x){return{titulo:x.txt,inicio:x.quando}}),"jarvis-lembretes.ics");hint("Arquivo de agenda baixado: abra-o para importar os lembretes.")},false,"Exportar para a agenda"));
+    hd.appendChild(acts);c.appendChild(hd);
     a.forEach(function(x){var li=el("li");li.appendChild(el("span",null,quandoFalado(x.quando)+" · "+x.txt));
+      li.appendChild(mini("AGENDA",function(){abrirAgenda({titulo:x.txt,inicio:x.quando})},false,"Pôr no Google Agenda"));
       li.appendChild(mini("×",function(){gravarL(lerL().filter(function(y){return y.id!==x.id}))},true,"Apagar lembrete"));ul.appendChild(li)});
     c.appendChild(ul);box.appendChild(c)}
-  var pendente=null;
-  function criarLembrete(l){var a=lerL();a.push({id:novoId(),quando:l.quando,txt:l.txt,alarme:l.alarme?1:0});gravarL(a);
+  var pendente=null,ultLemb=null;
+  function criarLembrete(l){var a=lerL(),novo={id:novoId(),quando:l.quando,txt:l.txt,alarme:l.alarme?1:0};a.push(novo);ultLemb={id:novo.id,em:Date.now()};gravarL(a);
     var t="Combinado: "+quandoFalado(l.quando)+", "+l.txt+".",n=0;
     try{n=+localStorage.getItem("jarvis_dica_lemb")||0;localStorage.setItem("jarvis_dica_lemb",String(n+1))}catch(e){}
     if(n<2)t+=" Eu aviso com o painel aberto, mesmo em segundo plano.";return t}
@@ -1029,7 +1198,8 @@ body.flex .log{max-height:24vh}
     b.hidden=false;$("tTempo").textContent=mmss(restaTimer());$("tRot").textContent=(timer.pausa?"PAUSADO · ":"")+String(timer.rot).toUpperCase();$("tPausa").textContent=timer.pausa?"CONTINUAR":"PAUSAR";
     if(!timer.pausa&&d.getTime()>=timer.fim)fimTimer()}
   function registraFoco(ms){var d=hojeId(new Date()),f={};try{f=JSON.parse(localStorage.getItem("jarvis_foco")||"{}")||{}}catch(e){}
-    if(f.dia!==d)f={dia:d,ciclos:0,ms:0};f.ciclos++;f.ms+=ms;try{localStorage.setItem("jarvis_foco",JSON.stringify(f))}catch(e){}return f}
+    if(f.dia!==d)f={dia:d,ciclos:0,ms:0};f.ciclos++;f.ms+=ms;try{localStorage.setItem("jarvis_foco",JSON.stringify(f))}catch(e){}
+    try{registrarMateria(ms)}catch(e){}return f}
   function fimTimer(){var t=timer,atraso=Date.now()-t.fim,txt;timer=null;gravarT();telaLigada("timer",false);atualizaTimer(new Date());
     if(t.tipo==="foco"){var f=registraFoco(t.total);fimFocoEm=Date.now();txt="Foco concluído, "+cfg.trat+". Hoje: "+f.ciclos+(f.ciclos>1?" ciclos":" ciclo")+", "+durFalada(f.ms)+" de estudo. Hora de uma pausa."}
     else if(t.tipo==="pausa"){fimPausaEm=Date.now();txt="Pausa encerrada, "+cfg.trat+". Pronta para mais um ciclo?"}
@@ -1062,7 +1232,7 @@ body.flex .log{max-height:24vh}
   /* ---------- rodapé: sugestões + conversa ---------- */
   function medirDock(){var d=$("dock"),b=document.body;if(!d||d.hidden){b.classList.remove("com-dock");return}b.classList.add("com-dock");document.documentElement.style.setProperty("--dock",d.offsetHeight+"px")}
   try{new ResizeObserver(function(){medirDock()}).observe($("dock"))}catch(e){addEventListener("resize",medirDock)}
-  function mostrarDock(){$("dock").hidden=false;medirDock();renderChips();dicaInicial()}
+  function mostrarDock(){$("dock").hidden=false;medirDock();renderChips();mostrarDestino();dicaInicial();executarAcaoInicial()}
   function dicaInicial(){var n=0;try{n=+localStorage.getItem("jarvis_dicas")||0}catch(e){}if(n>=2)return;try{localStorage.setItem("jarvis_dicas",String(n+1))}catch(e){}
     bolha("j","Novidade: as sugestões aqui embaixo mostram o que eu faço. Também pode dizer \"timer de 10 minutos\", \"me lembre às 15h de ligar para o cliente\" ou \"coloque leite na lista do mercado\".")}
   function dizer(t,ouvirDepois){bolha("j",t);falar(t,ouvirDepois&&porVoz&&!micBlocked?function(){setTimeout(ouvir,350)}:null,true)}
@@ -1072,7 +1242,12 @@ body.flex .log{max-height:24vh}
   var AJUDA=[["Conversar","toque no reator e fale; com CONVERSA ligado, eu volto a ouvir sozinho."],["Timer","\"timer de 10 minutos\", \"pomodoro\", \"quanto falta no timer?\", \"pare o timer\"."],
     ["Lembretes","\"me lembre às 15h de ligar para o cliente\", \"me lembre daqui a 20 minutos de tirar o bolo\", \"lembrete amanhã às 9h pagar o boleto\"."],
     ["Listas","\"coloque leite e café na lista do mercado\"."],["Notas","\"anote: levar a carteira da OAB na audiência\"."],["Pesquisa","\"pesquise informativos recentes do STJ\"."],
-    ["Estudo","\"Treinar questões\" nas sugestões: certo ou errado, uma por vez, com correção."],["Agenda","\"o que tenho amanhã?\"; rotinas com horário em AJUSTES (\"terça: 19:00 cursinho\") avisam na hora."],
+    ["Prazos","\"prazo de 15 dias a partir de 19/11\", ou MENU, PRAZOS. Marque uma vez os feriados do seu tribunal."],
+    ["Sigilo","MENU, SIGILOSO: bloqueia a chave gratuita e mascara CPF, processo e nomes antes de enviar."],
+    ["Estudo","MENU, ESTUDO: cartões com revisão espaçada, lei seca em áudio e questões certo ou errado sem IA. \"Pomodoro de constitucional\" soma horas na meta da matéria."],
+    ["Jogos","\"no MFF, melhor uniforme do Thor\" consulta a sua cópia do guia do CynicalEx; em JOGOS, códigos de deck do Marvel Snap."],
+    ["Compartilhar","no app instalado, compartilhe um PDF ou uma foto com o Jarvis para resumir ou tirar datas e valores."],
+    ["Agenda","\"o que tenho amanhã?\"; o botão AGENDA põe lembretes e prazos no Google Agenda, que avisa mesmo com o app fechado."],
     ["Modo mesa","dobre o Flip em L: relógio em cima, conversa embaixo, tela ligada."],["Cota","toque em J.A.R.V.I.S. no topo para ver o uso do Gemini hoje."]];
   function mostrarAjuda(){var box=$("resultados"),c=el("section","card in"),hd=el("div","hd"),acts=el("div","acts"),ul=el("ul","ajuda");
     hd.appendChild(el("h3",null,"O QUE O JARVIS FAZ"));acts.appendChild(mini("×",function(){c.remove()},true,"Fechar"));hd.appendChild(acts);c.appendChild(hd);
@@ -1088,21 +1263,28 @@ body.flex .log{max-height:24vh}
   function precisaPermissao(){try{return"Notification" in window&&Notification.permission==="default"&&(cfg.avisos==="1"||lerL().length>0||!!timer)}catch(e){return false}}
   function chipsAgora(){var h=new Date().getHours(),agora=Date.now(),L=[],flex=document.body.classList.contains("flex");
     if(!cerebro())L.push(["cerebro","Conectar cérebro",1]);
+    if(ultLemb&&agora-ultLemb.em<180000&&lerL().some(function(x){return x.id===ultLemb.id}))L.push(["agendaUlt","Pôr o lembrete na Agenda",1]);
+    if(sigiloso())L.push(["sigilo","Sigiloso ✓",0,true]);
+    var rv=0;try{rv=vencidos().length}catch(e){}if(rv)L.push(["revisar","Revisar "+rv+(rv>1?" cartões":" cartão"),1]);
     if(timer)L.push(["tparar","Parar timer",1]);
     else if(agora-fimFocoEm<600000)L.push(["pausa5","Pausa de 5 min",1],["foco25","Mais 25 min de foco"]);
     else if(agora-fimPausaEm<600000)L.push(["foco25","Voltar ao foco (25 min)",1]);
     if(precisaPermissao())L.push(["notif","Permitir notificações",1]);
     if(cfg.avisos!=="1"&&rotinasComHora())L.push(["avisos","Avisar rotinas na hora",1]);
     if(flex)L.push(["tela",telaOn()?"Tela ligada ✓":"Manter tela ligada",0,telaOn()]);
+    var dsem=new Date().getDay(),expediente=dsem>0&&dsem<6&&h>=8&&h<19;
     if(h>=5&&h<11)L.push(["briefing","Briefing do dia"]);
+    if(expediente)L.push(["prazos","Calcular prazo"]);
     if(!timer)L.push(["foco25","Pomodoro 25 min"],["timer","Timer"]);
     L.push(["lembrete","Lembrete"]);
     if(cerebro())L.push(["questoes","Treinar questões"]);
+    L.push(["estudo","Estudo"]);
+    if(!expediente)L.push(["jogos","Jogos"]);
     L.push(["lista","Lista"]);
     if(cerebro())L.push(["juridico","Notícias jurídicas"]);
     L.push(["anotar","Anotar"]);
     if(h>=17||h<5)L.push(["amanha","O que tenho amanhã"]);
-    L.push(["briefing","Briefing"],["tela",telaOn()?"Tela ligada ✓":"Manter tela ligada",0,telaOn()],["ajuda","O que você faz?"]);
+    L.push(["prazos","Calcular prazo"],["jogos","Jogos"],["briefing","Briefing"],["sigilo","Modo sigiloso"],["tela",telaOn()?"Tela ligada ✓":"Manter tela ligada",0,telaOn()],["ajuda","O que você faz?"]);
     var vistos={};return L.filter(function(c){if(vistos[c[0]])return false;vistos[c[0]]=1;return true})}
   function renderChips(lista){var box=$("chips");if(!box)return;box.innerHTML="";
     (lista||chipsAgora()).forEach(function(c){var b=el("button","chip"+(c[2]?" dest":"")+(c[3]?" on":""),c[1]);b.type="button";
@@ -1128,7 +1310,13 @@ body.flex .log{max-height:24vh}
     if(k==="tela"){alternarTela();return}
     if(k==="notif"){pedirPermissaoAviso();return}
     if(k==="avisos"){cfg.avisos="1";save();pedirPermissaoAviso();dizer("Pronto: aviso no horário das rotinas enquanto o painel estiver aberto.");renderChips();return}
-    if(k==="ajuda"){mostrarAjuda();return}}
+    if(k==="ajuda"){mostrarAjuda();return}
+    if(k==="agendaUlt"){var lb=lerL().filter(function(x){return ultLemb&&x.id===ultLemb.id})[0];ultLemb=null;if(lb)abrirAgenda({titulo:lb.txt,inicio:lb.quando});renderChips();return}
+    if(k==="sigilo"){alternarSigilo();return}
+    if(k==="prazos"){abrirPainel("prazos");return}
+    if(k==="estudo"){abrirPainel("estudo");return}
+    if(k==="revisar"){abrirPainel("estudo");abaEstudo("eRev");return}
+    if(k==="jogos"){abrirPainel("jogos");return}}
   bind($("tagBtn"),function(){abrirAjustes("uso")});
 
   /* comandos executados no próprio painel, antes do cérebro */
@@ -1136,7 +1324,11 @@ body.flex .log{max-height:24vh}
     if(pend){var q=quandoDe(s);if(q){limpa(txt);dizer(criarLembrete({quando:q.quando,txt:pend.txt,alarme:pend.alarme}));return true}}
     if(/^(o que (voce|vc) (faz|sabe fazer|pode fazer)|ajuda|comandos|o que (eu )?posso (dizer|falar|pedir))$/.test(s)){limpa(txt);mostrarAjuda();return true}
     if(/^(o que (eu )?tenho (para |pra )?amanha|minha agenda de amanha|agenda de amanha|e amanha|como (e|esta|fica) amanha)$/.test(s)){limpa(txt);dizerAmanha();return true}
+    var pz=lerPrazoVoz(txt);if(pz){limpa(txt);calcularPorVoz(pz);return true}
+    if(/^(?:no |sobre o |sobre )?(?:marvel future fight|future fight|mff)\b[\s,:-]*.{3,}$/.test(s)){limpa(txt);perguntarGuia(txt.replace(/^\s*(?:jarvis,?\s*)?(?:no |sobre o |sobre )?(?:marvel future fight|future fight|mff)\b[\s,:-]*/i,""),true);return true}
     var t=lerTimer(txt);if(t){limpa(txt);
+      if(t.tipo==="foco"){var mm=/(?:pomodoro|foco)\s+(?:de|em)\s+(.+)$/i.exec(txt);if(mm&&!duracao(norm(mm[1]))){var e=lerE(),mat=mm[1].replace(/[.!?]+$/,"").trim();
+        e.foco=mat.charAt(0).toUpperCase()+mat.slice(1);gravarE(e);dizer(iniciarTimer(t.ms,"Foco: "+e.foco,"foco"));return true}}
       if(t.cancelar){if(timer){pararTimer();dizer("Timer cancelado.")}else dizer("Não há timer correndo.");return true}
       if(t.consulta){dizer(timer?"Faltam "+durFalada(restaTimer())+(timer.pausa?", com o timer pausado.":"."):"Não há timer correndo.");return true}
       if(t.pausar||t.continuar){if(!timer){dizer("Não há timer correndo.");return true}if(!!t.pausar!==!!timer.pausa)pausarTimer();dizer(timer.pausa?"Timer pausado.":"Timer correndo.");return true}
@@ -1148,6 +1340,484 @@ body.flex .log{max-height:24vh}
     return false}
 
   renderLembretes();if(timer)telaLigada("timer",true);postura();mostrarUso();
+
+  /* ---------- sigilo: plano declarado, modo sigiloso, máscara local e registro de envios ---------- */
+  /* No plano gratuito do Gemini o Google pode usar o conteúdo e revisores humanos podem lê-lo: dado de cliente não vai para lá. */
+  function sigiloso(){return cfg.sigilo==="1"}
+  function destino(){var b=cerebro();
+    if(b==="api")return{prov:"Claude",plano:"contrato",ok:true,txt:"Claude API (sem uso para treino)"};
+    if(b==="claude")return{prov:"Claude",plano:"contrato",ok:true,txt:"Claude"};
+    if(b==="gemini")return cfg.gplano==="pago"?{prov:"Gemini",plano:"pago",ok:true,txt:"Gemini pago"}:{prov:"Gemini",plano:"gratuito",ok:!sigiloso(),txt:"Gemini gratuito: o Google pode ler"};
+    return{prov:"",plano:"",ok:false,txt:"sem cérebro conectado"}}
+  function mostrarDestino(){var p=$("destino"),d=destino();if(p){p.className="destino"+(sigiloso()?(d.ok?" alerta":" bloq"):"");
+      p.textContent=sigiloso()?(d.ok?"MODO SIGILOSO · máscara → "+d.txt:"MODO SIGILOSO · bloqueado sem Claude ou chave paga"):"→ "+d.txt;p.title=p.textContent+". Toque para ver os ajustes de sigilo."}
+    var b=$("btnSigilo");if(b){b.textContent="SIGILOSO: "+(sigiloso()?"ON":"OFF");b.classList.toggle("on",sigiloso())}}
+  function alternarSigilo(){cfg.sigilo=sigiloso()?"":"1";save();mostrarDestino();renderChips();try{if(!$("cfg").hidden)$("fSigilo").checked=sigiloso()}catch(e){}
+    var d=destino();dizer(sigiloso()?(d.ok?"Modo sigiloso ligado. Dados de clientes saem mascarados e a voz neural fica desligada.":"Modo sigiloso ligado. Com só a chave gratuita do Gemini, a conversa fica bloqueada: conecte a Claude ou marque a chave como paga em AJUSTES."):"Modo sigiloso desligado.")}
+  bind($("btnSigilo"),alternarSigilo);
+  bind($("destino"),function(){abrirAjustes("fGplano")});
+  function digitos(s){return String(s).replace(/\D/g,"")}
+  function cpfOk(s){var d=digitos(s);if(d.length!==11||/^(\d)\1+$/.test(d))return false;
+    for(var t=9;t<11;t++){var soma=0;for(var i=0;i<t;i++)soma+=+d[i]*(t+1-i);if((soma*10)%11%10!==+d[t])return false}return true}
+  function cnpjOk(s){var d=digitos(s);if(d.length!==14||/^(\d)\1+$/.test(d))return false;
+    function dv(n){var pes=n===12?[5,4,3,2,9,8,7,6,5,4,3,2]:[6,5,4,3,2,9,8,7,6,5,4,3,2],soma=0;for(var i=0;i<n;i++)soma+=+d[i]*pes[i];var r=soma%11;return r<2?0:11-r}
+    return dv(12)===+d[12]&&dv(13)===+d[13]}
+  /* ordem importa: processo antes de CNPJ e CPF, e todos antes do telefone */
+  var MASC=[["PROCESSO",/\b\d{7}-?\d{2}\.?\d{4}\.?\d\.?\d{2}\.?\d{4}\b/g,null],["CNPJ",/\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/g,cnpjOk],["CPF",/\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g,cpfOk],
+    ["OAB",/\bOAB\s*[\/-]?\s*[A-Z]{2}\s*(?:n[ºo°.]*\s*)?\d{1,3}\.?\d{3}\b|\b\d{1,3}\.?\d{3}\s*[\/-]?\s*OAB\s*[\/-]?\s*[A-Z]{2}\b/gi,null],
+    ["E-MAIL",/\b[\w.+-]+@[\w-]+(?:\.[\w-]+)+\b/g,null],["TELEFONE",/(?:\+?55\s?)?\(?\b\d{2}\)?\s?9?\d{4}[-\s]?\d{4}\b/g,null]];
+  /* a tabela de pseudônimos fica só na memória desta sessão; o mesmo dado recebe sempre o mesmo pseudônimo */
+  var mapaMasc={orig:{},tok:{},cont:{}};
+  function tokenPara(tipo,orig){var k=tipo+"|"+orig.toLowerCase();if(mapaMasc.orig[k])return mapaMasc.orig[k];
+    var n=mapaMasc.cont[tipo]=(mapaMasc.cont[tipo]||0)+1,t="["+tipo+" "+n+"]";mapaMasc.orig[k]=t;mapaMasc.tok[t]=orig;return t}
+  function escRe(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}
+  function mascarar(txt){var n=0,tipos={},s=String(txt);
+    cfg.nomes.split("\n").map(function(x){return x.trim()}).filter(function(x){return x.length>2}).sort(function(a,b){return b.length-a.length}).forEach(function(nm){
+      s=s.replace(new RegExp("(^|[^\\p{L}\\p{N}])("+escRe(nm)+")(?=$|[^\\p{L}\\p{N}])","giu"),function(m,a,b){n++;tipos.NOME=(tipos.NOME||0)+1;return a+tokenPara("NOME",b)})});
+    MASC.forEach(function(p){s=s.replace(p[1],function(m){if(p[2]&&!p[2](m))return m;n++;tipos[p[0]]=(tipos[p[0]]||0)+1;return tokenPara(p[0],m)})});
+    return{t:s,n:n,tipos:tipos}}
+  function desmascarar(txt){return String(txt).replace(/\[(NOME|PROCESSO|CNPJ|CPF|OAB|E-MAIL|TELEFONE) \d+\]/g,function(t){return mapaMasc.tok[t]||t})}
+  function resumoMasc(tipos){return Object.keys(tipos).map(function(k){return tipos[k]+" "+k.toLowerCase()}).join(", ")}
+  /* decide o que sai do aparelho: dado de cliente nunca vai ao plano gratuito; nos outros destinos, sai mascarado */
+  function prepararEnvio(txt){var d=destino(),m=mascarar(txt);
+    if(sigiloso()&&!d.ok)return{bloq:"No modo sigiloso a chave gratuita do Gemini fica bloqueada. Conecte a Claude em AJUSTES ou marque a chave do Gemini como paga, se o projeto tiver faturamento ativo.",fala:"No modo sigiloso, a chave gratuita fica bloqueada."};
+    if(m.n&&d.plano==="gratuito")return{bloq:"Encontrei dados que identificam pessoas ou processos ("+resumoMasc(m.tipos)+"). No Gemini gratuito o Google pode usar o conteúdo e revisores humanos podem lê-lo, então não envio. Reescreva sem esses dados ou use o modo sigiloso com a Claude ou uma chave paga.",fala:"Não envio: a mensagem tem dados de clientes e a chave é gratuita.",chipSig:true};
+    return{t:m.t,n:m.n,tipos:m.tipos,d:d}}
+  /* registro sem conteúdo: quando, o quê, para quem e quantos dados foram mascarados */
+  function lerEnvios(){try{var a=JSON.parse(localStorage.getItem("jarvis_envios")||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+  function registrarEnvio(tipo,d,n){var a=lerEnvios();a.push({em:Date.now(),tipo:tipo,prov:(d&&d.prov)||"",plano:(d&&d.plano)||"",masc:n||0,sig:sigiloso()?1:0});
+    try{localStorage.setItem("jarvis_envios",JSON.stringify(a.slice(-300)))}catch(e){}}
+  function dataHora(ms){var d=new Date(ms);return pad(d.getDate())+"/"+pad(d.getMonth()+1)+" "+hm(ms)}
+  function mostrarLog(){var box=$("logBox");box.hidden=!box.hidden;if(box.hidden)return;box.innerHTML="";var a=lerEnvios().slice(-30).reverse();
+    if(!a.length){box.appendChild(el("p","muted","Nenhum envio registrado ainda."));return}
+    var ul=el("ul","dias");a.forEach(function(x){ul.appendChild(el("li",null,dataHora(x.em)+" · "+x.tipo+" · "+(x.prov||"?")+" ("+x.plano+")"+(x.masc?" · "+x.masc+" mascarado(s)":"")+(x.sig?" · sigiloso":"")))});box.appendChild(ul);
+    var row=el("div","row");row.appendChild(btn("EXPORTAR CSV",function(){baixarArquivo("data;tipo;provedor;plano;mascarados;sigiloso\n"+lerEnvios().map(function(x){return new Date(x.em).toISOString()+";"+x.tipo+";"+x.prov+";"+x.plano+";"+x.masc+";"+(x.sig?"sim":"não")}).join("\n"),"jarvis-registro-envios.csv","text/csv")}));
+    row.appendChild(btn("LIMPAR",function(){if(confirm("Apagar o registro de envios deste celular?")){try{localStorage.removeItem("jarvis_envios")}catch(e){}box.hidden=true}}));box.appendChild(row)}
+  bind($("btnLog"),mostrarLog);
+  /* respostas do cérebro ganham "copiar limpo" e "+ caderno"; citação jurídica recebe aviso de conferência */
+  var RE_CIT=/\b(art(igo)?s?\.?\s*\d|s[úu]mulas?\b|resp\b|aresp\b|hc\s*\d|re\s*\d|adi\b|adpf\b|tema\s*\d|stf\b|stj\b|tst\b|tse\b|lei\s*(n[ºo°.]*\s*)?\d)/i;
+  function acoesResposta(bub,txt){var box=el("div","acoes");box.appendChild(mini("COPIAR",function(){copiarLimpo(txt)},false,"Copiar sem caracteres invisíveis"));
+    box.appendChild(mini("+ CADERNO",function(){novoCartao(txt)},false,"Guardar como cartão de estudo"));bub.appendChild(box);
+    if(RE_CIT.test(txt))bub.appendChild(el("div","cit","Citações jurídicas não verificadas: confira na fonte oficial antes de usar."))}
+  /* tira caracteres invisíveis (largura zero, controles de direção, caracteres-etiqueta) antes de levar o texto para uma peça */
+  function limparInvisiveis(t){return String(t).replace(/[\u00AD\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u2069\uFEFF]/g,"").replace(/[\u{E0000}-\u{E007F}]/gu,"")}
+  function copiarLimpo(t){var lim=limparInvisiveis(t),tirados=Array.from(t).length-Array.from(lim).length;
+    (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(lim):Promise.reject(new Error("x"))).then(function(){hint("Copiado"+(tirados?"; removi "+tirados+" caractere(s) invisível(is)":"")+".")},function(){hint("Não consegui copiar neste navegador.")})}
+  function btn(txt,fn,cls){var b=el("button","icon-btn"+(cls?" "+cls:""),txt);b.type="button";b.addEventListener("click",function(){try{fn()}catch(e){hint("Erro: "+e.message)}});return b}
+  function baixarArquivo(txt,nome,tipo){try{var url=URL.createObjectURL(new Blob([txt],{type:tipo||"text/plain"})),a=document.createElement("a");a.href=url;a.download=nome;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},5000)}catch(e){hint("Não consegui gerar o arquivo neste navegador.")}}
+
+  /* ---------- Google Agenda e .ics: o lembrete toca mesmo com o app fechado ---------- */
+  function fmtDia(d){return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())}
+  function fmtUtc(ms){return new Date(ms).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"")}
+  function linkAgenda(o){var datas=o.diaInteiro?fmtDia(new Date(o.inicio))+"/"+fmtDia(somaDias(new Date(o.inicio),1)):fmtUtc(o.inicio)+"/"+fmtUtc(o.fim||o.inicio+30*60000);
+    return"https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(o.titulo)+"&dates="+datas+"&details="+encodeURIComponent(o.detalhes||"Criado pelo J.A.R.V.I.S.")+"&ctz=America%2FSao_Paulo"+(o.rrule?"&recur="+encodeURIComponent("RRULE:"+o.rrule):"")}
+  /* link em nova aba; window.open com "noopener" devolve null mesmo quando abre, e o painel saía da tela */
+  function abrirAgenda(o){var a=document.createElement("a");a.href=linkAgenda(o);a.target="_blank";a.rel="noopener noreferrer";document.body.appendChild(a);a.click();a.remove()}
+  function icsEsc(s){return String(s).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n")}
+  function baixarICS(eventos,nome){var L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//JARVIS//painel//PT-BR","CALSCALE:GREGORIAN","METHOD:PUBLISH"],agora=fmtUtc(Date.now());
+    eventos.forEach(function(o,i){L.push("BEGIN:VEVENT","UID:"+Date.now()+"-"+i+"@jarvis-painel","DTSTAMP:"+agora);
+      if(o.diaInteiro)L.push("DTSTART;VALUE=DATE:"+fmtDia(new Date(o.inicio)),"DTEND;VALUE=DATE:"+fmtDia(somaDias(new Date(o.inicio),1)));
+      else L.push("DTSTART:"+fmtUtc(o.inicio),"DTEND:"+fmtUtc(o.fim||o.inicio+30*60000));
+      if(o.rrule)L.push("RRULE:"+o.rrule);
+      L.push("SUMMARY:"+icsEsc(o.titulo),"DESCRIPTION:"+icsEsc(o.detalhes||"Criado pelo J.A.R.V.I.S."),"BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+icsEsc(o.titulo),"TRIGGER:"+(o.antes||"-PT0M"),"END:VALARM","END:VEVENT")});
+    L.push("END:VCALENDAR");baixarArquivo(L.join("\r\n")+"\r\n",nome||"jarvis.ics","text/calendar")}
+
+  /* ---------- menu do topo e painéis (um aberto por vez) ---------- */
+  var PAINEIS=["cfg","wpanel","termo","prazos","estudo","jogos"];
+  function abrirPainel(id){PAINEIS.forEach(function(p){if(p!==id)$(p).hidden=true});var e=$(id);e.hidden=false;$("menu").hidden=true;$("btnMenu").classList.remove("on");$("btnMenu").setAttribute("aria-expanded","false");
+    if(id==="estudo")abrirEstudo();if(id==="jogos")abrirJogos();if(id==="prazos")abrirPrazos();if(id==="termo")gerarTermo(true);
+    try{e.scrollIntoView({block:"start",behavior:reduce?"auto":"smooth"})}catch(x){}}
+  bind($("btnMenu"),function(){var m=$("menu");m.hidden=!m.hidden;$("btnMenu").classList.toggle("on",!m.hidden);$("btnMenu").setAttribute("aria-expanded",String(!m.hidden))});
+  /* AJUSTES e + WIDGET já têm seus próprios botões; aqui só fecho o menu e os outros painéis antes */
+  $("menu").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+    if(b.id==="btnCfg"||b.id==="btnWid"){PAINEIS.forEach(function(p){if(p!==(b.id==="btnCfg"?"cfg":"wpanel"))$(p).hidden=true})}
+    if(b.id!=="btnTalk"&&b.id!=="btnTroca"&&b.id!=="btnSigilo"){$("menu").hidden=true;$("btnMenu").classList.remove("on");$("btnMenu").setAttribute("aria-expanded","false")}},true);
+  bind($("btnPrazos"),function(){abrirPainel("prazos")});
+  bind($("btnEstudo"),function(){abrirPainel("estudo")});
+  bind($("btnJogos"),function(){abrirPainel("jogos")});
+  bind($("btnTermo"),function(){abrirPainel("termo")});
+  ["tFechar","pFechar","eFechar","gFechar"].forEach(function(id){bind($(id),function(){$(id).closest(".cfg").hidden=true;if(id==="eFechar")pararLei()})});
+
+  /* ---------- termo de ciência de uso de IA (modelo para revisão) ---------- */
+  function lerTermo(){try{return JSON.parse(cfg.termo||"{}")||{}}catch(e){return{}}}
+  function gerarTermo(soCampos){var t=lerTermo();if(soCampos){$("tAdv").value=t.adv||"";$("tOab").value=t.oab||"";$("tCidade").value=t.cidade||"";if($("tTexto").value)return}
+    var cli=$("tCliente").value.trim()||"[NOME DO CLIENTE]",obj=$("tObjeto").value.trim()||"[SERVIÇO OU CASO]",adv=$("tAdv").value.trim()||"[NOME DA ADVOGADA]",oab=$("tOab").value.trim()||"[OAB/UF E NÚMERO]",cid=$("tCidade").value.trim()||"[CIDADE]",d=new Date();
+    cfg.termo=JSON.stringify({adv:$("tAdv").value.trim(),oab:$("tOab").value.trim(),cidade:$("tCidade").value.trim()});save();
+    $("tTexto").value="TERMO DE CIÊNCIA SOBRE O USO DE INTELIGÊNCIA ARTIFICIAL\n\n"+cli+" declara ter sido informado(a) por "+adv+", "+oab+", de que, na prestação dos serviços jurídicos relativos a "+obj+", poderão ser usadas ferramentas de inteligência artificial generativa como apoio, por exemplo na organização de informações, na pesquisa e na revisão de textos, com os seguintes compromissos:\n\n"+
+      "1. Dados que identifiquem o(a) cliente não serão inseridos em ferramentas de IA sem proteção, como anonimização ou pseudonimização.\n2. Serão usados apenas serviços cujas condições contratuais não permitam o uso do conteúdo para treinar modelos.\n3. Todo conteúdo produzido com apoio de IA será revisado pela advogada, que mantém a responsabilidade técnica integral pelo trabalho.\n4. O sigilo profissional será preservado, nos termos do Estatuto da Advocacia e do Código de Ética e Disciplina da OAB.\n\n"+
+      "O(A) cliente pode, a qualquer momento, pedir que não se usem ferramentas de IA no seu caso.\n\n"+cid+", "+d.getDate()+" de "+MESES[d.getMonth()]+" de "+d.getFullYear()+".\n\n______________________________\n"+cli}
+  bind($("tGerar"),function(){$("tTexto").value="";gerarTermo(false)});
+  bind($("tCopiar"),function(){if(!$("tTexto").value)gerarTermo(false);copiarLimpo($("tTexto").value)});
+
+  /* ---------- prazos processuais: contados em código, nunca pela IA ----------
+     Só entram sozinhos os feriados fixados em lei. O que depende do tribunal ela marca; sem marcar, o dia conta como útil,
+     e o prazo calculado nunca fica mais longo que o real. */
+  function pascoa(a){var b=a%19,c=Math.floor(a/100),d=a%100,e=Math.floor(c/4),f=c%4,g=Math.floor((c+8)/25),h=Math.floor((c-g+1)/3),i=(19*b+c-e-h+15)%30,
+    k=Math.floor(d/4),l=d%4,m=(32+2*f+2*k-i-l)%7,n=Math.floor((b+11*i+22*m)/451),x=i+m-7*n+114;return new Date(a,Math.floor(x/31)-1,x%31+1)}
+  function chaveDia(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function somaDias(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n)}
+  function ddmm(d){return pad(d.getDate())+"/"+pad(d.getMonth()+1)}
+  function dataBR(d){return DIAS[d.getDay()]+", "+pad(d.getDate())+"/"+pad(d.getMonth()+1)+"/"+d.getFullYear()}
+  function feriadosAno(a,jus,op){var F={},p=pascoa(a);function add(d,nome){if(!F[chaveDia(d)])F[chaveDia(d)]=nome}
+    [[0,1,"Confraternização Universal"],[3,21,"Tiradentes"],[4,1,"Dia do Trabalho"],[8,7,"Independência"],[9,12,"Nossa Senhora Aparecida"],[10,2,"Finados"],[10,15,"Proclamação da República"],[11,25,"Natal"]].forEach(function(x){add(new Date(a,x[0],x[1]),x[2]+" (feriado nacional)")});
+    if(a>=2024)add(new Date(a,10,20),"Consciência Negra (Lei 14.759/2023)");
+    if(jus==="federal"){var lf=" (Lei 5.010/66, art. 62)";add(somaDias(p,-48),"Carnaval"+lf);add(somaDias(p,-47),"Carnaval"+lf);for(var s=-4;s<=0;s++)add(somaDias(p,s),"Semana Santa"+lf);
+      add(new Date(a,7,11),"11 de agosto"+lf);add(new Date(a,10,1),"Todos os Santos"+lf);add(new Date(a,11,8),"8 de dezembro"+lf);
+      for(var x=20;x<=31;x++)add(new Date(a,11,x),"Feriado de 20/12 a 06/01"+lf);for(var y=1;y<=6;y++)add(new Date(a,0,y),"Feriado de 20/12 a 06/01"+lf)}
+    if(op.carnaval){add(somaDias(p,-48),"Carnaval (marcado por você)");add(somaDias(p,-47),"Carnaval (marcado por você)")}
+    if(op.cinzas)add(somaDias(p,-46),"Quarta-feira de Cinzas (marcado por você)");
+    if(op.sexta)add(somaDias(p,-2),"Sexta-feira Santa (marcado por você)");
+    if(op.corpus)add(somaDias(p,60),"Corpus Christi (marcado por você)");
+    (op.locais||[]).forEach(function(l){if(!l.a||l.a===a)add(new Date(a,l.m-1,l.d),(l.nome||"Feriado ou suspensão local")+" (marcado por você)")});
+    return F}
+  /* "25/01 aniversário da cidade" ou "10/03/2027 sistema fora do ar" */
+  function lerLocais(t){var out=[];String(t||"").split("\n").forEach(function(l){var m=/^\s*(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\s*[-–:]?\s*(.*)$/.exec(l);if(!m)return;
+      var d=+m[1],mm=+m[2],a=m[3]?(+m[3]<100?2000+(+m[3]):+m[3]):0;if(d>=1&&d<=31&&mm>=1&&mm<=12)out.push({d:d,m:mm,a:a,nome:m[4].trim()})});return out}
+  var REGRAS={cpc:"CPC, art. 219 (dias úteis), art. 224 (exclui o dia do começo e inclui o do vencimento) e art. 220 (suspensão de 20/12 a 20/01).",
+    clt:"CLT, art. 775 (dias úteis) e art. 775-A (suspensão de 20/12 a 20/01).",
+    jec:"Lei 9.099/95, art. 12-A (dias úteis); suspensão de 20/12 a 20/01 (CPC, art. 220). Não há prazo em dobro nos Juizados (Lei 10.259/01, art. 9º; Lei 12.153/09, art. 7º).",
+    cpp:"CPP, art. 798 (dias corridos; vencimento em dia sem expediente prorroga para o dia útil seguinte) e art. 798-A (suspensão de 20/12 a 20/01, salvo réu preso e Lei Maria da Penha); início no 1º dia útil (Súmula 310 do STF).",
+    corridos:"Dias corridos (ECA, art. 152, §2º; Lei 11.101/05, art. 189, §1º, I). A suspensão de fim de ano não foi aplicada: confira se vale no seu caso. No ECA não há prazo em dobro."};
+  function calcularPrazo(o){/* o: {marco, data(Date), dias, reg, jus, dobro, preso, op} */
+    var cache={};function fer(d){var a=d.getFullYear();if(!cache[a])cache[a]=feriadosAno(a,o.jus,o.op);return cache[a][chaveDia(d)]}
+    function util(d){var w=d.getDay();return w!==0&&w!==6&&!fer(d)}
+    var corr=o.reg==="cpp"||o.reg==="corridos",susp=o.reg==="cpc"||o.reg==="clt"||o.reg==="jec"||(o.reg==="cpp"&&!o.preso);
+    function suspenso(d){if(!susp)return false;var m=d.getMonth(),dd=d.getDate();return(m===11&&dd>=20)||(m===0&&dd<=20)}
+    /* explica só dias de semana (fim de semana dispensa explicação); a suspensão de fim de ano entra uma vez */
+    var pulados=[],viuSusp=false;
+    function anota(x){if(suspenso(x)){if(!viuSusp){viuSusp=true;pulados.push("20/12 a 20/01, suspensão dos prazos")}}else if(x.getDay()!==0&&x.getDay()!==6&&fer(x))pulados.push(ddmm(x)+" "+fer(x))}
+    var dobro=o.dobro&&o.reg!=="jec"&&o.reg!=="corridos",n=o.dias*(dobro?2:1),passos=[],ini=o.data;
+    if(o.marco==="dje"){var sem=[],pub=somaDias(ini,1);while(!util(pub)){if(pub.getDay()!==0&&pub.getDay()!==6)sem.push(ddmm(pub)+" "+fer(pub));pub=somaDias(pub,1)}
+      passos.push("Disponibilização: "+dataBR(ini),"Publicação, 1º dia útil seguinte (CPC, art. 224, §2º; Lei 11.419/06, art. 4º, §3º): "+dataBR(pub)+(sem.length?" (sem expediente em "+sem.join("; ")+")":""));ini=pub}
+    else if(o.marco==="portal"){var tac=somaDias(ini,10);passos.push("Envio da intimação no portal: "+dataBR(ini),"Ciência tácita no 10º dia corrido (Lei 11.419/06, art. 5º, §3º): "+dataBR(tac)+
+      (util(tac)?"":". Há decisões que adiam a ciência para o dia útil seguinte; não adiei, para o prazo não ficar mais longo que o real"));ini=tac}
+    else passos.push("Intimação ou ciência: "+dataBR(ini));
+    var d=somaDias(ini,1);while(suspenso(d)||!util(d)){anota(d);d=somaDias(d,1)}
+    var dia1=d,conta=0,guarda=0;
+    while(guarda++<1500){if(!suspenso(d)&&(corr||util(d))){conta++;if(conta>=n)break}else anota(d);d=somaDias(d,1)}
+    var venc=d,prorrog=null;if(!util(venc)||suspenso(venc)){var v=venc;while(!util(v)||suspenso(v))v=somaDias(v,1);prorrog="O último dia ("+dataBR(venc)+") não tem expediente: prorrogado para o 1º dia útil seguinte.";venc=v}
+    return{venc:venc,dia1:dia1,n:n,dobro:dobro,corr:corr,passos:passos,pulados:pulados,prorrog:prorrog,regra:REGRAS[o.reg]}}
+  function lerPrazoCfg(){try{return JSON.parse(cfg.prazoscfg||"{}")||{}}catch(e){return{}}}
+  function abrirPrazos(){var c=lerPrazoCfg();["pCarnaval","pCinzas","pSexta","pCorpus"].forEach(function(id){$(id).checked=!!c[id]});$("pLocais").value=c.locais||"";
+    if(c.regime)$("pRegime").value=c.regime;if(c.justica)$("pJustica").value=c.justica;if(!$("pData").value){var h=new Date();$("pData").value=h.getFullYear()+"-"+pad(h.getMonth()+1)+"-"+pad(h.getDate())}}
+  function salvarPrazoCfg(){var c={};["pCarnaval","pCinzas","pSexta","pCorpus"].forEach(function(id){c[id]=$(id).checked});c.locais=$("pLocais").value;c.regime=$("pRegime").value;c.justica=$("pJustica").value;cfg.prazoscfg=JSON.stringify(c);save()}
+  function opcoesPrazo(){return{carnaval:$("pCarnaval").checked,cinzas:$("pCinzas").checked,sexta:$("pSexta").checked,corpus:$("pCorpus").checked,locais:lerLocais($("pLocais").value)}}
+  function calcularDoPainel(){var v=$("pData").value,m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v),dias=parseInt($("pDias").value,10),box=$("pRes");box.innerHTML="";
+    if(!m){box.appendChild(el("p","hint","Escolha a data do marco."));return null}if(!(dias>=1&&dias<=365)){box.appendChild(el("p","hint","O prazo deve ter de 1 a 365 dias."));return null}
+    salvarPrazoCfg();var r=calcularPrazo({marco:$("pMarco").value,data:new Date(+m[1],+m[2]-1,+m[3]),dias:dias,reg:$("pRegime").value,jus:$("pJustica").value,dobro:$("pDobro").checked,preso:$("pPreso").checked,op:opcoesPrazo()});
+    mostrarPrazo(r,$("pDesc").value.trim());return r}
+  function mostrarPrazo(r,desc){var box=$("pRes");box.innerHTML="";
+    box.appendChild(el("p","venc","Vence em "+dataBR(r.venc)));
+    box.appendChild(el("p","sub","Até 23h59 no horário do juízo (CPC, art. 213). Dia 1: "+dataBR(r.dia1)+". "+r.n+(r.corr?" dias corridos":" dias úteis")+(r.dobro?" (prazo em dobro: CPC, arts. 180, 183 e 186)":"")+"."));
+    var ul=el("ul","dias");r.passos.forEach(function(p){ul.appendChild(el("li",null,p))});
+    if(r.pulados.length)ul.appendChild(el("li",null,"Dias úteis da semana que não contaram: "+r.pulados.join("; ")+"."));
+    if(r.prorrog)ul.appendChild(el("li",null,r.prorrog));box.appendChild(ul);
+    box.appendChild(el("p","muted","Regras: "+r.regra));
+    box.appendChild(el("p","cit","Confira com o calendário do tribunal: feriado local ou suspensão não cadastrados mudam o resultado. Em recurso, comprove o feriado local na interposição (CPC, art. 1.003, §6º)."));
+    var titulo="Prazo"+(desc?": "+desc:" processual"),det="Vencimento calculado pelo J.A.R.V.I.S.: "+dataBR(r.venc)+". "+r.passos.join(" · ")+". Confira com o calendário do tribunal.",row=el("div","row");
+    row.appendChild(btn("AGENDA: VENCIMENTO",function(){abrirAgenda({titulo:titulo+" (vence hoje)",inicio:r.venc.getTime(),diaInteiro:true,detalhes:det})}));
+    var antes=r.venc,k=0;while(k<2){antes=somaDias(antes,-1);if(antes.getDay()!==0&&antes.getDay()!==6)k++}
+    row.appendChild(btn("AGENDA: 2 DIAS ANTES",function(){abrirAgenda({titulo:titulo+" (vence em "+ddmm(r.venc)+")",inicio:new Date(antes.getFullYear(),antes.getMonth(),antes.getDate(),9).getTime(),detalhes:det})}));
+    row.appendChild(btn("CONTAGEM",function(){addWidget({tipo:"contagem",titulo:titulo,alvo:new Date(r.venc.getFullYear(),r.venc.getMonth(),r.venc.getDate(),23,59).getTime()});hint("Contagem regressiva criada nos widgets.")}));
+    row.appendChild(btn("COPIAR CÁLCULO",function(){copiarLimpo(titulo+"\nVencimento: "+dataBR(r.venc)+"\n"+r.passos.join("\n")+(r.pulados.length?"\nNão contaram: "+r.pulados.join("; "):"")+(r.prorrog?"\n"+r.prorrog:"")+"\nRegras: "+r.regra)}));
+    box.appendChild(row)}
+  bind($("pCalc"),function(){calcularDoPainel()});
+  /* por voz: "prazo de 15 dias a partir de 19/11" (usa regime e tribunal salvos no painel) */
+  function lerPrazoVoz(txt){var s=norm(txt),m=/\bprazo de (\d{1,3}) dias?(?: (uteis|corridos))?\b.*?\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/.exec(s);if(!m)return null;
+    var a=m[5]?(+m[5]<100?2000+(+m[5]):+m[5]):new Date().getFullYear();return{dias:+m[1],tipo:m[2]||"",d:+m[3],m:+m[4],a:a,marco:/disponibiliz|publicad|dje|djen|diario/.test(s)?"dje":/portal/.test(s)?"portal":"ciencia"}}
+  function calcularPorVoz(p){abrirPainel("prazos");$("pDias").value=p.dias;$("pMarco").value=p.marco;$("pData").value=p.a+"-"+pad(p.m)+"-"+pad(p.d);
+    if(p.tipo==="corridos"&&!/cpp|corridos/.test($("pRegime").value))$("pRegime").value="corridos";
+    var r=calcularDoPainel();if(r)dizer("Pelas regras marcadas no painel, o prazo vence "+dataBR(r.venc)+". Confira os detalhes e o calendário do tribunal.")}
+
+  /* ---------- IndexedDB: textos grandes (lei seca, guia do MFF) ficam fora do localStorage ---------- */
+  var idbP=null;
+  function idb(){if(!idbP)idbP=new Promise(function(ok,err){try{var r=indexedDB.open("jarvis",1);r.onupgradeneeded=function(){r.result.createObjectStore("kv")};r.onsuccess=function(){ok(r.result)};r.onerror=function(){err(r.error)}}catch(e){err(e)}});return idbP}
+  function idbGet(k){return idb().then(function(db){return new Promise(function(ok,err){var q=db.transaction("kv").objectStore("kv").get(k);q.onsuccess=function(){ok(q.result)};q.onerror=function(){err(q.error)}})})}
+  function idbSet(k,v){return idb().then(function(db){return new Promise(function(ok,err){var tx=db.transaction("kv","readwrite");tx.objectStore("kv").put(v,k);tx.oncomplete=function(){ok()};tx.onerror=function(){err(tx.error)}})})}
+
+  /* ---------- estudo: cartões com repetição espaçada (FSRS-4.5, parâmetros padrão, retenção desejada de 90%) ---------- */
+  var FW=[0.4872,1.4003,3.7145,13.8206,5.1618,1.2298,0.8975,0.031,1.6474,0.1367,1.0461,2.1072,0.0793,0.3246,1.587,0.2272,2.8755],FDEC=-0.5,FFAT=19/81;
+  function fD0(g){return Math.min(10,Math.max(1,FW[4]-(g-3)*FW[5]))}
+  function fsrs(c,g,agora){/* g: 1 errei, 2 difícil, 3 bom, 4 fácil */
+    if(!c.reps){c.s=FW[g-1];c.d=fD0(g)}
+    else{var t=Math.max(0,(agora-(c.last||agora))/864e5),r=Math.pow(1+FFAT*t/c.s,FDEC),d0=c.d;
+      c.s=g===1?FW[11]*Math.pow(d0,-FW[12])*(Math.pow(c.s+1,FW[13])-1)*Math.exp(FW[14]*(1-r))
+        :c.s*(Math.exp(FW[8])*(11-d0)*Math.pow(c.s,-FW[9])*(Math.exp(FW[10]*(1-r))-1)*(g===2?FW[15]:1)*(g===4?FW[16]:1)+1);
+      c.d=Math.min(10,Math.max(1,FW[7]*fD0(3)+(1-FW[7])*(d0-FW[6]*(g-3))));if(g===1)c.lapses=(c.lapses||0)+1}
+    c.s=Math.max(.1,c.s);c.reps=(c.reps||0)+1;c.last=agora;
+    /* com 90% de retenção, o intervalo em dias é a própria estabilidade; "errei" volta em 10 minutos */
+    c.due=g===1?agora+600000:agora+Math.max(1,Math.round(c.s))*864e5;return c}
+  function lerE(){var e={};try{e=JSON.parse(cfg.estudo||"{}")||{}}catch(x){}e.cartoes=Array.isArray(e.cartoes)?e.cartoes:[];e.metas=e.metas||"";e.foco=e.foco||"";return e}
+  function gravarE(e){cfg.estudo=JSON.stringify(e);if(!save())hint(MSG_NAO_SALVA)}
+  function vencidos(){var agora=Date.now();return lerE().cartoes.filter(function(c){return(c.due||0)<=agora}).sort(function(a,b){return(a.due||0)-(b.due||0)})}
+  function intervaloTxt(ms){var m=Math.round(ms/60000);if(m<60)return m+" min";var d=Math.round(ms/864e5);return d+(d>1?" dias":" dia")}
+  function abaEstudo(id){Array.prototype.forEach.call($("eAbas").children,function(b){b.classList.toggle("on",b.getAttribute("data-aba")===id)});["eRev","eCartoes","eLei","eMetas"].forEach(function(a){$(a).hidden=a!==id});
+    if(id!=="eLei")pararLei();if(id==="eRev")renderRev();if(id==="eCartoes")renderCartoes();if(id==="eLei")carregarLei();if(id==="eMetas")renderMetas()}
+  $("eAbas").addEventListener("click",function(e){var b=e.target.closest("button");if(b)abaEstudo(b.getAttribute("data-aba"))});
+  function abrirEstudo(){var cur=Array.prototype.filter.call($("eAbas").children,function(b){return b.classList.contains("on")})[0];abaEstudo(cur?cur.getAttribute("data-aba"):"eRev");atualizaMaterias()}
+  function atualizaMaterias(){var e=lerE(),s={};e.cartoes.forEach(function(c){if(c.m)s[c.m]=1});metasLidas(e).forEach(function(x){s[x.m]=1});if(e.foco)s[e.foco]=1;
+    var dl=$("eMats");dl.innerHTML="";Object.keys(s).sort().forEach(function(m){var o=el("option");o.value=m;dl.appendChild(o)})}
+  var revAtual=null;
+  function renderRev(){var box=$("eCard"),v=vencidos();box.innerHTML="";
+    if(!v.length){var e=lerE(),prox=e.cartoes.map(function(c){return c.due||0}).sort(function(a,b){return a-b})[0];revAtual=null;
+      $("eRevInfo").textContent=e.cartoes.length?"Nada para revisar agora."+(prox?" Próxima revisão: "+dataHora(prox)+".":""):"Nenhum cartão ainda. Crie em CARTÕES ou toque em + CADERNO numa resposta do Jarvis.";return}
+    $("eRevInfo").textContent=v.length+(v.length>1?" cartões para revisar agora.":" cartão para revisar agora.");revAtual=v[0];
+    box.appendChild(el("div","flash",(revAtual.m?"["+revAtual.m+"]\n":"")+revAtual.f));
+    var row=el("div","row");row.appendChild(btn("OUVIR",function(){destravarVoz();falar(revAtual.f,null,true)}));row.appendChild(btn("MOSTRAR RESPOSTA",mostrarVerso,"on"));box.appendChild(row)}
+  function mostrarVerso(){var box=$("eCard");if(!revAtual)return;while(box.children.length>1)box.removeChild(box.lastChild);
+    box.appendChild(el("div","flash verso",revAtual.v||"(sem resposta cadastrada)"));
+    var g=el("div","notas4"),agora=Date.now();[["ERREI",1],["DIFÍCIL",2],["BOM",3],["FÁCIL",4]].forEach(function(x){var sim=fsrs(JSON.parse(JSON.stringify(revAtual)),x[1],agora);
+      var b=btn(x[0]+"\n"+intervaloTxt(sim.due-agora),function(){avaliar(x[1])});b.style.whiteSpace="pre-line";g.appendChild(b)});box.appendChild(g)}
+  function avaliar(g){var e=lerE(),c=e.cartoes.filter(function(x){return revAtual&&x.id===revAtual.id})[0];if(!c)return;fsrs(c,g,Date.now());gravarE(e);renderRev();renderChips()}
+  var editando=null;
+  function renderCartoes(){var ul=$("eLista"),e=lerE();ul.innerHTML="";atualizaMaterias();
+    e.cartoes.slice().sort(function(a,b){return(a.due||0)-(b.due||0)}).forEach(function(c){var li=el("li");
+      li.appendChild(el("span",null,(c.m?"["+c.m+"] ":"")+c.f.slice(0,90)+(c.f.length>90?"…":"")+" · "+((c.due||0)<=Date.now()?"revisar agora":"próxima: "+dataHora(c.due))));
+      li.appendChild(mini("EDITAR",function(){editando=c.id;$("eMat").value=c.m||"";$("eFrente").value=c.f;$("eVerso").value=c.v||"";$("eSalvar").textContent="ATUALIZAR CARTÃO";try{$("eFrente").focus()}catch(x){}}));
+      li.appendChild(mini("×",function(){if(!confirm("Apagar este cartão?"))return;var e2=lerE();e2.cartoes=e2.cartoes.filter(function(y){return y.id!==c.id});gravarE(e2);renderCartoes();renderChips()},true,"Apagar cartão"));ul.appendChild(li)})}
+  function limparForm(){editando=null;$("eFrente").value="";$("eVerso").value="";$("eSalvar").textContent="SALVAR CARTÃO"}
+  bind($("eLimpar"),limparForm);
+  bind($("eSalvar"),function(){var f=$("eFrente").value.trim(),v=$("eVerso").value.trim(),m=$("eMat").value.trim();if(!f){hint("Escreva a frente do cartão.");return}
+    var e=lerE();if(editando){e.cartoes.forEach(function(c){if(c.id===editando){c.f=f;c.v=v;c.m=m}})}else e.cartoes.push({id:novoId(),f:f,v:v,m:m,due:Date.now(),reps:0});
+    gravarE(e);limparForm();renderCartoes();renderChips();hint("Cartão salvo. Ele aparece em REVISÃO.")});
+  /* "+ CADERNO" numa resposta do Jarvis: abre o cartão já preenchido para ela completar */
+  function novoCartao(txt){abrirPainel("estudo");abaEstudo("eCartoes");limparForm();$("eFrente").value=String(txt).slice(0,800);if(!$("eMat").value)$("eMat").value="Caderno de erros";try{$("eVerso").focus()}catch(x){}}
+
+  /* lei seca em áudio: voz do aparelho (não gasta cota), com velocidade e posição guardada */
+  var lei={blocos:[],pos:0,lendo:false,id:0,carregada:false,texto:""};
+  function blocosLei(t){var out=[];String(t||"").replace(/\r/g,"").split(/\n+/).map(function(s){return s.trim()}).filter(Boolean).forEach(function(l){
+      var fr=l.match(/[^.;:!?]+[.;:!?]*\s*/g)||[l],cur="";fr.forEach(function(f){if(cur&&(cur+f).length>280){out.push(cur.trim());cur=""}cur+=f});if(cur.trim())out.push(cur.trim())});return out}
+  function carregarLei(){if(lei.carregada){mostrarLei();return}idbGet("leiseca").then(function(o){lei.carregada=true;if(o&&o.texto){$("eLeiTxt").value=o.texto;lei.texto=o.texto;lei.blocos=blocosLei(o.texto);lei.pos=Math.min(o.pos||0,Math.max(0,lei.blocos.length-1))}mostrarLei()},function(){lei.carregada=true})}
+  function mostrarLei(){$("eLeiAtual").textContent=lei.blocos.length?"("+(lei.pos+1)+"/"+lei.blocos.length+") "+lei.blocos[lei.pos]:"";$("eLeiOuvir").textContent=lei.lendo?"LENDO…":"OUVIR"}
+  function guardarPos(){return idbSet("leiseca",{texto:lei.texto,pos:lei.pos}).catch(function(){})}
+  function salvarLei(){var t=$("eLeiTxt").value;if(t!==lei.texto){lei.texto=t;lei.blocos=blocosLei(t);lei.pos=0}
+    return idbSet("leiseca",{texto:t,pos:lei.pos}).then(mostrarLei,function(){hint("Não consegui guardar o texto neste navegador.")})}
+  function pararLei(){var lendo=lei.lendo;lei.lendo=false;lei.id++;if(lendo){try{speechSynthesis.cancel()}catch(e){}}try{mostrarLei()}catch(e){}}
+  function lerLei(){if(!lei.blocos.length){hint("Cole ou abra o texto da lei e toque em SALVAR TEXTO.");return}pararFala();pararLei();lei.lendo=true;var id=lei.id,v=vozSistema(),vel=+$("eVel").value||1;
+    (function prox(){if(id!==lei.id||!lei.lendo)return;if(lei.pos>=lei.blocos.length){lei.lendo=false;lei.pos=0;guardarPos();mostrarLei();hint("Fim do texto.");return}
+      mostrarLei();var u=new SpeechSynthesisUtterance(lei.blocos[lei.pos]),feito=false;u.lang=v?v.lang:"pt-BR";if(v)u.voice=v;u.rate=vel;
+      function fim(){if(feito)return;feito=true;if(id!==lei.id||!lei.lendo)return;lei.pos++;guardarPos();prox()}
+      u.onend=fim;u.onerror=fim;setTimeout(fim,Math.max(6000,u.text.length*120/vel));try{speechSynthesis.speak(u)}catch(e){fim()}})()}
+  bind($("eLeiOuvir"),function(){destravarVoz();if(lei.lendo)return;salvarLei().then(lerLei)});
+  bind($("eLeiPausa"),pararLei);
+  bind($("eLeiVolta"),function(){var lendo=lei.lendo;pararLei();lei.pos=Math.max(0,lei.pos-1);guardarPos();mostrarLei();if(lendo)lerLei()});
+  bind($("eLeiSalvar"),function(){salvarLei().then(function(){hint("Texto guardado neste celular ("+lei.blocos.length+" trechos).")})});
+  bind($("eLeiArq"),function(){$("eLeiFile").value="";$("eLeiFile").click()});
+  $("eLeiFile").addEventListener("change",function(){var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){$("eLeiTxt").value=String(r.result||"");salvarLei().then(function(){hint("Texto aberto e guardado ("+lei.blocos.length+" trechos).")})};r.readAsText(f)});
+
+  /* questões certo ou errado da letra da lei, sem IA: troca uma palavra-chave ou um prazo e pergunta se o texto está certo */
+  var TROCAS=[["poderá","deverá"],["deverá","poderá"],["poderão","deverão"],["deverão","poderão"],["é vedado","é permitido"],["é vedada","é permitida"],["é permitido","é vedado"],["é permitida","é vedada"],
+    ["obrigatório","facultativo"],["obrigatória","facultativa"],["facultativo","obrigatório"],["facultativa","obrigatória"],["salvo","inclusive"],["exclusivamente","preferencialmente"],["privativamente","concorrentemente"],["concorrentemente","privativamente"],
+    ["maioria absoluta","maioria simples"],["maioria simples","maioria absoluta"],["dois terços","três quintos"],["três quintos","dois terços"],["no mínimo","no máximo"],["no máximo","no mínimo"],["anterior","posterior"],["posterior","anterior"],
+    ["Senado Federal","Câmara dos Deputados"],["Câmara dos Deputados","Senado Federal"],["Presidente da República","Congresso Nacional"],["Congresso Nacional","Presidente da República"]];
+  function mutacoes(t){var out=[];TROCAS.forEach(function(p){var m=new RegExp("(^|[^\\p{L}])("+escRe(p[0])+")(?=$|[^\\p{L}])","iu").exec(t);
+      if(m){var orig=m[2],nova=orig.charAt(0)===orig.charAt(0).toUpperCase()?p[1].charAt(0).toUpperCase()+p[1].slice(1):p[1];out.push({i:m.index+m[1].length,de:orig,para:nova})}});
+    /* prazo só com algarismos (sem o número por extenso entre parênteses, que entregaria a troca) */
+    var n=/\b(\d{1,3})\s+(dias|meses|anos|horas)\b/i.exec(t);if(n){var v=+n[1],nv=v<=2?v+1:v<=10?v+(v%2?2:-2):v+(v%10?5:10);out.push({i:n.index,de:n[1],para:String(nv)})}
+    return out}
+  function gerarQuestoes(t,qtd){var art="",cand=[];String(t||"").replace(/\r/g,"").split(/\n+/).forEach(function(l){l=l.trim();if(!l)return;var ma=/^(art\.?\s*\d+[º°o]?(?:-[a-z])?)/i.exec(l);if(ma)art=ma[1].replace(/\s+/g," ");
+      if(l.length<40||l.length>500)return;var mu=mutacoes(l);if(mu.length)cand.push({t:l,art:art,mu:mu})});
+    for(var i=cand.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=cand[i];cand[i]=cand[j];cand[j]=x}
+    return cand.slice(0,qtd||10).map(function(c){var certo=Math.random()<.5,m=c.mu[Math.floor(Math.random()*c.mu.length)];
+      return{art:c.art,original:c.t,certo:certo,texto:certo?c.t:c.t.slice(0,m.i)+m.para+c.t.slice(m.i+m.de.length),troca:certo?null:m}})}
+  var quiz={itens:[],i:0,pontos:0,acertos:0,erros:0,branco:0};
+  function iniciarQuiz(){quiz={itens:gerarQuestoes($("eLeiTxt").value,10),i:0,pontos:0,acertos:0,erros:0,branco:0};var box=$("eQ");box.innerHTML="";
+    if(!quiz.itens.length){box.appendChild(el("p","hint","Não achei trechos com expressões que dá para trocar (poderá ou deverá, vedado ou permitido, prazos em dias…). Cole artigos com essas expressões."));return}mostrarQuestao()}
+  function mostrarQuestao(){var box=$("eQ");box.innerHTML="";
+    if(quiz.i>=quiz.itens.length){box.appendChild(el("p","venc","Resultado: "+quiz.pontos+" ponto(s) líquido(s)"));box.appendChild(el("p","sub",quiz.acertos+" acerto(s), "+quiz.erros+" erro(s), "+quiz.branco+" em branco. No modelo Cebraspe, cada erro anula um acerto."));box.appendChild(btn("NOVA RODADA",iniciarQuiz,"on"));return}
+    var q=quiz.itens[quiz.i],it=el("div","item");it.appendChild(el("span","art","ITEM "+(quiz.i+1)+"/"+quiz.itens.length+(q.art?" · "+q.art.toUpperCase():"")));it.appendChild(document.createTextNode(q.texto));box.appendChild(it);
+    var row=el("div","row");row.appendChild(btn("OUVIR",function(){destravarVoz();falar(q.texto,null,true)}));row.appendChild(btn("EM BRANCO",function(){responder(null)}));row.appendChild(btn("ERRADO",function(){responder(false)}));row.appendChild(btn("CERTO",function(){responder(true)},"on"));box.appendChild(row)}
+  function responder(r){var q=quiz.itens[quiz.i],box=$("eQ"),ok=r===q.certo;box.lastChild.remove();
+    if(r===null)quiz.branco++;else if(ok){quiz.acertos++;quiz.pontos++}else{quiz.erros++;quiz.pontos--}
+    var fb=el("div","item");fb.appendChild(el("span",r===null?"art":ok?"ok-t":"erro-t",r===null?"EM BRANCO":ok?"ACERTOU":"ERROU"));
+    fb.appendChild(el("div",null,q.certo?"O texto está igual ao da lei: CERTO.":"O texto foi alterado: \""+q.troca.para+"\" no lugar de \""+q.troca.de+"\". ERRADO."));
+    fb.appendChild(el("div","sub","Original"+(q.art?" ("+q.art+")":"")+": "+q.original));box.appendChild(fb);var row=el("div","row");
+    if(r===null||!ok)row.appendChild(btn("+ CADERNO",function(){var e=lerE();e.cartoes.push({id:novoId(),m:"Lei seca",f:"Certo ou errado?"+(q.art?" ("+q.art+")":"")+"\n"+q.texto,v:(q.certo?"CERTO.":"ERRADO: \""+q.troca.para+"\" no lugar de \""+q.troca.de+"\".")+"\n\n"+q.original,due:Date.now(),reps:0});gravarE(e);hint("Guardado no caderno de erros.");renderChips()}));
+    row.appendChild(btn("PRÓXIMO",function(){quiz.i++;mostrarQuestao()},"on"));box.appendChild(row)}
+  bind($("eQGerar"),function(){salvarLei().then(iniciarQuiz)});
+
+  /* metas semanais por matéria, alimentadas pelos ciclos de foco do Pomodoro */
+  function metasLidas(e){return String((e||lerE()).metas||"").split("\n").map(function(l){var m=/^\s*(.+?)\s*[:\-–]\s*(\d+(?:[.,]\d+)?)\s*h?\s*$/i.exec(l);return m?{m:m[1].trim(),h:parseFloat(m[2].replace(",","."))}:null}).filter(Boolean)}
+  function lerFocoLog(){try{var a=JSON.parse(cfg.focolog||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+  function registrarMateria(ms){var a=lerFocoLog();a.push({dia:hojeId(new Date()),m:lerE().foco||"Geral",min:Math.round(ms/60000)});cfg.focolog=JSON.stringify(a.slice(-600));save()}
+  function barraMeta(rot,h,meta){var w=el("div"),top=el("div","ubt"),tr=el("div","ubar"),i=el("i"),f=meta?Math.min(1,h/meta):0;
+    top.appendChild(el("span",null,rot));top.appendChild(el("span",null,String(h).replace(".",",")+" h"+(meta?" de "+String(meta).replace(".",",")+" h":" (sem meta)")));
+    i.style.width=Math.round(f*100)+"%";i.className=meta&&f<.5?"medio":"";tr.appendChild(i);w.appendChild(top);w.appendChild(tr);return w}
+  function renderMetas(){var e=lerE();$("eFoco").value=e.foco||"";$("eMetasTxt").value=e.metas||"";atualizaMaterias();var box=$("eSem");box.innerHTML="";
+    var hoje=new Date(),ini=hojeId(somaDias(hoje,-((hoje.getDay()+6)%7))),soma={};lerFocoLog().forEach(function(x){if(x.dia>=ini)soma[x.m]=(soma[x.m]||0)+x.min});
+    var metas=metasLidas(e),nomes={};metas.forEach(function(x){nomes[x.m]=1});Object.keys(soma).forEach(function(k){nomes[k]=1});
+    if(!Object.keys(nomes).length){box.appendChild(el("p","muted","Sem ciclos de foco nesta semana. Escolha a matéria acima e use o Pomodoro."));return}
+    box.appendChild(el("h4","sec","ESTA SEMANA, DESDE SEGUNDA"));
+    Object.keys(nomes).sort().forEach(function(m){var meta=(metas.filter(function(x){return norm(x.m)===norm(m)})[0]||{}).h,min=0;Object.keys(soma).forEach(function(k){if(norm(k)===norm(m))min+=soma[k]});
+      box.appendChild(barraMeta(m,Math.round(min/6)/10,meta))})}
+  bind($("eMetasSalvar"),function(){var e=lerE();e.foco=$("eFoco").value.trim();e.metas=$("eMetasTxt").value;gravarE(e);renderMetas();hint("Metas salvas.")});
+  $("eFoco").addEventListener("change",function(){var e=lerE();e.foco=$("eFoco").value.trim();gravarE(e)});
+
+  /* ---------- pergunta avulsa ao cérebro (documentos e jogos), fora da conversa ---------- */
+  function claudeUnica(sistema,texto,o){var content=(o.blocos||[]).concat([{type:"text",text:texto}]);
+    function tentar(modelo){return timeout(fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":cfg.ckey.trim(),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+        body:JSON.stringify({model:modelo,max_tokens:o.tokens||1500,system:sistema,messages:[{role:"user",content:content}]})}),90000)
+      .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok,status:r.status,j:j}})})
+      .then(function(x){if(x.ok){var t=(x.j.content||[]).filter(function(b){return b.type==="text"}).map(function(b){return b.text}).join("").trim();if(t)return t;throw new Error("Resposta vazia do Claude.")}
+        if(x.status===404&&modelo!=="claude-haiku-5-5")return tentar("claude-haiku-5-5");if(x.status===401)throw new Error("A chave do Claude foi recusada. Confira em AJUSTES.");
+        throw new Error("O Claude não respondeu ("+x.status+").")})}
+    return tentar("claude-sonnet-5-5")}
+  function perguntaUnica(sistema,texto,o){o=o||{};var b=cerebro();
+    if(b==="gemini")return geminiGerar({sistema:sistema,contents:[{role:"user",parts:(o.partes||[]).concat([{text:texto}])}],tokens:o.tokens||2048,temp:o.temp==null?.3:o.temp,buscaSeAjudar:!!o.buscaSeAjudar,urlctx:!!o.urlctx}).then(function(r){return r.texto});
+    if(b==="api")return claudeUnica(sistema,texto,o);
+    if(b==="claude"&&!o.partes&&!o.blocos)return viaClaude([{role:"user",content:sistema+"\n\n"+texto}]);
+    return Promise.reject(new Error(b?"Para arquivos, use a chave do Gemini ou da Claude API em AJUSTES.":"Sem cérebro conectado. Cole uma chave em AJUSTES."))}
+
+  /* ---------- "Compartilhar com o Jarvis": PDF, foto, texto ou link vindos de outro app (app instalado) ---------- */
+  function paraBase64(blob){return new Promise(function(ok,err){var r=new FileReader();r.onload=function(){ok(String(r.result).split(",")[1]||"")};r.onerror=function(){err(r.error)};r.readAsDataURL(blob)})}
+  function lerCompartilhado(){var q=location.search;if(!/[?&]compartilhado=/.test(q))return;try{history.replaceState(null,"",location.pathname)}catch(e){}
+    if(/compartilhado=erro/.test(q)||!("caches" in window)){hint("Não consegui receber o que foi compartilhado.");return}
+    caches.open("jarvis-compartilhado").then(function(c){return Promise.all([c.match("compartilhado-meta").then(function(r){return r?r.json():null}),c.match("compartilhado-arquivo").then(function(r){return r?r.blob():null})])})
+      .then(function(x){if(x[0])mostrarCompartilhado(x[0],x[1])},function(){})}
+  function mostrarCompartilhado(meta,blob){var box=$("resultados"),c=el("section","card in"),hd=el("div","hd"),acts=el("div","acts"),nome=meta.nome||(meta.url?"link":"texto");
+    hd.appendChild(el("h3",null,"RECEBIDO // "+String(nome).toUpperCase()));acts.appendChild(mini("×",function(){try{caches.delete("jarvis-compartilhado")}catch(e){}c.remove()},true,"Descartar"));hd.appendChild(acts);c.appendChild(hd);
+    if(blob)c.appendChild(el("p","sub",(meta.tipo||blob.type||"arquivo")+" · "+Math.max(1,Math.round(blob.size/1024))+" KB"));
+    var txt=[meta.titulo,meta.texto,meta.url].filter(Boolean).join("\n");if(txt)c.appendChild(el("p","res",txt.slice(0,600)));
+    var d=destino();c.appendChild(el("p","cit",sigiloso()?(blob?"Modo sigiloso: o documento não sai do aparelho.":"Modo sigiloso: o texto sai mascarado."):d.plano==="gratuito"?"Vai para o Gemini gratuito: o Google pode usar e revisores podem ler. Não envie documento de cliente.":"Vai para "+d.txt+"."));
+    var res=el("div"),row=el("div","row");
+    if(!(sigiloso()&&blob)){var suf=d.plano==="gratuito"?" (NÃO É DE CLIENTE)":"";
+      row.appendChild(btn("RESUMIR"+suf,function(){analisarCompartilhado(meta,blob,"resumo",res)}));
+      row.appendChild(btn("DATAS, PRAZOS E VALORES"+suf,function(){analisarCompartilhado(meta,blob,"extrair",res)},"on"))}
+    c.appendChild(row);c.appendChild(res);box.insertBefore(c,box.firstChild);try{c.scrollIntoView({block:"start"})}catch(e){}}
+  var PEDIDOS={resumo:"Resuma em português do Brasil, em até 8 frases: do que se trata, quem são as partes (se houver), o que se pede ou se decide e o que precisa ser feito. Não invente nada que não esteja no conteúdo.",
+    extrair:"Liste em português do Brasil, em linhas curtas: cada data no formato dd/mm/aaaa com o que acontece nela, os prazos, os valores em reais e as partes envolvidas. Se algo não constar, escreva \"não consta\". Não invente nada."};
+  function analisarCompartilhado(meta,blob,modo,res){res.innerHTML="";var b=cerebro(),d=destino(),env=null,txt=[meta.titulo,meta.texto,meta.url].filter(Boolean).join("\n");
+    function aviso(m){res.innerHTML="";res.appendChild(el("p","muted",m))}
+    if(!b)return aviso("Sem cérebro conectado.");if(blob&&sigiloso())return aviso("No modo sigiloso, documentos não saem do aparelho.");
+    if(blob&&blob.size>15*1048576)return aviso("Arquivo grande demais para enviar direto (limite de 15 MB).");
+    if(!blob){env=prepararEnvio(txt);if(env.bloq)return aviso(env.bloq)}
+    aviso("Lendo…");registrarEnvio(blob?"documento":"texto compartilhado",d,env?env.n:0);
+    (blob?paraBase64(blob):Promise.resolve(null)).then(function(b64){var tipo=blob?(blob.type||meta.tipo||"application/octet-stream"):"",o={tokens:2048,temp:.2,urlctx:!blob&&!!meta.url};
+      if(b64){if(b==="gemini")o.partes=[{inline_data:{mime_type:tipo,data:b64}}];else o.blocos=[/pdf/.test(tipo)?{type:"document",source:{type:"base64",media_type:"application/pdf",data:b64}}:{type:"image",source:{type:"base64",media_type:tipo,data:b64}}]}
+      return perguntaUnica("Você é o J.A.R.V.I.S., assistente de uma advogada. Responda só com base no conteúdo enviado.",PEDIDOS[modo]+(env?"\n\nConteúdo:\n"+env.t:""),o)})
+    .then(function(t){t=desmascarar(limparFala(t).trim());res.innerHTML="";res.appendChild(el("p","res",t));
+      var datas=[],re=/\b(\d{2})\/(\d{2})\/(\d{4})\b/g,m;while((m=re.exec(t))&&datas.length<6){if(datas.indexOf(m[0])<0)datas.push(m[0])}
+      if(datas.length){res.appendChild(el("p","sub","Datas encontradas (confira no documento):"));var row=el("div","row");
+        datas.forEach(function(k){var p=k.split("/"),ms=new Date(+p[2],+p[1]-1,+p[0],9).getTime();row.appendChild(btn("AGENDA "+k.slice(0,5),function(){abrirAgenda({titulo:"Do documento "+(meta.nome||"compartilhado"),inicio:ms,detalhes:t.slice(0,900)})}))});res.appendChild(row)}
+      res.appendChild(el("p","cit","Resumo feito por IA: confira no documento original."))},function(e){aviso(erroRede(e))})}
+
+  /* ---------- leitor de .xlsx sem biblioteca: o zip abre com DecompressionStream e o XML com DOMParser ---------- */
+  function lerZip(buf){var dv=new DataView(buf),u8=new Uint8Array(buf),fim=-1,td=new TextDecoder(),ent={};
+    for(var i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-65557);i--){if(dv.getUint32(i,true)===0x06054b50){fim=i;break}}
+    if(fim<0)throw new Error("o arquivo não é um .xlsx válido");
+    var n=dv.getUint16(fim+10,true),p=dv.getUint32(fim+16,true);
+    for(var k=0;k<n&&dv.getUint32(p,true)===0x02014b50;k++){var nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true);
+      ent[td.decode(u8.subarray(p+46,p+46+nl))]={met:dv.getUint16(p+10,true),tam:dv.getUint32(p+20,true),off:dv.getUint32(p+42,true)};p+=46+nl+xl+cl}
+    return function(nome){var e=ent[nome];if(!e)return Promise.resolve(null);var ini=e.off+30+dv.getUint16(e.off+26,true)+dv.getUint16(e.off+28,true),dados=u8.subarray(ini,ini+e.tam);
+      if(e.met===0)return Promise.resolve(td.decode(dados));
+      if(e.met!==8||!window.DecompressionStream)return Promise.reject(new Error("compressão não suportada neste navegador"));
+      return new Response(new Blob([dados]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text()}}
+  function colNum(ref){var m=/^([A-Z]+)/.exec(ref||""),n=0;if(!m)return-1;for(var i=0;i<m[1].length;i++)n=n*26+(m[1].charCodeAt(i)-64);return n-1}
+  function linhasDaAba(doc,strs){var out=[];Array.prototype.forEach.call(doc.getElementsByTagName("row"),function(r){var l=[],c0=0;
+      Array.prototype.forEach.call(r.getElementsByTagName("c"),function(c){var t=c.getAttribute("t"),v=c.getElementsByTagName("v")[0],val,col=colNum(c.getAttribute("r"));if(col<0)col=c0;c0=col+1;
+        if(t==="s")val=strs[+(v&&v.textContent)]||"";else if(t==="inlineStr")val=Array.prototype.map.call(c.getElementsByTagName("t"),function(x){return x.textContent}).join("");else val=v?v.textContent:"";
+        l[col]=String(val).trim()});
+      for(var i=0;i<l.length;i++)if(l[i]==null)l[i]="";if(l.some(Boolean))out.push(l)});return out}
+  function lerXlsx(buf){var abrir=lerZip(buf),xml=function(s){return new DOMParser().parseFromString(s,"application/xml")};
+    return Promise.all([abrir("xl/workbook.xml"),abrir("xl/_rels/workbook.xml.rels"),abrir("xl/sharedStrings.xml")]).then(function(r){if(!r[0])throw new Error("não encontrei as abas da planilha");
+      var wb=xml(r[0]),rels=xml(r[1]||"<Relationships/>"),strs=[],alvo={};
+      if(r[2])Array.prototype.forEach.call(xml(r[2]).getElementsByTagName("si"),function(si){strs.push(Array.prototype.map.call(si.getElementsByTagName("t"),function(t){return t.textContent}).join(""))});
+      Array.prototype.forEach.call(rels.getElementsByTagName("Relationship"),function(x){alvo[x.getAttribute("Id")]=x.getAttribute("Target")});
+      var abas=Array.prototype.map.call(wb.getElementsByTagName("sheet"),function(s){var t=(alvo[s.getAttribute("r:id")]||"").replace(/^\/?xl\//,"").replace(/^\//,"");return{nome:s.getAttribute("name"),arq:"xl/"+t}});
+      return Promise.all(abas.map(function(a){return abrir(a.arq).then(function(s){return{nome:a.nome,linhas:s?linhasDaAba(xml(s),strs):[]}})}))})}
+  function lerCsv(t){var linhas=[],l=[],c="",q=false;for(var i=0;i<t.length;i++){var ch=t[i];
+      if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}
+      else if(ch==='"')q=true;else if(ch===","||ch===";"&&!/,/.test(t.slice(0,200))){l.push(c.trim());c=""}else if(ch==="\n"){l.push(c.trim());if(l.some(Boolean))linhas.push(l);l=[];c=""}else if(ch!=="\r")c+=ch}
+    l.push(c.trim());if(l.some(Boolean))linhas.push(l);return linhas}
+
+  /* ---------- Marvel Future Fight: a cópia do guia do CynicalEx que ela importa fica só no aparelho ---------- */
+  var guia=null,guiaCarregado=false;
+  function abaJogos(id){Array.prototype.forEach.call($("gAbas").children,function(b){b.classList.toggle("on",b.getAttribute("data-aba")===id)});["gMff","gSnap"].forEach(function(a){$(a).hidden=a!==id});if(id==="gMff")carregarGuia()}
+  $("gAbas").addEventListener("click",function(e){var b=e.target.closest("button");if(b)abaJogos(b.getAttribute("data-aba"))});
+  function abrirJogos(){var cur=Array.prototype.filter.call($("gAbas").children,function(b){return b.classList.contains("on")})[0];abaJogos(cur?cur.getAttribute("data-aba"):"gMff");$("gDiario").value=cfg.gdiario||""}
+  function carregarGuia(){if(guiaCarregado){infoGuia();return Promise.resolve(guia)}return idbGet("guia_mff").then(function(g){guiaCarregado=true;guia=g||null;infoGuia();return guia},function(){guiaCarregado=true;infoGuia();return null})}
+  function infoGuia(){$("gInfo").textContent=guia?"Guia importado em "+dataHora(guia.em)+": "+guia.abas.length+" abas, "+guia.abas.reduce(function(s,a){return s+Math.max(0,a.linhas.length-1)},0)+" linhas (sem contar os cabeçalhos).":"Nenhum guia importado ainda."}
+  bind($("gImp"),function(){$("gArq").value="";$("gArq").click()});
+  $("gArq").addEventListener("change",function(){var f=this.files&&this.files[0];if(!f)return;$("gInfo").textContent="Lendo "+f.name+"…";var csv=/\.csv$/i.test(f.name)||/csv/.test(f.type);
+    (csv?f.text().then(function(t){return[{nome:f.name.replace(/\.csv$/i,""),linhas:lerCsv(t)}]}):f.arrayBuffer().then(lerXlsx)).then(function(abas){
+      abas=abas.filter(function(a){return a.linhas.length>1});if(!abas.length)throw new Error("planilha vazia");
+      /* .csv soma uma aba ao guia já importado; .xlsx substitui tudo */
+      var g=csv&&guia?{abas:guia.abas.filter(function(a){return a.nome!==abas[0].nome}).concat(abas),em:Date.now(),arq:f.name}:{abas:abas,em:Date.now(),arq:f.name};
+      return idbSet("guia_mff",g).then(function(){guia=g;guiaCarregado=true;infoGuia();hint("Guia importado. Pergunte, por exemplo: melhor uniforme do Thor.")})})
+    .catch(function(e){$("gInfo").textContent="Não consegui ler o arquivo ("+((e&&e.message)||e)+"). Baixe de novo como Microsoft Excel (.xlsx) ou como CSV."})});
+  var PARADAS={de:1,da:1,do:1,das:1,dos:1,o:1,a:1,os:1,as:1,e:1,em:1,no:1,na:1,nos:1,nas:1,um:1,uma:1,qual:1,quais:1,que:1,como:1,eu:1,meu:1,minha:1,para:1,pra:1,pro:1,com:1,por:1,the:1,of:1,is:1,me:1,mff:1,future:1,fight:1,guia:1,melhor:1,melhores:1,devo:1,vale:1,pena:1};
+  function termosBusca(q){return norm(q).replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w.length>1&&!PARADAS[w]})}
+  /* busca local: pontua linhas pelas palavras da pergunta; só as melhores vão para a IA */
+  function buscarGuia(q,max){if(!guia)return[];var ts=termosBusca(q),res=[];if(!ts.length)return[];
+    guia.abas.forEach(function(a){var cab=a.linhas[0]||[];a.linhas.forEach(function(l,i){if(!i)return;var txt=" "+norm(l.join(" | ")).replace(/[^a-z0-9| ]/g," ")+" ",s=0;
+      ts.forEach(function(t){if(txt.indexOf(" "+t)>=0)s+=t.length>3?2:1});if(s)res.push({s:s,aba:a.nome,cab:cab,l:l})})});
+    res.sort(function(x,y){return y.s-x.s});var top=res.length?res[0].s:0;return res.filter(function(r){return r.s>=top/2}).slice(0,max||8)}
+  function linhaTexto(r,lim){var partes=[];r.l.forEach(function(v,i){if(v)partes.push((r.cab[i]&&r.cab[i]!==v?r.cab[i]+": ":"")+v)});var s=partes.join(" | ");return lim&&s.length>lim?s.slice(0,lim)+"…":s}
+  function mostrarLinhas(q,rs,box){box.innerHTML="";if(!guia){box.appendChild(el("p","muted","Importe primeiro a sua cópia do guia (botão acima)."));return}
+    if(!rs.length){box.appendChild(el("p","muted","Não achei linhas sobre isso no guia. Tente o nome como aparece no jogo, em inglês."));return}
+    var lw=el("div","linhas");rs.forEach(function(r){var d=el("div","linha");d.appendChild(el("span","aba-n",String(r.aba).toUpperCase()));d.appendChild(document.createTextNode(linhaTexto(r,600)));lw.appendChild(d)});box.appendChild(lw);
+    var row=el("div","row");row.appendChild(btn("EXPLICAR COM IA",function(){explicarGuia(q,rs,box,false)},"on"));box.appendChild(row)}
+  function explicarGuia(q,rs,box,voz){var res=el("div");box.appendChild(res);res.appendChild(el("p","muted","Consultando…"));
+    var env=prepararEnvio(q);if(env.bloq){res.innerHTML="";res.appendChild(el("p","muted",env.bloq));return}registrarEnvio("jogo (MFF)",env.d,env.n);
+    var trecho=rs.map(function(r){return"Aba \""+r.aba+"\": "+linhaTexto(r,900)}).join("\n").slice(0,7000);
+    perguntaUnica("Você é especialista em Marvel Future Fight e responde em português do Brasil, em até 6 frases, só com base nas linhas do guia do CynicalEx enviadas. Diga de qual aba veio cada informação e avise quando a aba parecer desatualizada (versão antiga no nome ou no conteúdo). Mantenha em inglês os nomes de personagens, uniformes e itens. Aqui, JARVIS é o sistema de chips do jogo, não você.",
+      "Pergunta: "+env.t+"\n\nLinhas do guia:\n"+trecho,{tokens:1024,temp:.2})
+    .then(function(t){t=desmascarar(limparFala(t).trim());res.innerHTML="";res.appendChild(el("p","res",t));res.appendChild(el("p","sub","Fonte: Cynicalex Mega Guides, cópia importada em "+dataHora(guia.em)+"."));if(voz)falar(t,null,true)},
+      function(e){res.innerHTML="";res.appendChild(el("p","muted",erroRede(e)))})}
+  function perguntarGuia(q,voz){abrirPainel("jogos");abaJogos("gMff");$("gQ").value=q;carregarGuia().then(function(){var rs=buscarGuia(q,8);mostrarLinhas(q,rs,$("gRes"));
+      if(!voz)return;if(!guia)dizer("Importe primeiro a sua cópia do guia do CynicalEx, em JOGOS.");else if(!rs.length)dizer("Não achei isso no guia.");else if(cerebro())explicarGuia(q,rs,$("gRes"),true);else dizer("Mostrei as linhas do guia na tela.")})}
+  bind($("gBuscar"),function(){var q=$("gQ").value.trim();if(q)perguntarGuia(q,false)});
+  $("gQ").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();var q=$("gQ").value.trim();if(q)perguntarGuia(q,false)}});
+  function proxSemanaUtc(dow,h){var x=new Date(),t=Date.UTC(x.getUTCFullYear(),x.getUTCMonth(),x.getUTCDate(),h);while(new Date(t).getUTCDay()!==dow||t<=Date.now())t+=864e5;return t}
+  bind($("gSemanal"),function(){abrirAgenda({titulo:"MFF: reset semanal dos modos competitivos",inicio:proxSemanaUtc(5,1),rrule:"FREQ=WEEKLY",detalhes:"Sexta, 01:00 UTC (quinta, 22h em Brasília), segundo as notas oficiais de 2025. Confira no jogo."})});
+  bind($("gDiarioBtn"),function(){var v=$("gDiario").value;if(!/^\d{2}:\d{2}$/.test(v)){hint("Escolha o horário do reset diário (confira no jogo).");return}cfg.gdiario=v;save();
+    var p=v.split(":"),x=new Date();x.setHours(+p[0],+p[1],0,0);if(x.getTime()<=Date.now())x.setDate(x.getDate()+1);
+    abrirAgenda({titulo:"MFF: reset diário",inicio:x.getTime(),rrule:"FREQ=DAILY",detalhes:"Horário anotado por você no J.A.R.V.I.S."})});
+
+  /* ---------- Marvel Snap: códigos de deck lidos e montados no aparelho; a IA só entra na análise ---------- */
+  function b64texto(s){var b=atob(s.replace(/-/g,"+").replace(/_/g,"/")),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return new TextDecoder().decode(u)}
+  function textob64(t){var u=new TextEncoder().encode(t),b="";for(var i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return btoa(b)}
+  /* formato completo: base64 de {"Name","Cards":[{"CardDefId"}]}; formato curto: base64 de IDs curtos separados por vírgula */
+  function lerDeck(cod){var cand=String(cod||"").split(/\s+/).filter(function(x){return/^[A-Za-z0-9+\/=_-]{12,}$/.test(x)}).sort(function(a,b){return b.length-a.length})[0],t,j;
+    if(!cand)throw new Error("Não achei um código de deck no texto.");try{t=b64texto(cand)}catch(e){throw new Error("Código inválido.")}
+    if(/^\s*\{/.test(t)){try{j=JSON.parse(t)}catch(e){throw new Error("Código inválido.")}var cs=(j.Cards||[]).map(function(c){return c&&c.CardDefId}).filter(Boolean);if(!cs.length)throw new Error("Código sem cartas.");return{formato:"completo",nome:j.Name||"",cartas:cs}}
+    var ids=t.split(",").map(function(x){return x.trim()}).filter(Boolean);if(ids.length<6||ids.length>12||ids.some(function(x){return!/^[A-Za-z0-9]+$/.test(x)}))throw new Error("Código não reconhecido.");
+    return{formato:"curto",nome:"",cartas:ids}}
+  function nomeCarta(id){return String(id).replace(/([a-z])([A-Z0-9])/g,"$1 $2")}
+  function gerarDeck(nomes){return textob64(JSON.stringify({Name:"Deck do Jarvis",Cards:nomes.map(function(n){return{CardDefId:n.replace(/[^A-Za-z0-9]/g,"")}})}))}
+  var deckAtual=null;
+  function mostrarDeck(){var box=$("sRes");box.innerHTML="";try{deckAtual=lerDeck($("sCod").value)}catch(e){deckAtual=null;box.appendChild(el("p","muted",e.message));return false}
+    box.appendChild(el("p","sub",(deckAtual.nome?deckAtual.nome+" · ":"")+deckAtual.cartas.length+" cartas · código "+deckAtual.formato));
+    var ul=el("ul","dias");deckAtual.cartas.forEach(function(c){ul.appendChild(el("li",null,deckAtual.formato==="completo"?nomeCarta(c):c))});box.appendChild(ul);
+    if(deckAtual.formato==="curto")box.appendChild(el("p","muted","Código curto: o jogo guarda só as consoantes do nome em inglês e o tamanho. A análise com IA identifica as cartas."));return true}
+  bind($("sLer"),mostrarDeck);
+  bind($("sAnalisar"),function(){if(!mostrarDeck())return;if(!cerebro()){hint("Sem cérebro conectado.");return}var box=$("sRes"),res=el("div"),d=destino();
+    if(sigiloso()&&!d.ok){box.appendChild(el("p","muted","No modo sigiloso a chave gratuita fica bloqueada."));return}registrarEnvio("jogo (Snap)",d,0);box.appendChild(res);res.appendChild(el("p","muted","Analisando o deck…"));
+    var lista=deckAtual.formato==="completo"?deckAtual.cartas.map(nomeCarta).join(", "):deckAtual.cartas.join(", ")+" (IDs curtos: consoantes do nome em inglês, sem vogais nem y, seguidas do tamanho do nome em hexadecimal)";
+    perguntaUnica("Você é especialista em Marvel Snap e responde em português do Brasil, em até 10 frases, sem listas longas. Mantenha em inglês os nomes das cartas, como no jogo.",
+      "Analise este deck: "+lista+". Se forem IDs curtos, identifique as cartas e diga quais ficaram incertas. Explique o plano de jogo, as sinergias principais, os pontos fracos, duas ou três substituições possíveis e se ele aparece no meta atual (pesquise e diga a data das fontes).",{tokens:1500,temp:.3,buscaSeAjudar:true})
+    .then(function(t){res.innerHTML="";res.appendChild(el("p","res",limparFala(t).trim()));res.appendChild(el("p","cit","Análise feita por IA: o meta muda a cada ajuste de equilíbrio."))},function(e){res.innerHTML="";res.appendChild(el("p","muted",erroRede(e)))})});
+  bind($("sGerar"),function(){var nomes=$("sNomes").value.split(/\n|,/).map(function(x){return x.trim()}).filter(Boolean),box=$("sRes");box.innerHTML="";
+    if(nomes.length!==12){box.appendChild(el("p","muted","Um deck tem 12 cartas; você listou "+nomes.length+"."));return}var cod=gerarDeck(nomes);
+    box.appendChild(el("p","sub","Código gerado no formato completo. No jogo, importe o deck e confira se as 12 cartas foram reconhecidas."));
+    var p=el("p","res",cod);p.style.fontFamily="var(--mono)";p.style.fontSize="12px";box.appendChild(p);box.appendChild(btn("COPIAR CÓDIGO",function(){copiarLimpo(cod)},"on"))});
+  /* temporada troca na primeira terça do mês, provavelmente no reset das 19:00 UTC (16h em Brasília) */
+  function proxTempSnap(){function primTerca(a,m){var t=Date.UTC(a,m,1,19);while(new Date(t).getUTCDay()!==2)t+=864e5;return t}
+    var n=new Date(),a=n.getUTCFullYear(),m=n.getUTCMonth(),t=primTerca(a,m);if(t<=Date.now())t=primTerca(m===11?a+1:a,(m+1)%12);return t}
+  bind($("sDiario"),function(){var d=new Date(),x=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),19);if(x-30*60000<=Date.now())x+=864e5;
+    abrirAgenda({titulo:"Marvel Snap: reset diário em 30 minutos",inicio:x-30*60000,fim:x,rrule:"FREQ=DAILY",detalhes:"Missões renovam às 19:00 UTC (16h em Brasília)."})});
+  bind($("sTemp"),function(){var t=proxTempSnap();addWidget({tipo:"contagem",titulo:"Troca de temporada (Snap)",alvo:t});
+    abrirAgenda({titulo:"Marvel Snap: último dia da temporada",inicio:t-24*3600000,fim:t-23*3600000,detalhes:"A temporada troca na primeira terça do mês, provavelmente às 16h (Brasília). Termine o passe e gaste o ouro."});hint("Contagem regressiva criada nos widgets.")});
+  bind($("sNews"),function(){executarBusca("Marvel Snap: novidades desta semana (novas cartas, ajustes de equilíbrio e eventos), com datas",true)});
+
+  /* ---------- atalhos do ícone (toque longo): ?acao=falar|lembrete|timer|estudo ---------- */
+  var acaoInicial=(/[?&]acao=(\w+)/.exec(location.search)||[])[1]||null,ROT_ACAO={falar:"FALAR",lembrete:"LEMBRETE",timer:"TIMER",estudo:"ESTUDO"};
+  if(acaoInicial){try{history.replaceState(null,"",location.pathname)}catch(e){}if(ROT_ACAO[acaoInicial])$("btnStart").textContent="INICIAR · "+ROT_ACAO[acaoInicial];else acaoInicial=null}
+  function executarAcaoInicial(){if(!acaoInicial)return;var a=acaoInicial,t0=Date.now();acaoInicial=null;
+    (function quando(){/* espera o briefing terminar para não ouvir a própria voz */if((seqOn||speaking)&&Date.now()-t0<20000){setTimeout(quando,300);return}
+      if(a==="falar"){pararFala();ouvir()}else if(a==="estudo")abrirPainel("estudo");else acaoChip(a)})()}
+
+  mostrarDestino();lerCompartilhado();
 
   /* ---------- utilidades de interface ---------- */
   function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
@@ -1179,9 +1849,11 @@ body.flex .log{max-height:24vh}
     return Promise.reject(new Error("Sem cérebro conectado. Cole a chave gratuita do Gemini em AJUSTES."))}
   function erroRede(e){var m=(e&&e.message)||"";return/Failed to fetch|NetworkError|tempo|Load failed/i.test(m)?"Sem conexão para pesquisar agora.":m}
   var buscando=false;
-  function executarBusca(q,voz){q=(q||"").trim();if(!q||buscando)return;buscando=true;thinking=true;setState("PESQUISANDO");$("q").value="";
+  function executarBusca(q,voz){q=(q||"").trim();if(!q||buscando)return;
+    var env=prepararEnvio(q);if(env.bloq){hint(env.bloq);if(voz)falar(env.fala||"Não envio essa pesquisa: ela tem dados protegidos.",null,true);return}
+    registrarEnvio("pesquisa",env.d,env.n);buscando=true;thinking=true;setState("PESQUISANDO");$("q").value="";
     var box=$("resultados"),wait=card("PESQUISA // "+q.toUpperCase(),'<p class="muted">Pesquisando na web…</p>');wait.classList.add("in");box.insertBefore(wait,box.firstChild);
-    pesquisar(q).then(function(r){buscando=false;thinking=false;setState("");
+    pesquisar(env.t).then(function(r){r.texto=desmascarar(r.texto);buscando=false;thinking=false;setState("");
       var c=el("section","card in"),hd=el("div","hd"),acts=el("div","acts");hd.appendChild(el("h3",null,"PESQUISA // "+q.toUpperCase()));hd.appendChild(acts);c.appendChild(hd);
       c.appendChild(el("p","res",r.texto));var fl=listaFontes(r.fontes);if(fl)c.appendChild(fl);
       acts.appendChild(mini("OUVIR",function(){destravarVoz();falar(r.texto)}));
@@ -1212,8 +1884,9 @@ body.flex .log{max-height:24vh}
   function cardW(w,titulo){var c=el("section","card"),hd=el("div","hd"),acts=el("div","acts"),b=el("div");hd.appendChild(el("h3",null,titulo));
     acts.appendChild(mini("↑",function(){moverW(w.id,-1)},false,"Subir"));acts.appendChild(mini("×",function(){if(confirm("Remover este widget?"))removerW(w.id)},true,"Remover"));
     hd.appendChild(acts);c.appendChild(hd);c.appendChild(b);return{c:c,b:b,acts:acts}}
-  function atualizarPesquisaW(w,k){k.b.innerHTML="";k.b.appendChild(el("p","muted","Pesquisando na web…"));
-    pesquisar(w.q).then(function(r){mudarW(w.id,function(x){x.texto=r.texto;x.fontes=r.fontes.slice(0,5);x.em=Date.now()});renderWidgets()},
+  function atualizarPesquisaW(w,k){k.b.innerHTML="";var env=prepararEnvio(w.q);if(env.bloq){k.b.appendChild(el("p","muted",env.bloq));return}
+    registrarEnvio("pesquisa salva",env.d,env.n);k.b.appendChild(el("p","muted","Pesquisando na web…"));
+    pesquisar(env.t).then(function(r){mudarW(w.id,function(x){x.texto=desmascarar(r.texto);x.fontes=r.fontes.slice(0,5);x.em=Date.now()});renderWidgets()},
       function(e){k.b.innerHTML="";k.b.appendChild(el("p","muted",erroRede(e)))})}
   function renderW(w){var d=new Date(),k;
     if(w.tipo==="relogio"){k=cardW(w,"RELÓGIO // "+String(w.titulo).toUpperCase());var big=el("div","big",horaEm(w.tz,d));big.setAttribute("data-tz",w.tz);k.b.appendChild(big);k.b.appendChild(el("div","sub",diaEm(w.tz,d)));return k.c}
