@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZgExoXInPWLBXxQnP+jmmSGpsKb+dhgEJ3ONSfqlByY='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-PlokL++kCAnKe3MCSghmkuIwpSGWxe1yOJrR9y3jg7s='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Painel J.A.R.V.I.S.</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -96,6 +96,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .mic{width:52px;flex:none;border:1px solid var(--cyan);background:transparent;color:var(--cyan);border-radius:2px;cursor:pointer;display:grid;place-items:center}
 .mic.live{background:var(--amber);border-color:var(--amber);color:var(--bg);animation:pulse 1s ease infinite}
 .mic svg{width:22px;height:22px}
+.mic[hidden]{display:none}
 .send{flex:none;font-family:var(--mono);font-size:12px;letter-spacing:.12em;border:0;background:var(--cyan);color:var(--bg);padding:0 14px;border-radius:2px;cursor:pointer}
 .hint{font-size:13px;color:var(--muted);margin:0}
 /* cartões */
@@ -262,7 +263,7 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
   <div class="top">
     <button class="tag" id="tagBtn" type="button" title="Uso do Gemini hoje">J.A.R.V.I.S. // <b id="brainTag">OFFLINE</b><span class="cota" id="cotaMini" hidden><i id="cotaMiniBar"></i></span></button>
     <div class="tools">
-      <button class="icon-btn" id="btnMute" type="button">VOZ: ON</button>
+      <button class="icon-btn" id="btnMute" type="button" title="Alterna entre modo voz e modo texto">MODO: VOZ</button>
       <button class="icon-btn" id="btnMenu" type="button" aria-expanded="false" aria-controls="menu">MENU</button>
     </div>
   </div>
@@ -481,9 +482,9 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
 (function(){
   "use strict";
   var DEFAULTS={trat:"Senhora",cidades:"São Paulo",rotinas:"",sobre:"",perfil:"",feito:"",key:"",ckey:"",voz:"",gvoz:"Charon",widgets:"[]",intro:"",avisos:"",lembretes:"[]",
-    sigilo:"",gplano:"gratis",nomes:"",estudo:"{}",focolog:"[]",prazoscfg:"{}",termo:"{}",gresets:"{}",mffcheck:"{}",mffprog:"{}"};
+    sigilo:"",gplano:"gratis",nomes:"",estudo:"{}",focolog:"[]",prazoscfg:"{}",termo:"{}",gresets:"{}",mffcheck:"{}",mffprog:"{}",modo:"voz"};
   var storageOk=true;
-  var cfg=load(), muted=false, talkMode=false, speaking=false, listening=false, thinking=false, busy=false;
+  var cfg=load(), muted=cfg.modo==="texto", talkMode=false, speaking=false, listening=false, thinking=false, busy=false;
   var entrevista=null;
   var history=[], climaCache=[], sampleFn=null, recog=null, micBlocked=false;
   var reduce=false; try{reduce=matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
@@ -718,6 +719,7 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   function ouvir(){
     if(busy)return;
+    if(modoTexto()){try{$("ask").focus()}catch(e){}return}
     if(!SR||micBlocked){$("ask").focus();hint("Use o microfone do teclado para ditar e toque em ENVIAR.");return}
     if(listening){try{recog.stop()}catch(e){}return}
     pararFala();
@@ -1013,7 +1015,17 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
   bind($("btnReplay"),iniciar);
   bind($("reactorBtn"),function(){if(arrastou){arrastou=false;return}destravarVoz();if(!started&&!seqOn){comecar();return}if(started)ouvir()});
   bind($("btnMic"),function(){destravarVoz();ouvir()});
-  bind($("btnMute"),function(){muted=!muted;$("btnMute").textContent="VOZ: "+(muted?"OFF":"ON");$("btnMute").classList.toggle("on",muted);if(muted)pararFala()});
+  /* modo voz ou texto (fica salvo): no texto, o Jarvis não fala, não abre o microfone sozinho e o reator abre o teclado */
+  function modoTexto(){return cfg.modo==="texto"}
+  function aplicarModo(){var t=modoTexto(),b=$("btnMute"),bt=$("btnTalk");muted=t;b.textContent="MODO: "+(t?"TEXTO":"VOZ");b.classList.toggle("on",t);
+    b.setAttribute("aria-label",t?"Modo texto: o Jarvis responde só na tela. Toque para o modo voz.":"Modo voz: o Jarvis fala as respostas e ouve. Toque para o modo texto.");
+    $("btnMic").hidden=t;$("ask").placeholder=t?"Digite sua mensagem…":"Fale ou digite…";
+    if(bt){bt.hidden=t;if(t&&talkMode){talkMode=false;bt.textContent="CONVERSA: OFF";bt.classList.remove("on")}}}
+  function trocarModo(m){cfg.modo=m==="texto"?"texto":"voz";save();aplicarModo();
+    if(modoTexto()){pararFala();if(listening&&recog){try{recog.abort()}catch(e){}}hint("Modo texto: respondo só na tela, sem falar e sem abrir o microfone.")}
+    else hint("Modo voz: falo as respostas. Toque no microfone ou no reator para falar.")}
+  bind($("btnMute"),function(){destravarVoz();var ia=!modoTexto();trocarModo(ia?"texto":"voz");if(!ia)falar("Modo voz.",null,true)});
+  aplicarModo();
   function rotuloTroca(){$("btnTroca").textContent="TIMBRE: "+(cfg.key.trim()&&cfg.gvoz?cfg.gvoz.toUpperCase():"APARELHO")}
   bind($("btnTroca"),function(){destravarVoz();
     if(!cfg.key.trim()){rotuloTroca();var m="As vozes neurais usam a chave do Gemini. Cole a chave em AJUSTES; por enquanto uso a voz do aparelho.";hint(m);falar(m,null,true);return}
@@ -1287,7 +1299,7 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
   function exemplo(frase){hint("Diga ou digite, por exemplo: \""+frase+"\".");$("ask").placeholder=frase;if(SR&&!micBlocked)ouvir();else try{$("ask").focus()}catch(e){}}
 
   /* ---------- "o que você faz?" e "o que tenho amanhã?" ---------- */
-  var AJUDA=[["Conversar","toque no reator e fale; com CONVERSA ligado, eu volto a ouvir sozinho."],["Timer","\"timer de 10 minutos\", \"pomodoro\", \"quanto falta no timer?\", \"pare o timer\"."],
+  var AJUDA=[["Conversar","toque no reator e fale; com CONVERSA ligado, eu volto a ouvir sozinho."],["Voz ou texto","o botão MODO, no topo, alterna. No modo voz eu falo as respostas e ouço pelo microfone; no modo texto respondo só na tela e o reator abre o teclado. Também dá para escrever \"modo texto\" ou \"modo voz\"."],["Timer","\"timer de 10 minutos\", \"pomodoro\", \"quanto falta no timer?\", \"pare o timer\"."],
     ["Lembretes","\"me lembre às 15h de ligar para o cliente\", \"me lembre daqui a 20 minutos de tirar o bolo\", \"lembrete amanhã às 9h pagar o boleto\"."],
     ["Listas","\"coloque leite e café na lista do mercado\"."],["Notas","\"anote: levar a carteira da OAB na audiência\"."],["Pesquisa","\"pesquise informativos recentes do STJ\"."],
     ["Prazos","\"prazo de 15 dias a partir de 19/11\", ou MENU, PRAZOS. Marque uma vez os feriados do seu tribunal."],
@@ -1371,6 +1383,8 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
   function comandoLocal(txt,pend){var s=norm(txt).replace(/^jarvis,?\s*/,"").replace(/[.!?]+$/,"").trim();
     if(pend){var q=quandoDe(s);if(q){limpa(txt);dizer(criarLembrete({quando:q.quando,txt:pend.txt,alarme:pend.alarme}));return true}}
     if(/^(o que (voce|vc) (faz|sabe fazer|pode fazer)|ajuda|comandos|o que (eu )?posso (dizer|falar|pedir))$/.test(s)){limpa(txt);mostrarAjuda();return true}
+    if(/^(modo (de )?texto|(so|somente|apenas) (por )?texto|sem voz)$/.test(s)){limpa(txt);trocarModo("texto");bolha("j","Modo texto: respondo só na tela. Para voltar, toque em MODO, no topo, ou escreva \"modo voz\".");return true}
+    if(/^(modo (de )?voz|com voz|pode falar|volte a falar|voltar a falar)$/.test(s)){limpa(txt);trocarModo("voz");dizer("Modo voz. Falo as respostas e ouço pelo microfone.");return true}
     if(/^(o que (eu )?tenho (para |pra )?amanha|minha agenda de amanha|agenda de amanha|e amanha|como (e|esta|fica) amanha)$/.test(s)){limpa(txt);dizerAmanha();return true}
     var pz=lerPrazoVoz(txt);if(pz){limpa(txt);calcularPorVoz(pz);return true}
     if(/^(?:no |sobre o |sobre )?(?:marvel future fight|future fight|mff)\b[\s,:-]*.{3,}$/.test(s)){limpa(txt);perguntarGuia(txt.replace(/^\s*(?:jarvis,?\s*)?(?:no |sobre o |sobre )?(?:marvel future fight|future fight|mff)\b[\s,:-]*/i,""),true);return true}
