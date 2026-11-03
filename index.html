@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-OpmdXJJzLove/JW+K5gZ5VB4REDMo2E3JRgt0M6jnIw='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZgExoXInPWLBXxQnP+jmmSGpsKb+dhgEJ3ONSfqlByY='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Painel J.A.R.V.I.S.</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -239,6 +239,9 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
 .linha p b{color:var(--cyan);font-weight:600}
 #gRes>*+*,#gTimesRes>*+*,#gArtRes>*+*,#gTierRes>*+*,#gCheckRes>*+*{margin-top:8px}
 .reset .sub{color:var(--text)}
+.nomes-t button.on{border-color:var(--amber);color:var(--amber)}
+.prog-sel{justify-content:flex-start!important}
+.prog-sel select{width:auto!important;flex:1 1 40%;font-size:15px!important;padding:8px!important}
 .linha b{color:var(--muted);font-weight:600}
 .linha .aba-n{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--amber)}
 @keyframes fadeIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
@@ -393,8 +396,13 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
       <p class="muted">Base: <a href="https://docs.google.com/spreadsheets/d/1H0Hcl9oVZV9gA266xkJAqPv5bD1qwqhC5NeVbLj_-FE/edit" target="_blank" rel="noopener noreferrer">Cynicalex Mega Guides</a>, de CynicalEx e colaboradores. Importe uma vez a sua cópia (no computador: Arquivo, Fazer download, Microsoft Excel). O guia fica só neste celular; para a IA vão só as linhas que interessam à pergunta.</p>
       <div class="row"><button class="icon-btn on" type="button" id="gImp">IMPORTAR GUIA (.XLSX OU .CSV)</button><input type="file" id="gArq" accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden></div>
       <p class="hint" id="gInfo"></p>
-      <div class="abas" id="gSub"><button class="icon-btn on" type="button" data-v="pers">PERSONAGEM</button><button class="icon-btn" type="button" data-v="times">TIMES</button><button class="icon-btn" type="button" data-v="art">ARTEFATOS</button><button class="icon-btn" type="button" data-v="tier">TIER LIST</button><button class="icon-btn" type="button" data-v="check">CHECKLIST</button></div>
-      <div class="aba" id="gvpers">
+      <div class="abas" id="gSub"><button class="icon-btn on" type="button" data-v="plano">PLANO</button><button class="icon-btn" type="button" data-v="pers">PERSONAGEM</button><button class="icon-btn" type="button" data-v="times">TIMES</button><button class="icon-btn" type="button" data-v="art">ARTEFATOS</button><button class="icon-btn" type="button" data-v="tier">TIER LIST</button><button class="icon-btn" type="button" data-v="check">CHECKLIST</button></div>
+      <div class="aba" id="gvplano">
+        <div class="row"><button class="icon-btn on" type="button" id="gMarcarBtn">MARCAR QUEM EU TENHO</button></div>
+        <div class="bar"><input id="gAddQ" list="gNomes" placeholder="Adicionar quem você tem" autocomplete="off" enterkeyhint="done"><button class="send" type="button" id="gAdd">TENHO</button></div>
+        <div id="gPlanoRes"></div>
+      </div>
+      <div class="aba" id="gvpers" hidden>
         <div class="bar"><input id="gQ" list="gNomes" placeholder="Personagem ou pergunta (ex.: Thor)" autocomplete="off" enterkeyhint="search"><button class="send" type="button" id="gBuscar">VER</button></div>
         <datalist id="gNomes"></datalist>
         <div id="gRes"></div>
@@ -1777,7 +1785,7 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     l.push(c.trim());if(l.some(Boolean))linhas.push(l);return linhas}
 
   /* ---------- Marvel Future Fight: a cópia do guia do CynicalEx que ela importa fica só no aparelho ---------- */
-  var guia=null,guiaCarregado=false,gIdx=null,gVista="pers",gArtT=0,chkAbertos={S:1,A:1,"+":1};
+  var guia=null,guiaCarregado=false,gIdx=null,gVista="plano",gMarcar=false,gArtT=0,chkAbertos={S:1,A:1,"+":1};
   function abaJogos(id){Array.prototype.forEach.call($("gAbas").children,function(b){b.classList.toggle("on",b.getAttribute("data-aba")===id)});["gMff","gSnap"].forEach(function(a){$(a).hidden=a!==id});if(id==="gMff")carregarGuia().then(montarGuia)}
   $("gAbas").addEventListener("click",function(e){var b=e.target.closest("button");if(b)abaJogos(b.getAttribute("data-aba"))});
   function abrirJogos(){var cur=Array.prototype.filter.call($("gAbas").children,function(b){return b.classList.contains("on")})[0];abaJogos(cur?cur.getAttribute("data-aba"):"gMff");renderResets()}
@@ -1913,9 +1921,9 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
   /* ---------- telas do guia ---------- */
   function montarGuia(){var I=idxGuia(),dl=$("gNomes");dl.innerHTML="";if(I)I.pers.forEach(function(p){var o=el("option");o.value=p.nome;dl.appendChild(o)});opcoesTimes();vistaGuia(gVista)}
   $("gSub").addEventListener("click",function(e){var b=e.target.closest("button");if(b)vistaGuia(b.getAttribute("data-v"))});
-  function vistaGuia(v){gVista=v;Array.prototype.forEach.call($("gSub").children,function(b){b.classList.toggle("on",b.getAttribute("data-v")===v)});
-    ["pers","times","art","tier","check"].forEach(function(x){$("gv"+x).hidden=x!==v});
-    if(v==="times")renderTimes();else if(v==="art")renderArt();else if(v==="tier")renderTier();else if(v==="check")renderCheck();
+  function vistaGuia(v){if(v!=="tier")gMarcar=false;gVista=v;Array.prototype.forEach.call($("gSub").children,function(b){b.classList.toggle("on",b.getAttribute("data-v")===v)});
+    ["plano","pers","times","art","tier","check"].forEach(function(x){$("gv"+x).hidden=x!==v});
+    if(v==="plano")renderPlano();else if(v==="times")renderTimes();else if(v==="art")renderArt();else if(v==="tier")renderTier();else if(v==="check")renderCheck();
     else if(!$("gRes").firstChild)$("gRes").appendChild(el("p","muted",guia?"Digite ou escolha um personagem para ver a ficha: montagem, CTP, artefato, T4 e onde ele entra nos times.":"Importe primeiro a sua cópia do guia (botão acima)."))}
   function semGuia(box,aba){box.innerHTML="";box.appendChild(el("p","muted",guia?"Não achei a aba "+aba+" na sua cópia do guia.":"Importe primeiro a sua cópia do guia (botão acima)."))}
   function linhaF(box,rot,val){var p=el("p");p.appendChild(el("b",null,rot+": "));p.appendChild(document.createTextNode(val));box.appendChild(p);return p}
@@ -1930,12 +1938,20 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     if(k==="tier list bling"&&I.tier){var t=tagsDe(v,I.tier.leg).tags;if(t.length)v=t.map(tagTxt).join(" · ")}return v}
   function ctpsDetalhe(I,f,vals){var vistos={};vals.forEach(function(v){v.split(/[\/,]| or /i).forEach(function(n){var k=chaveNome(n.replace(/\+/g,""));if(!k||vistos[k]||!I.ctps[k])return;vistos[k]=1;
       var c=I.ctps[k],d=el("details");d.appendChild(el("summary",null,"EFEITO DO CTP "+c.nome.toUpperCase()));if(c.stats)d.appendChild(el("p","efeito",c.stats));if(c.desc)d.appendChild(el("p","efeito",c.desc));f.appendChild(d)})})}
-  var PROG=[["uni","Uniforme"],["iso","ISO-8"],["ctp","CTP"],["art","Artefato"],["t3","T3"],["t4","T4"]];
-  function lerProg(){try{return JSON.parse(cfg.mffprog||"{}")||{}}catch(e){return{}}}
-  function progresso(f,p){var k=p.pk||chaveNome(p.nome),me=lerProg()[k]||{},w=el("div","prog");f.appendChild(el("h5",null,"MEU PROGRESSO"));
-    PROG.forEach(function(x){var lab=el("label","chk"),cb=el("input");cb.type="checkbox";cb.checked=!!me[x[0]];
-      cb.addEventListener("change",function(){var a=lerProg(),m=a[k]||{};if(cb.checked)m[x[0]]=1;else delete m[x[0]];if(Object.keys(m).length)a[k]=m;else delete a[k];cfg.mffprog=JSON.stringify(a);save()});
-      lab.appendChild(cb);lab.appendChild(document.createTextNode(x[1]));w.appendChild(lab)});f.appendChild(w)}
+  /* lido muitas vezes por tela (cada nome do World Boss Legend consulta o roster): guarda a última leitura */
+  var progCache={s:null,o:null};
+  function lerProg(){var t=cfg.mffprog||"{}";if(progCache.s===t)return progCache.o;var o;try{o=JSON.parse(t)||{}}catch(e){o={}}progCache={s:t,o:o};return o}
+  /* MEU PROGRESSO na ficha: o que ela tem do personagem; alimenta o PLANO */
+  function progresso(f,p){var o=progDe(p),i=infoPers(p),w=el("div","prog"),sel=el("div","row prog-sel"),prox=el("p","sub"),cbs={};f.appendChild(el("h5",null,"MEU PROGRESSO"));
+    function atualiza(){var x=progDe(p),ps=x.tem?passosDe(p,x):[];cbs.tem.checked=x.tem;prox.textContent=!x.tem?"Marque “Tenho” para este personagem entrar no seu plano.":ps.length?"Próximo passo: "+ps[0].t+".":"Completo pelo guia."}
+    function caixa(k,rot){var lab=el("label","chk"),cb=el("input");cb.type="checkbox";cb.checked=!!o[k];cbs[k]=cb;
+      cb.addEventListener("change",function(){var x=progDe(p);x[k]=cb.checked;if(k!=="tem"&&cb.checked)x.tem=true;salvarProgDe(p,x);atualiza()});lab.appendChild(cb);lab.appendChild(document.createTextNode(rot));w.appendChild(lab)}
+    function seletor(k,rot,ops){var se=el("select");se.setAttribute("aria-label",rot);ops.forEach(function(v){var op=el("option",null,v[1]);op.value=v[0];se.appendChild(op)});se.value=String(o[k]||0);
+      se.addEventListener("change",function(){var x=progDe(p);x[k]=+se.value;if(x[k])x.tem=true;salvarProgDe(p,x);atualiza()});sel.appendChild(se)}
+    caixa("tem","Tenho");seletor("est","Estrelas",[["0","Estrelas ?"],["1","1★"],["2","2★"],["3","3★"],["4","4★"],["5","5★"],["6","6★"]]);
+    var maxT=i.htSabido?Math.max(i.max,o.tier):4;seletor("tier","Tier",[["0","Tier ?"],["1","T1"],["2","T2"],["3","T3"],["4","T4"]].filter(function(v){return+v[0]<=maxT}));
+    caixa("uni","Uniforme");caixa("iso","ISO-8");caixa("ctp","CTP");if(i.art)caixa("art","Artefato");if(i.desp)caixa("desp","Despertado");
+    f.appendChild(sel);f.appendChild(w);f.appendChild(prox);atualiza()}
   function agrupar(lista,chave,valor){var g={},ordem=[];lista.forEach(function(w){var k=chave(w);if(!g[k]){g[k]=[];ordem.push(k)}if(g[k].indexOf(valor(w))<0)g[k].push(valor(w))});return ordem.map(function(k){return[k,g[k]]})}
   function mostrarFicha(p,q){var I=idxGuia(),box=$("gRes"),b=mapaBuild(p),usados={"best uniform":1,"highest tier":1,"tier list rank":1,"tier list bling":1},f=el("div","ficha");box.innerHTML="";box.appendChild(f);
     f.appendChild(el("h3",null,p.nome));var topo=[];if(b["best uniform"])topo.push("Melhor uniforme: "+b["best uniform"]);if(b["highest tier"])topo.push("tier máximo: "+b["highest tier"]);if(topo.length)f.appendChild(el("p","sub",topo.join(" · ")));
@@ -1979,6 +1995,7 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     for(i=0;i+1<ws.length;i++){k=ws[i]+ws[i+1];if(k.length>=9){var p2=aproximado(I,k);if(p2)return p2}}return null}
   function rotaGuia(q){var s=" "+trocarPt(q)+" ",I=idxGuia();if(!I)return null;
     if(/ (checklist|diarias|tarefas|o que fazer|prioridades?) /.test(s))return{v:"check"};
+    if(/ (plano|proximo passo|proximos passos|em quem investir|onde investir|evoluir|roster|meu time) /.test(s)&&!detectarPers(q))return{v:"plano"};
     if(/ tier list /.test(s)&&!detectarPers(q.replace(/tier list/ig,"")))return{v:"tier"};
     if(/ (artefatos) /.test(s)&&!detectarPers(q))return{v:"art"};
     if(/ (time|times|equipe|equipes|contra|boss|chefe|wbl|world boss|estagio|estagios|stage) /.test(s)){for(var k=0;k<I.wbl.length;k++)if(s.indexOf(" "+nrm(I.wbl[k].nome)+" ")>=0)return{v:"times",m:"w"+k}}
@@ -1988,7 +2005,7 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
       if(!guia){vistaGuia("pers");$("gQ").value=q;semGuia($("gRes"),"");if(voz)dizer("Importe primeiro a sua cópia do guia do CynicalEx, em JOGOS.");return}
       var r=rotaGuia(q);if(r){if(r.m)$("gModo").value=r.m;vistaGuia(r.v);
         if(voz){if(r.v==="check"){var pend=pendentes();dizer(pend.length?"Faltam "+pend.length+" itens dos tiers S e A. Os primeiros: "+pend.slice(0,3).join("; ")+".":"Os itens dos tiers S e A estão feitos.")}
-          else dizer(r.v==="tier"?"Abri a tier list do guia.":r.v==="art"?"Abri a lista de artefatos.":"Abri os times de "+$("gModo").selectedOptions[0].textContent+".")}return}
+          else if(r.v==="plano")dizer(vozPlano());else dizer(r.v==="tier"?"Abri a tier list do guia.":r.v==="art"?"Abri a lista de artefatos.":"Abri os times de "+$("gModo").selectedOptions[0].textContent+".")}return}
       vistaGuia("pers");$("gQ").value=q;var p=detectarPers(q);
       if(p){mostrarFicha(p,q);if(voz){var extra=termosBusca(q).filter(function(t){return!p.palavras[t]&&!/^(uniforme|uniformes|build|montar|monto|monta|ficha|personagem|iso|iso8|ctp|artefato|bom|boa|forte|presta|meta|tier|list|lista)$/.test(t)});
           if(extra.length&&cerebro())explicarFicha(q,p,$("gRes"),true);else dizer(resumoVoz(p))}return}
@@ -2043,9 +2060,11 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     fonteGuia(box,"ARTIFACTS")}
   $("gArtQ").addEventListener("input",function(){clearTimeout(gArtT);gArtT=setTimeout(renderArt,200)});
   function renderTier(){var I=idxGuia(),box=$("gTierRes");box.innerHTML="";if(!I||!I.tier)return semGuia(box,"TIER LIST");var T=I.tier;
-    if(T.titulo)box.appendChild(el("p","sub",T.titulo));if(T.leg.length)box.appendChild(el("p","muted",T.leg.map(tagTxt).join(" · ")));
-    T.ordem.forEach(function(t,k){var d=el("details","grupo"),w=el("div","nomes-t");if(k<2)d.open=true;d.appendChild(el("summary",null,t.toUpperCase()+" ("+T.tiers[t].length+")"));
-      T.tiers[t].forEach(function(it){var b=el("button",null,it.nome+(it.tags.length?" "+it.tags.map(function(x){return x.k}).join(""):""));b.type="button";b.title=it.tags.map(tagTxt).join(", ");b.addEventListener("click",function(){abrirFichaNome(it.p.nome)});w.appendChild(b)});
+    if(gMarcar){var mb=el("div","row");mb.appendChild(el("p","sub","Toque em quem você tem; toque de novo para desmarcar. Quem não estiver aqui entra pelo campo da aba PLANO."));mb.appendChild(btn("CONCLUIR",function(){gMarcar=false;vistaGuia("plano")},"on"));box.appendChild(mb)}
+    if(T.titulo)box.appendChild(el("p","sub",T.titulo));if(T.leg.length)box.appendChild(el("p","muted",T.leg.map(tagTxt).join(" · ")+(lerProg()&&Object.keys(lerProg()).length?" · em destaque: quem você tem":"")));
+    T.ordem.forEach(function(t,k){var d=el("details","grupo"),w=el("div","nomes-t");if(k<2||gMarcar)d.open=true;d.appendChild(el("summary",null,t.toUpperCase()+" ("+T.tiers[t].length+")"));
+      T.tiers[t].forEach(function(it){var b=el("button",null,it.nome+(it.tags.length?" "+it.tags.map(function(x){return x.k}).join(""):"")),tem=progDe(it.p).tem;b.type="button";b.title=it.tags.map(tagTxt).join(", ");b.classList.toggle("on",tem);b.setAttribute("aria-pressed",String(tem));
+        b.addEventListener("click",function(){if(!gMarcar){abrirFichaNome(it.p.nome);return}var x=progDe(it.p);x.tem=!x.tem;salvarProgDe(it.p,x);b.classList.toggle("on",x.tem);b.setAttribute("aria-pressed",String(x.tem))});w.appendChild(b)});
       d.appendChild(w);box.appendChild(d)});
     box.appendChild(el("p","muted","O guia ordena os personagens dentro de cada tier, da esquerda para a direita, e por tipo, de cima para baixo; tipos diferentes não se comparam. Toque num nome para abrir a ficha."));fonteGuia(box,"TIER LIST")}
 
@@ -2076,6 +2095,114 @@ ul.dias{margin:0;padding:0;list-style:none;font-size:14px;color:var(--muted);dis
     if(I&&I.conteudo)fonteGuia(box,"CONTENT")}
   function addChk(){var t=$("gCheckNovo").value.trim();if(!t)return;var c=lerChk();c.extras=c.extras||[];c.extras.push({id:"x:"+Date.now(),txt:t,freq:"dia",tags:[]});gravarChk(c);$("gCheckNovo").value="";chkAbertos["+"]=1;renderCheck()}
   bind($("gCheckAdd"),addChk);$("gCheckNovo").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addChk()}});
+
+  /* ---------- PLANO: planejador de roster para quem está começando ----------
+     Valor de cada personagem: posição na tier list do guia, um pouco a mais para quem é fácil de jogar no PvE e para quem entra em mais faixas do World Boss Legend.
+     Time principal: 3 atacantes e 2 suportes de maior valor, com preferência para quem já recebeu investimento.
+     Próximo passo de cada um, nesta ordem: 6 estrelas, T2, uniforme, ISO-8, CTP, T3, T4 (se o guia não dispensar), despertar, artefato.
+     Custos e materiais não são inventados aqui: o plano manda conferir na tela de avanço do jogo, que mostra o que falta. */
+  function chavePers(p){return p.pk||chaveNome(p.nome)}
+  function progDe(p){var m=lerProg()[chavePers(p)]||{},o={tem:!!m.tem,est:+m.est||0,tier:+m.tier||0,uni:!!m.uni,iso:!!m.iso,ctp:!!m.ctp,art:!!m.art,desp:!!m.desp};
+    /* a versão anterior guardava só caixas: T3/T4 marcados viram o tier, e qualquer marca quer dizer que ela tem o personagem */
+    if(!o.tier&&m.t4)o.tier=4;else if(!o.tier&&m.t3)o.tier=3;if(!o.tem&&(m.uni||m.iso||m.ctp||m.art||m.t3||m.t4))o.tem=true;return o}
+  function salvarProgDe(p,o){var a=JSON.parse(JSON.stringify(lerProg())),k=chavePers(p),m={};if(o.tem)m.tem=1;if(o.est)m.est=o.est;if(o.tier)m.tier=o.tier;["uni","iso","ctp","art","desp"].forEach(function(x){if(o[x])m[x]=1});
+    if(Object.keys(m).length)a[k]=m;else delete a[k];cfg.mffprog=JSON.stringify(a);save()}
+  function tagsPers(p){var I=idxGuia();if(p.tier&&p.tier.tags.length)return p.tier.tags;var b=mapaBuild(p);return b["tier list bling"]&&I&&I.tier?tagsDe(b["tier list bling"],I.tier.leg).tags:[]}
+  function infoPers(p){var b=mapaBuild(p),ht=b["highest tier"]||"",na=b["needs artifact?"]||"",tags=tagsPers(p).map(function(x){return nrm(x.v)}),tier=(p.tier&&p.tier.t)||b["tier list rank"]||"";
+    function tem(re){return tags.some(function(t){return re.test(t)})}
+    return{b:b,tier:tier,htSabido:!!ht,max:/t4/i.test(ht)?4:/t3/i.test(ht)?3:2,desp:/awaken/i.test(ht),isoNao:/don.?t waste/i.test(b["best iso-8 set"]||""),
+      art:/^y/i.test(na)||tem(/needs artifact/),artPvp:/^y\s*\(pvp\)/i.test(na),naoT4:tem(/doesn t need tier 4/),facil:tem(/very easy to play/),
+      suporte:/lead|support/i.test(tier)||(!tier&&tem(/^support$|good leadership/)),tambemSup:!/lead|support/i.test(tier)&&!!tier&&tem(/^support$|good leadership/),wbl:agrupar(p.wbl,function(w){return w.chefe+" "+w.st},function(w){return w.papel}).length}}
+  function valorPers(p){var i=infoPers(p),t=nrm(i.tier),v=45;
+    if(/beyond|gods/.test(t))v=100;else if(/high meta/.test(t))v=90;else if(/(lead|support).*meta/.test(t))v=85;else if(/low meta/.test(t))v=75;else if(/useful/.test(t))v=60;else if(/useable|usable/.test(t))v=40;else if(/shadowland|rework|out of the meta/.test(t))v=30;
+    return v+(i.facil?8:0)+Math.min(10,i.wbl)}
+  function totalT4(p,k){var t=(p.t4[k]||[]).filter(function(v){return/total/i.test(v[0])})[0];return t?parseFloat(t[1]):NaN}
+  function notaT4(p){var I=idxGuia(),out=[];p.t4.forEach(function(vals,k){var v=totalT4(p,k);if(v>=0)out.push(v+" "+(I.t4seg[k]||""))});return out.join(", ")}
+  function t4Fator(p){var I=idxGuia(),v=totalT4(p,0);if(I.t4max==null){I.t4max=0;I.pers.forEach(function(x){var y=totalT4(x,0);if(y>I.t4max)I.t4max=y})}return I.t4max&&v>=0?.5+.5*v/I.t4max:.6}
+  var PASSO_PESO={dados:1.1,est:1,t2:1,uni:.9,iso:.85,ctp:.85,t3:.7,t4:.6,desp:.55,art:.5};
+  function passosDe(p,o){var I=idxGuia(),i=infoPers(p),b=i.b,L=[],acq=b["acquisition"]?valorCb(I,"acquisition",b["acquisition"]):"";
+    if(!o.est||!o.tier){L.push({id:"dados",t:"Conferir no jogo as estrelas e o tier",c:"Abra o personagem no jogo e marque na ficha dele, aqui, quantas estrelas e qual tier ele tem. Sem isso o plano não sabe qual é o próximo passo."});return L}
+    if(o.est<6)L.push({id:"est",t:"Chegar a 6 estrelas (tem "+o.est+")",c:"Junte as biometrias dele."+(acq?" Onde conseguir, segundo o guia: "+acq+".":"")+" Abaixo de 6 estrelas, o próprio guia recomenda investir pouco no personagem."});
+    else{
+      if(o.tier<2)L.push({id:"t2",t:"Avançar para T2",c:"Na tela do personagem, use o avanço de tier. O jogo pede 6 estrelas e nível 60, entre outros requisitos, e a própria tela mostra os materiais que faltam."});
+      if(!o.uni&&b["best uniform"])L.push({id:"uni",t:"Conseguir o uniforme "+b["best uniform"],c:"Uniformes ficam na loja de uniformes e costumam custar cristais; se der, espere uma promoção. A montagem do guia considera o uniforme mais recente."});
+      if(!o.iso&&b["best iso-8 set"]&&!i.isoNao)L.push({id:"iso",t:"Montar o ISO-8 "+b["best iso-8 set"],c:"Equipe as peças desse conjunto até completá-lo: o conjunto completo dá um bônus extra."});
+      if(!o.ctp&&b["best ctp"])L.push({id:"ctp",t:"Equipar o CTP "+b["best ctp"],c:"O efeito aparece na ficha."+(b["2nd best ctp"]?" Se ainda não tiver esse, o guia indica "+b["2nd best ctp"]+" como segunda opção.":"")});
+      if(o.tier===2&&i.htSabido&&i.max>=3)L.push({id:"t3",t:"Avançar para T3",c:"Use o avanço de tier quando juntar os materiais que a tela mostra."});
+      if(o.tier===3&&i.htSabido&&i.max>=4&&!i.naoT4){var n4=notaT4(p);L.push({id:"t4",t:"Avançar para T4",c:"É o avanço mais caro."+(n4?" Nota de T4 no guia (aba T4 RANK): "+n4+".":"")})}
+      if(i.desp&&!o.desp&&o.tier>=2)L.push({id:"desp",t:"Despertar",c:"O despertar libera uma habilidade nova; a tela do personagem mostra o custo."});
+      if(i.art&&!o.art)L.push({id:"art",t:"Liberar o artefato"+(p.art&&p.art.artefato?" "+p.art.artefato:"")+(i.artPvp?" (só para PvP)":""),c:i.artPvp?"O guia diz que ele depende de artefato só no PvP; para história e chefes, pode esperar.":"O guia marca que ele depende do artefato para render."})}
+    return L}
+  function investido(o){return(o.est>=6?1:0)+(o.tier>=2?1:0)+(o.uni?1:0)+(o.iso?1:0)+(o.ctp?1:0)+(o.tier>=3?1:0)}
+  function planoDe(I){var meus=[],faltam=[];
+    I.pers.forEach(function(p){var o=progDe(p),m={p:p,o:o,v:valorPers(p),i:infoPers(p)};if(o.tem)meus.push(m);else if(p.build||p.tier)faltam.push(m)});
+    meus.forEach(function(m){m.passos=passosDe(m.p,m.o);var s=m.passos[0];m.foco=m.v+6*investido(m.o);
+      m.score=s?m.v*(s.id==="art"&&m.i.artPvp?.3:PASSO_PESO[s.id]||.5)*(1+.12*investido(m.o))*(s.id==="t4"?t4Fator(m.p):1):0});
+    function porFoco(a,b){return b.foco-a.foco}
+    var nucleo=meus.filter(function(m){return!m.i.suporte}).sort(porFoco).slice(0,3).concat(meus.filter(function(m){return m.i.suporte}).sort(porFoco).slice(0,2));
+    return{meus:meus,nucleo:nucleo,outros:meus.filter(function(m){return nucleo.indexOf(m)<0&&m.passos.length}).sort(function(a,b){return b.score-a.score}),
+      conseguir:faltam.filter(function(m){return m.v>=60}).sort(function(a,b){return b.v-a.v}).slice(0,8)}}
+  function estadoTxt(o){return(o.est?o.est+"★":"estrelas ?")+" · "+(o.tier?"T"+o.tier:"tier ?")}
+  function papelTxt(i){return i.suporte?"suporte":i.tambemSup?"atacante e suporte":"atacante"}
+  function porqueTxt(i){var L=[];if(i.tier)L.push(i.tier+" na tier list do guia");if(i.facil)L.push("fácil de jogar no PvE");if(i.wbl)L.push("entra em "+i.wbl+(i.wbl>1?" faixas":" faixa")+" do World Boss Legend");if(i.naoT4)L.push("o guia marca que dispensa T4");return L.join("; ")}
+  function nomeLnk(n){var b=el("button","lnk",n);b.type="button";b.addEventListener("click",function(){abrirFichaNome(n)});return b}
+  function marcarPasso(p,id){var o=progDe(p);if(id==="est")o.est=6;else if(/^t[234]$/.test(id))o.tier=+id[1];else o[id]=true;salvarProgDe(p,o);renderPlano();hint(p.nome+": passo marcado como feito.")}
+  function linhaPasso(f,m){var c=el("div","linha"),s=m.passos[0],t=el("p"),pq=porqueTxt(m.i);t.appendChild(nomeLnk(m.p.nome));t.appendChild(document.createTextNode(" · "+papelTxt(m.i)+" · "+estadoTxt(m.o)));c.appendChild(t);
+    if(!s){c.appendChild(el("p","muted","Completo pelo guia: agora é usar nos times."));f.appendChild(c);return}
+    linhaF(c,"Próximo passo",s.t);if(pq)c.appendChild(el("p","muted","Por quê: "+pq+"."));c.appendChild(el("p","efeito",s.c));
+    var r=el("div","row");r.appendChild(s.id==="dados"?btn("INFORMAR",function(){abrirFichaNome(m.p.nome)},"on"):btn("FEITO",function(){marcarPasso(m.p,s.id)},"on"));c.appendChild(r);f.appendChild(c)}
+  function pDe(I,n){return acharExato(I,n)||aproximado(I,chaveNome(n))}
+  function coberturaWbl(f,I){if(!I.wbl.length)return;f.appendChild(el("h5",null,"WORLD BOSS LEGEND COM O SEU ROSTER"));
+    f.appendChild(el("p","muted","Para cada chefe, as faixas de estágio e quem você tem entre os nomes que o guia recomenda."));
+    function tem(n){var p=pDe(I,n);return!!(p&&progDe(p).tem)}
+    I.wbl.forEach(function(ch){var ok=0,linhas=ch.est.map(function(e){var a=e.atk.filter(tem),s=e.sup.filter(tem);if(a.length)ok++;return{e:e,a:a,s:s}}),d=el("details","grupo");
+      d.appendChild(el("summary",null,ch.nome+": atacante para "+ok+" de "+ch.est.length+(ch.est.length>1?" faixas":" faixa")));
+      linhas.forEach(function(x){var p=el("p");p.appendChild(el("b",null,x.e.st+(x.e.tipo?" ("+x.e.tipo+")":"")+": "));
+        if(x.a.length)p.appendChild(document.createTextNode("✓ "+x.a.join(", ")+(x.s.length?" · suporte: "+x.s.join(", "):" · nenhum suporte recomendado no seu roster")));
+        else{var cand=x.e.atk.map(function(n){return pDe(I,n)}).filter(Boolean).sort(function(a,b){return valorPers(b)-valorPers(a)})[0];p.appendChild(document.createTextNode("✗ nenhum atacante recomendado no seu roster"+(cand?"; o melhor para conseguir: "+cand.nome:"")))}
+        d.appendChild(p)});f.appendChild(d)})}
+  var GLOSS_MFF=[
+    ["Estrelas e biometrias","cada personagem sobe de 1 a 6 estrelas juntando as biometrias dele. O próprio guia recomenda investir pouco em quem está abaixo de 6 estrelas."],
+    ["Tier (T1 a T4)","é o avanço do personagem. O T2 pede 6 estrelas e nível 60, entre outros requisitos; T3 e T4 existem só para alguns personagens e pedem materiais próprios. A tela de avanço do personagem mostra exatamente o que falta."],
+    ["Uniforme","roupa alternativa que aumenta os atributos; alguns uniformes também mudam o tipo do personagem (combate, velocidade, explosão ou universal). As montagens do guia consideram o uniforme mais recente."],
+    ["ISO-8","peças que dão atributos. Com o conjunto completo, o personagem ganha o bônus do conjunto. O guia indica qual conjunto usar."],
+    ["CTP","peça especial com um efeito forte (Rage, Insight e outros). O guia indica a melhor para PvE, contra o computador, e para PvP, contra outros jogadores."],
+    ["Obelisco","item usado no Shadowland e na Alliance Conquest (SL/AC)."],
+    ["Despertar","alguns personagens podem ser despertados e ganham uma habilidade nova; a ficha mostra quando existe."],
+    ["Artefato","item exclusivo de alguns personagens. O selo {art} na tier list marca quem depende dele."],
+    ["Líder e suporte","o líder do time dá o bônus de liderança; os suportes fortalecem os colegas. Os times de World Boss Legend do guia separam atacantes e suportes."],
+    ["Tier list do guia","Beyond Meta e High Meta são os mais fortes; Low Meta e Useful vêm depois; as colunas Lead/Support reúnem os melhores líderes e suportes."]];
+  function guiaIniciante(box,I){var d=el("details","grupo"),art=I&&I.tier?I.tier.leg.filter(function(x){return/needs artifact/.test(nrm(x.v))})[0]:null;
+    d.appendChild(el("summary",null,"COMO O MFF FUNCIONA (PARA QUEM ESTÁ COMEÇANDO)"));
+    GLOSS_MFF.forEach(function(g){linhaF(d,g[0],g[1].replace("{art}",art?art.k:"de artefato"))});
+    if(I&&Object.keys(I.glos).length)linhaF(d,"Siglas do guia",Object.keys(I.glos).sort().map(function(k){return k+" = "+I.glos[k]}).join("; ")+".");
+    linhaF(d,"Como o plano escolhe","o valor de cada personagem vem da posição na tier list do guia, com um pouco a mais para quem é fácil de jogar no PvE e para quem entra em mais faixas do World Boss Legend. O time principal reúne os 3 atacantes e os 2 suportes de maior valor que você tem, com preferência para quem já recebeu investimento. Para cada um, o próximo passo segue esta ordem: 6 estrelas, T2, uniforme, ISO-8, CTP, T3, T4 (se o guia não dispensar), despertar e artefato. Quando o CynicalEx atualizar a planilha, importe de novo e o plano se ajusta.");
+    box.appendChild(d)}
+  function renderPlano(){var I=idxGuia(),box=$("gPlanoRes"),f=el("div","ficha");box.innerHTML="";$("gMarcarBtn").hidden=!(I&&I.tier);box.appendChild(f);
+    if(!I||!I.pers.length){f.appendChild(el("p","muted",guia?"Não achei a aba CHAMP BUILDING na sua cópia; sem ela não dá para montar o plano.":"Importe primeiro a sua cópia do guia (botão acima). O plano usa a tier list, a montagem de cada personagem e os times do World Boss Legend."));guiaIniciante(f,I);return}
+    var P=planoDe(I);
+    if(!P.meus.length){f.appendChild(el("h5",null,"COMECE AQUI"));
+      ["1. Toque em MARCAR QUEM EU TENHO e depois, na tier list, nos personagens que você tem. Quem não estiver lá entra pelo campo acima.","2. Abra cada um (toque no nome) e informe estrelas e tier, como aparecem no jogo.","3. Volte aqui: o plano mostra o próximo passo de cada um, por que fazer e como."].forEach(function(t){f.appendChild(el("p",null,t))});
+      guiaIniciante(f,I);return}
+    f.appendChild(el("h5",null,"SEU TIME PRINCIPAL"));f.appendChild(el("p","muted","Cada avanço custa caro. O plano concentra recursos em 3 atacantes e 2 suportes e termina quem você já começou antes de abrir frente nova. Os passos mais urgentes vêm primeiro."));
+    P.nucleo.slice().sort(function(a,b){return b.score-a.score}).forEach(function(m){linhaPasso(f,m)});
+    if(P.outros.length){f.appendChild(el("h5",null,"DEPOIS DO TIME PRINCIPAL"));P.outros.slice(0,6).forEach(function(m){linhaPasso(f,m)})}
+    if(P.conseguir.length){f.appendChild(el("h5",null,"QUEM CONSEGUIR EM SEGUIDA"));
+      P.conseguir.forEach(function(m){var c=el("div","linha"),t=el("p"),acq=m.i.b["acquisition"],pq=porqueTxt(m.i),r=el("div","row");t.appendChild(nomeLnk(m.p.nome));t.appendChild(document.createTextNode(" · "+papelTxt(m.i)));c.appendChild(t);
+        if(pq)c.appendChild(el("p","muted","Por quê: "+pq+"."));if(acq)linhaF(c,"Como conseguir",valorCb(I,"acquisition",acq));
+        r.appendChild(btn("JÁ TENHO",function(){var o=progDe(m.p);o.tem=true;salvarProgDe(m.p,o);renderPlano();hint(m.p.nome+" entrou no seu roster. Informe estrelas e tier na ficha.")}));c.appendChild(r);f.appendChild(c)})}
+    coberturaWbl(f,I);
+    f.appendChild(el("h5",null,"MEU ROSTER ("+P.meus.length+")"));var w=el("div","nomes-t");
+    P.meus.slice().sort(function(a,b){return a.p.nome.localeCompare(b.p.nome)}).forEach(function(m){var b=el("button",null,m.p.nome+" · "+estadoTxt(m.o));b.type="button";b.addEventListener("click",function(){abrirFichaNome(m.p.nome)});w.appendChild(b)});f.appendChild(w);
+    guiaIniciante(f,I);f.appendChild(el("p","muted","Fonte: abas CHAMP BUILDING, TIER LIST, T4 RANK e WBL GUIDE do Cynicalex Mega Guides, na sua cópia importada em "+dataHora(guia.em)+"."))}
+  function vozPlano(){var I=idxGuia(),P=planoDe(I);if(!P.meus.length)return"Primeiro marque quem você tem: em JOGOS, aba PLANO, toque em MARCAR QUEM EU TENHO.";
+    var L=P.nucleo.concat(P.outros).filter(function(m){return m.passos.length}).sort(function(a,b){return b.score-a.score}).slice(0,3);if(!L.length)return"Seu time principal está completo pelo guia.";
+    function passo(m){var t=m.passos[0].t;return m.p.nome+", "+t.charAt(0).toLowerCase()+t.slice(1)}
+    return"Próximo passo: "+passo(L[0])+"."+(L.length>1?" Depois: "+L.slice(1).map(passo).join("; ")+".":"")+" Os detalhes estão na aba PLANO."}
+  function addRoster(){var I=idxGuia(),n=$("gAddQ").value.trim();if(!I||!n)return;var p=pDe(I,n);if(!p){hint("Não achei "+n+" no guia.");return}
+    var o=progDe(p);o.tem=true;salvarProgDe(p,o);$("gAddQ").value="";renderPlano();hint(p.nome+" entrou no seu roster. Informe estrelas e tier na ficha.")}
+  bind($("gAdd"),addRoster);$("gAddQ").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addRoster()}});
+  bind($("gMarcarBtn"),function(){gMarcar=true;vistaGuia("tier");try{$("gvtier").scrollIntoView({block:"start",behavior:reduce?"auto":"smooth"})}catch(e){}});
 
   /* ---------- horários dos jogos: saem da contagem que o próprio jogo mostra (ou de nota oficial), nunca de estimativa ----------
      Ela digita quanto falta; o Jarvis soma ao relógio e encaixa na hora cheia que cabe na contagem (resets caem em hora cheia). */
