@@ -2,14 +2,14 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-mNUC4KjdsSGGtIDMMz+Qxcm0inDUCmCFFO31JouMXmA='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-iOjki/LzIPZPPir26J/FsDItFkMWKk9kHGhNrg5Bb8Q='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.anthropic.com https://generativelanguage.googleapis.com https://geocoding-api.open-meteo.com https://api.open-meteo.com; media-src blob:; img-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Painel J.A.R.V.I.S.</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#03080c">
@@ -122,6 +122,55 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
 .cfg hr{border:0;border-top:1px solid var(--cyan-dim);margin:4px 0;width:100%}
 .cfg a{color:var(--cyan)}
 .nojs{border:1px solid var(--red);color:#ffd0d0;background:rgba(255,107,107,.08);padding:12px 14px;font-size:16px;line-height:1.35;border-radius:2px}
+/* alvos de toque maiores (tela alta 22:9 do Z Flip, uso com uma mão) */
+.icon-btn{min-height:36px}
+.mini{min-width:32px;min-height:32px}
+.tl input[type=checkbox]{width:22px;height:22px}
+button.tag{background:none;border:0;padding:6px 0;min-height:36px;cursor:pointer;text-align:left}
+.cota{display:inline-block;position:relative;width:46px;height:6px;margin-left:10px;vertical-align:middle;border:1px solid var(--cyan-dim);overflow:hidden}
+/* rodapé fixo: sugestões e conversa no alcance do polegar */
+html{scroll-padding-bottom:var(--dock,0px)}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:14px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(3,8,12,0),rgba(3,8,12,.94) 14px,rgba(3,8,12,.98))}
+.dock-in{max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+body.com-dock .wrap{padding-bottom:calc(var(--dock,120px) + 20px)}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0;-webkit-mask-image:linear-gradient(90deg,#000 86%,transparent);mask-image:linear-gradient(90deg,#000 86%,transparent)}
+.chips::-webkit-scrollbar{display:none}
+.chips::after{content:"";flex:0 0 28px}
+.chip{flex:none;font-family:var(--display);font-size:15px;font-weight:600;letter-spacing:.03em;color:var(--text);background:rgba(6,22,32,.96);border:1px solid var(--cyan-dim);border-radius:999px;padding:0 15px;min-height:40px;cursor:pointer;white-space:nowrap}
+.chip.dest{border-color:var(--amber);color:var(--amber)}
+.chip.on{background:rgba(255,179,71,.12);border-color:var(--amber);color:var(--amber)}
+.chip:active{transform:scale(.97)}
+.tbar{display:flex;align-items:center;gap:10px;border:1px solid var(--amber);background:linear-gradient(rgba(255,179,71,.1),rgba(255,179,71,.1)),var(--bg);padding:4px 4px 4px 12px;border-radius:2px}
+.tbar .tt{font-family:var(--mono);font-size:22px;color:#fff;font-variant-numeric:tabular-nums}
+.tbar .tr{flex:1;min-width:0;font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--amber);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ul.ajuda{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.35}
+ul.ajuda b{color:var(--amber);font-weight:600}
+/* uso da cota gratuita do Gemini */
+.uso{display:flex;flex-direction:column;gap:10px}
+.uso h4{margin:0;font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.15em;color:var(--muted)}
+.ubt{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:15px;margin-bottom:4px}
+.ubt span:last-child{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right}
+.ubar{height:8px;border:1px solid var(--cyan-dim);background:rgba(79,216,255,.06);position:relative;overflow:hidden;border-radius:1px}
+.ubar i,.cota i{position:absolute;left:0;top:0;bottom:0;background:var(--cyan);transition:width .4s ease}
+.ubar i.medio,.cota i.medio{background:var(--amber)}
+.ubar i.alto,.cota i.alto{background:var(--red)}
+.ubar i.desc{background:repeating-linear-gradient(45deg,var(--cyan-dim) 0 6px,transparent 6px 12px)}
+/* Flex Window (tela externa do Z Flip): só o essencial */
+body.capa .wrap{gap:10px;padding-top:6px}
+body.capa .tools .icon-btn:not(#btnMute):not(#btnCfg){display:none}
+body.capa .reactor{max-width:min(220px,48vh)}
+body.capa .greet{font-size:18px}
+body.capa .time{font-size:34px}
+body.capa .date{font-size:12px;max-width:70%}
+body.capa .dica,body.capa .diag{display:none}
+body.capa .start{padding:12px 18px;font-size:13px}
+body.capa .chip{min-height:36px;font-size:14px;padding:0 12px}
+body.capa .log{max-height:30vh}
+/* modo Flex (Flip dobrado em L): reator e relógio na metade de cima, conversa na de baixo */
+body.flex .top,body.flex .greet,body.flex .dica,body.flex .busca{display:none!important}
+body.flex .reactor{position:fixed;z-index:2;left:50%;top:calc(env(viewport-segment-top 0 0,0px) + 12px);transform:translateX(-50%);width:min(calc(env(viewport-segment-height 0 0,50vh) - 24px),calc(100vw - 32px));max-width:none;margin:0}
+body.flex .wrap{padding-top:calc(env(viewport-segment-top 0 1,50vh) + 10px)}
+body.flex .log{max-height:24vh}
 @keyframes fadeIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
 @keyframes slideL{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
 @keyframes slideR{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
@@ -138,7 +187,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
 <main class="wrap">
   <div class="nojs" id="nojs">ATENÇÃO: os comandos desta página não carregaram. Isso acontece quando ela é aberta como arquivo (pelo WhatsApp, pelo gerenciador de arquivos ou pelo "Visualizador de HTML"). Abra pelo link https, direto no Google Chrome.</div>
   <div class="top">
-    <span class="tag">J.A.R.V.I.S. // <b id="brainTag">OFFLINE</b></span>
+    <button class="tag" id="tagBtn" type="button" title="Uso do Gemini hoje">J.A.R.V.I.S. // <b id="brainTag">OFFLINE</b><span class="cota" id="cotaMini" hidden><i id="cotaMiniBar"></i></span></button>
     <div class="tools">
       <button class="icon-btn" id="btnReplay" type="button" hidden>BRIEFING</button>
       <button class="icon-btn" id="btnTalk" type="button" title="Depois de responder, volta a ouvir sozinho">CONVERSA: OFF</button>
@@ -157,6 +206,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     <label for="fCkey">CHAVE DA API DO CLAUDE (cérebro principal, opcional)<input id="fCkey" class="secret" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="sk-ant-…"></label>
     <label for="fKey">CHAVE DO GEMINI (cérebro reserva, gratuito)<input id="fKey" class="secret" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="AIza…"></label>
     <p class="muted">Gemini grátis em <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>. As chaves ficam salvas só neste celular e não aparecem de novo na tela. Deixe o campo vazio para manter a chave atual.</p>
+    <div class="uso" id="uso"></div>
     <hr>
     <label for="fGvoz">VOZ NEURAL DO GEMINI (usa a mesma chave gratuita)<select id="fGvoz"></select></label>
     <p class="muted">A voz neural soa bem mais humana, mas o plano gratuito tem limite diário. Quando o limite acaba ou a internet falha, o Jarvis usa a voz do aparelho abaixo.</p>
@@ -196,11 +246,6 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
 
   <section class="chat" id="chat" hidden>
     <div class="log" id="log" aria-live="polite"></div>
-    <div class="bar" id="bar">
-      <button class="mic" id="btnMic" type="button" aria-label="Falar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
-      <input id="ask" placeholder="Fale ou digite…" autocomplete="off" enterkeyhint="send">
-      <button class="send" type="button" id="btnSend">ENVIAR</button>
-    </div>
     <p class="hint" id="hint"></p>
   </section>
 
@@ -212,8 +257,19 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   </section>
   <div class="cards" id="resultados"></div>
   <div class="cards" id="cards"></div>
+  <div class="cards" id="lembretesBox"></div>
   <div class="cards" id="widgets"></div>
 </main>
+
+<div class="dock" id="dock" hidden><div class="dock-in">
+  <div class="tbar" id="tbar" hidden><span class="tt" id="tTempo">--:--</span><span class="tr" id="tRot"></span><button class="icon-btn" type="button" id="tPausa">PAUSAR</button><button class="icon-btn" type="button" id="tParar" aria-label="Cancelar timer">×</button></div>
+  <div class="chips" id="chips" role="toolbar" aria-label="Sugestões"></div>
+  <div class="bar" id="bar">
+    <button class="mic" id="btnMic" type="button" aria-label="Falar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+    <input id="ask" placeholder="Fale ou digite…" autocomplete="off" enterkeyhint="send">
+    <button class="send" type="button" id="btnSend">ENVIAR</button>
+  </div>
+</div></div>
 
 <script>
 /* Se o script rodar, some o aviso; se algo quebrar depois, o erro aparece na tela em vez de travar em silêncio. */
@@ -224,7 +280,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
 })();
 (function(){
   "use strict";
-  var DEFAULTS={trat:"Senhora",cidades:"São Paulo",rotinas:"",sobre:"",perfil:"",feito:"",key:"",ckey:"",voz:"",gvoz:"Charon",widgets:"[]",intro:"",avisos:""};
+  var DEFAULTS={trat:"Senhora",cidades:"São Paulo",rotinas:"",sobre:"",perfil:"",feito:"",key:"",ckey:"",voz:"",gvoz:"Charon",widgets:"[]",intro:"",avisos:"",lembretes:"[]"};
   var storageOk=true;
   var cfg=load(), muted=false, talkMode=false, speaking=false, listening=false, thinking=false, busy=false;
   var entrevista=null;
@@ -250,10 +306,11 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     return verbo+hs+ms+((h===0||h===12)?"":" "+per)}
   function saud(d){var h=d.getHours();return(h>=5&&h<12)?"Bom dia":(h>=12&&h<18)?"Boa tarde":"Boa noite"}
   function norm(s){return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")}
-  function rotinasHoje(){var hoje=norm(DIAS[new Date().getDay()]),out=[];
+  function rotinasDoDia(off){var hoje=norm(DIAS[(new Date().getDay()+(off||0))%7]),out=[];
     cfg.rotinas.split("\n").forEach(function(l){l=l.trim();if(!l)return;var nl=norm(l);
       var temDia=DIAS.some(function(dd){return nl.indexOf(norm(dd))===0});
       if(!temDia)out.push(l);else if(nl.indexOf(hoje)===0)out.push(l.replace(/^[^:]+:\s*/,""))});return out}
+  function rotinasHoje(){return rotinasDoDia(0)}
   function setState(s){$("state").textContent=s||""}
 
   /* ---------- relógio ---------- */
@@ -262,7 +319,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     $("time").innerHTML=pad(d.getHours())+":"+pad(d.getMinutes())+"<small>:"+pad(d.getSeconds())+"</small>";
     $("date").textContent=DIAS[d.getDay()]+", "+d.getDate()+" de "+MESES[d.getMonth()]+" de "+d.getFullYear();
     $("greet").innerHTML=saud(d)+", <b></b>.";$("greet").querySelector("b").textContent=cfg.trat;
-    try{atualizaTempo(d)}catch(e){}}
+    try{atualizaTempo(d)}catch(e){}try{atualizaTimer(d)}catch(e){}}
   tick();setInterval(tick,1000);
 
   /* ---------- reator 3D (canvas puro: anéis em planos inclinados, projeção em perspectiva, giro por arraste com inércia) ---------- */
@@ -363,8 +420,9 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     if(cfg.voz){var f=vs.find(function(v){return idVoz(v)===cfg.voz});if(f)return f}
     return vs.slice().sort(function(a,b){return notaVoz(b)-notaVoz(a)})[0]}
   var GVOZES=[["Charon","Charon: grave e informativo (padrão)"],["Orus","Orus: firme"],["Iapetus","Iapetus: claro"],["Algenib","Algenib: rouco"],["Sadaltager","Sadaltager: culto"],["Rasalgethi","Rasalgethi: informativo"],["Alnilam","Alnilam: firme"],["","Desligada (só voz do aparelho)"]];
-  var gPausaAte=0,avisouG=false;try{gPausaAte=+localStorage.getItem("jarvis_voz_pausa")||0}catch(e){}
-  function pausaVoz(ms){gPausaAte=ms?Date.now()+ms:0;try{localStorage.setItem("jarvis_voz_pausa",String(gPausaAte))}catch(e){}}
+  var gPausaAte=0,gPausaCota=false,avisouG=false;try{gPausaAte=+localStorage.getItem("jarvis_voz_pausa")||0;gPausaCota=localStorage.getItem("jarvis_voz_cota")==="1"}catch(e){}
+  /* cota=true só quando o Google recusou por cota diária; outras pausas (chave, conexão) não contam como "esgotada" */
+  function pausaVoz(ms,cota){gPausaAte=ms?Date.now()+ms:0;gPausaCota=!!(ms&&cota);try{localStorage.setItem("jarvis_voz_pausa",String(gPausaAte));localStorage.setItem("jarvis_voz_cota",gPausaCota?"1":"")}catch(e){}}
   function geminiVozOk(){return!!(cfg.key.trim()&&cfg.gvoz&&Date.now()>gPausaAte)}
   function descreverVoz(){var v=vozSistema();
     return(cfg.key.trim()&&cfg.gvoz?"Voz principal: "+cfg.gvoz+" (Gemini). Reserva: ":"Voz atual: ")+(v?v.name:"padrão do aparelho")+"."+(vozStatus?" "+vozStatus:"")}
@@ -409,8 +467,9 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     return timeout(fetch(c.url,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(c.body)}),30000)
       .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok,status:r.status,j:j}})})
       .then(function(x){
-        if(x.ok){var a=acharAudio(x.j,0);if(a)return/l16|pcm/i.test(a.mime)?pcmWav(a.data):b64blob(a.data,a.mime||"audio/wav");x.status=0}
-        var msg=((x.j&&x.j.error&&x.j.error.message)||"sem áudio na resposta").slice(0,140),e=new Error(msg);e.status=x.status;if(x.status===429)e.lim=infoLimite(x.j);throw e})}
+        if(x.ok){var a=acharAudio(x.j,0);if(a){contarUso("v",ROTAS[k][1]);return/l16|pcm/i.test(a.mime)?pcmWav(a.data):b64blob(a.data,a.mime||"audio/wav")}x.status=0}
+        var msg=((x.j&&x.j.error&&x.j.error.message)||"sem áudio na resposta").slice(0,140),e=new Error(msg);e.status=x.status;
+        if(x.status===429){e.lim=infoLimite(x.j);if(e.lim.dia)aprenderLimite(ROTAS[k][1],e.lim.n)}throw e})}
   function geminiAudio(txt){
     var texto=limparFala(txt).replace(/\s+/g," ").trim(),chave=cfg.gvoz+"|"+texto;
     for(var c=0;c<cacheVoz.length;c++)if(cacheVoz[c][0]===chave)return Promise.resolve(cacheVoz[c][1]);
@@ -438,7 +497,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     speaking=true;setState("FALANDO");
     try{
       if(geminiVozOk()){geminiAudio(txt).then(function(b){return tocar(b,id)}).then(fim,function(e){if(id!==falaId)return;
-          if(e&&e.status===429){pausaVoz((e.lim&&e.lim.dia?6*3600:Math.max(20,(e.lim&&e.lim.seg)||60))*1000);if(!(e.lim&&e.lim.dia))avisouG=false}
+          if(e&&e.status===429){pausaVoz(e.lim&&e.lim.dia?msAteRenovar():Math.max(20,(e.lim&&e.lim.seg)||60)*1000,!!(e.lim&&e.lim.dia));if(!(e.lim&&e.lim.dia))avisouG=false;mostrarUso()}
           if(e&&(e.status===401||e.status===404))pausaVoz(30*60*1000);
           if(!avisouG){avisouG=true;var em=(e&&e.message)||"";if(/Failed to fetch|NetworkError|tempo|Load failed/i.test(em))em="Sem conexão com a voz neural do Gemini.";avisoVoz(em+(/celular/.test(em)?"":" Usando a voz do celular."))}
           falarSistema(txt,id,fim)});return}
@@ -449,7 +508,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     w(0,"RIFF");d.setUint32(4,36+n*2,true);w(8,"WAVE");w(12,"fmt ");d.setUint32(16,16,true);d.setUint16(20,1,true);d.setUint16(22,1,true);d.setUint32(24,16000,true);d.setUint32(28,32000,true);d.setUint16(32,2,true);d.setUint16(34,16,true);w(36,"data");d.setUint32(40,n*2,true);
     return URL.createObjectURL(new Blob([b],{type:"audio/wav"}))}
   var audioLiberado=false;
-  function destravarVoz(){try{var u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}catch(e){}
+  function destravarVoz(){try{var u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u)}catch(e){}prepararBip();
     if(!audioLiberado){try{if(!audioEl)audioEl=new Audio();audioEl.src=silencio();var p=audioEl.play();audioLiberado=true;if(p&&p.catch)p.catch(function(){audioLiberado=false})}catch(e){}}}
 
   /* ---------- voz (entrada) ---------- */
@@ -465,7 +524,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     recog.onresult=function(ev){var t="";for(var i=0;i<ev.results.length;i++){t+=ev.results[i][0].transcript;if(ev.results[i].isFinal)final=t}$("ask").value=t};
     recog.onerror=function(ev){if(ev.error==="not-allowed"||ev.error==="service-not-allowed"||ev.error==="audio-capture"){micBlocked=true;hint("O microfone não foi liberado aqui. Use o microfone do teclado para ditar e toque em ENVIAR.")}
       else if(ev.error==="no-speech"){hint("Não ouvi nada. Toque no reator e fale.")}};
-    recog.onend=function(){listening=false;$("btnMic").classList.remove("live");setState("");var t=(final||$("ask").value).trim();if(t)perguntar(t)};
+    recog.onend=function(){listening=false;$("btnMic").classList.remove("live");setState("");var t=(final||$("ask").value).trim();if(t){porVoz=true;perguntar(t)}};
     try{recog.start()}catch(e){listening=false;micBlocked=true;ouvir()}}
   function hint(t){$("hint").textContent=t||""}
 
@@ -478,10 +537,13 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     else c+="Cidades de interesse: "+cfg.cidades+" (clima ao vivo indisponível nesta tela).\n";
     var rot=rotinasHoje();c+="Rotinas de hoje: "+(rot.length?rot.join("; "):"nenhuma")+".\n";
     try{var rw=resumoWidgets();if(rw)c+="Widgets da usuária (notas, tarefas, contagens): "+rw+"\n"}catch(e){}
+    try{var lm=lerL();if(lm.length)c+="Lembretes agendados: "+lm.map(function(x){return quandoFalado(x.quando)+", "+x.txt}).join("; ")+".\n";if(timer)c+="Timer ativo ("+timer.rot+"): faltam "+durFalada(restaTimer())+".\n"}catch(e){}
     if(cfg.perfil.trim())c+="\nPERFIL DA USUÁRIA (use para personalizar tudo):\n"+cfg.perfil.trim()+"\n";
     if(cfg.sobre.trim())c+="Outras informações: "+cfg.sobre.trim()+"\n";
     c+="\nVocê tem acesso à pesquisa do Google nesta conversa: quando precisar de algo atual, pesquise você mesmo e responda direto. Nunca peça para ela usar a barra de busca nem para confirmar se pode pesquisar. O painel também tem widgets (relógio, contagem, notas, tarefas, clima) e \"anote ...\" grava no bloco de notas.\n";
     c+="\nComandos: se ela pedir briefing ou relatório, dê saudação, hora por extenso, \"Todos os sistemas estão online.\", clima (chuva só se acima de 30%) e rotinas do dia. Para notícias, trânsito, resultados ou qualquer coisa atual, pesquise antes de responder. \"Jarvis, encerrar\": responda \"Até logo,\" e o tratamento.\n";
+    c+="O próprio painel executa, sem você: timers e pomodoro (\"timer de 10 minutos\"), lembretes (\"me lembre às 15h de…\" ou \"daqui a 20 minutos…\"), listas (\"coloque leite na lista do mercado\") e notas (\"anote: …\"). Se ela pedir isso com outras palavras, diga a frase exata que funciona; nunca afirme que criou lembrete, timer ou item de lista.\n";
+    c+="Em treino de questões de concurso, use itens fiéis ao texto legal e à jurisprudência consolidada; se não tiver certeza do gabarito, troque o item.\n";
     return c}
   function cerebro(){return cfg.ckey.trim()?"api":sampleFn?"claude":(cfg.key.trim()?"gemini":null)}
   function tagCerebro(){var b=cerebro();$("brainTag").textContent=(b==="api"||b==="claude")?"ONLINE · CLAUDE":b==="gemini"?"ONLINE · GEMINI":"SEM CÉREBRO"}
@@ -530,13 +592,13 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
       return timeout(fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":cfg.key.trim()},body:JSON.stringify(body)}),o.busca?40000:25000)
         .then(function(r){return r.json().catch(function(){return{}}).then(function(j){return{ok:r.ok,status:r.status,j:j}})})
         .then(function(x){
-          if(x.ok){var c=(x.j.candidates&&x.j.candidates[0])||{},t=((c.content&&c.content.parts)||[]).map(function(q){return q.text||""}).join("").trim(),f=[],vistos={};
+          if(x.ok){contarUso("c",m);var c=(x.j.candidates&&x.j.candidates[0])||{},t=((c.content&&c.content.parts)||[]).map(function(q){return q.text||""}).join("").trim(),f=[],vistos={};
             ((c.groundingMetadata&&c.groundingMetadata.groundingChunks)||[]).forEach(function(k){if(k.web&&k.web.uri&&!vistos[k.web.uri]){vistos[k.web.uri]=1;f.push({t:k.web.title||k.web.uri,u:k.web.uri})}});
             if(t&&c.finishReason==="MAX_TOKENS"&&!/[.!?…]["”)]?\s*$/.test(t))t=t.replace(/[,;:\s]+$/,"")+"…";
             if(t)return{texto:t,fontes:f,modelo:m};return tentar(i+1,comBusca)}
           if(x.status===429){var li=infoLimite(x.j);
             if(comBusca&&!o.busca)return tentar(i,false);
-            esfria[m]=Date.now()+(li.dia?8*3600:Math.max(20,li.seg))*1000;gravaEsfria();ultimo429=li;return tentar(i+1,comBusca)}
+            if(li.dia)aprenderLimite(m,li.n);esfria[m]=Date.now()+(li.dia?msAteRenovar():Math.max(20,li.seg)*1000);gravaEsfria();ultimo429=li;mostrarUso();return tentar(i+1,comBusca)}
           if(x.status===400&&comBusca&&!o.busca)return tentar(i,false);
           if(x.status===404||(x.status===400&&/model|not found|not supported/i.test((x.j.error&&x.j.error.message)||""))){naoExiste++;return tentar(i+1,comBusca)}
           if(x.status===400||x.status===403||x.status===401)throw new Error("A chave do Gemini foi recusada. Confira em AJUSTES.");
@@ -547,11 +609,13 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     return geminiGerar({sistema:contexto(),contents:contents,buscaSeAjudar:true,tokens:2048}).then(function(r){return r.texto})}
 
   /* lê a resposta 429 do Google: cota diária ou por minuto, e quanto esperar */
-  function infoLimite(j){var d=(j&&j.error&&j.error.details)||[],dia=false,seg=0;
+  function infoLimite(j){var d=(j&&j.error&&j.error.details)||[],dia=false,seg=0,n=0,msg=(j&&j.error&&j.error.message)||"";
     d.forEach(function(x){if(x&&x.retryDelay){var m=String(x.retryDelay).match(/([\d.]+)/);if(m)seg=Math.ceil(+m[1])}
-      (x&&x.violations||[]).forEach(function(v){if(/PerDay|per_day|daily/i.test((v.quotaId||"")+" "+(v.quotaMetric||"")))dia=true})});
-    if(/per day|daily|PerDay/i.test((j&&j.error&&j.error.message)||""))dia=true;
-    return{dia:dia,seg:seg||60}}
+      (x&&x.violations||[]).forEach(function(v){if(/PerDay|per_day|daily/i.test((v.quotaId||"")+" "+(v.quotaMetric||""))){dia=true;if(+v.quotaValue)n=+v.quotaValue}})});
+    if(/per day|daily|PerDay/i.test(msg))dia=true;
+    /* o limite real do plano vem na própria recusa ("limit: 20"); só vale se houver um único limite na mensagem */
+    var ls=msg.match(/limit:\s*(\d+)/gi);if(dia&&!n&&ls&&ls.length===1)n=+ls[0].replace(/\D/g,"");
+    return{dia:dia,seg:seg||60,n:n}}
   function bolha(cls,txt){var d=document.createElement("div");d.className="msg "+cls;d.textContent=txt;$("log").appendChild(d);$("log").scrollTop=$("log").scrollHeight;return d}
 
   /* ---------- entrevista de perfil (igual ao Gem) ---------- */
@@ -594,16 +658,21 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     bolha("j",fim);if(!ok)bolha("j err",MSG_NAO_SALVA);
     falar(fim,function(){buildCards().then(function(c){falar(briefing(c))})},true)}
 
-  function perguntar(txt){
+  var porVoz=false;
+  function limpa(txt,exibir){$("ask").value="";$("ask").placeholder="Fale ou digite…";hint("");bolha("u",exibir||txt)}
+  function perguntar(txt,exibir){
     txt=(txt||"").trim();if(!txt||busy)return;
+    var pend=pendente;pendente=null;
     if(entrevista){$("ask").value="";hint("");bolha("u",txt);responderEntrevista(txt);return}
     if(/^(jarvis,?\s*)?(refazer perfil|iniciar configura)/i.test(norm(txt))){$("ask").value="";bolha("u",txt);iniciarEntrevista();return}
     var mb=txt.match(/^(jarvis,?\s*)?(pesquis[ae]r?|procur[ea]r?|busqu?e|buscar)\s+(sobre\s+|por\s+)?(.{2,})$/i);
-    if(mb){$("ask").value="";hint("");bolha("u",txt);bolha("j","Pesquisando: "+mb[4]+". O resultado aparece logo abaixo.");executarBusca(mb[4],true);return}
+    if(mb){limpa(txt);bolha("j","Pesquisando: "+mb[4]+". O resultado aparece logo abaixo.");executarBusca(mb[4],true);return}
+    var li=lerLista(txt);if(li){limpa(txt);dizer(addLista(li));return}
     var ma=txt.match(/^(jarvis,?\s*)?(anot[ae]r?|anote a[ií]|lembre(-se)? que)\s*:?\s+(.{2,})$/i);
-    if(ma){$("ask").value="";hint("");bolha("u",txt);anotar(ma[4].replace(/[.!]+$/,""));var ok="Anotado no bloco de notas.";bolha("j",ok);falar(ok,null,true);return}
+    if(ma){limpa(txt);anotar(ma[4].replace(/[.!]+$/,""));dizer("Anotado no bloco de notas.");return}
+    if(comandoLocal(txt,pend))return;
     var b=cerebro();
-    $("ask").value="";hint("");bolha("u",txt);
+    limpa(txt,exibir);
     if(!b){var m="Estou sem cérebro conectado. Abra AJUSTES e cole uma chave: a do Claude ou a gratuita do Gemini.";bolha("j err",m);falar(m,null,true);return}
     history.push({role:"user",content:txt});if(history.length>12)history=history.slice(-12);
     busy=true;thinking=true;setState("PROCESSANDO");var bub=bolha("j","…");
@@ -618,13 +687,19 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   function briefing(climas){var d=new Date();var t=saud(d)+", "+cfg.trat+". "+horaExtenso(d)+". Todos os sistemas estão online.";
     (climas||[]).forEach(function(w){t+=" Em "+w.nome+", "+w.temp+" graus, "+w.ceu+"."+(w.chuva!=null&&w.chuva>30?" Chance de chuva de "+w.chuva+" por cento.":"")});
     var rot=rotinasHoje();if(rot.length)t+=" Para hoje: "+rot.join("; ")+".";
+    /* proativo: lembretes do dia, contagens próximas (prova, prazos) e listas com pendências */
+    var ls=lerL().filter(function(x){return new Date(x.quando).toDateString()===d.toDateString()});
+    if(ls.length)t+=" Lembretes de hoje: "+ls.map(function(x){return hm(x.quando)+", "+x.txt}).join("; ")+".";
+    var nl=0;lerW().forEach(function(w){
+      if(w.tipo==="contagem"){var dias=Math.ceil((w.alvo-Date.now())/864e5);if(dias>0&&dias<=30)t+=" Faltam "+dias+(dias>1?" dias":" dia")+" para "+w.titulo+"."}
+      if(w.tipo==="tarefas"&&nl<2){var p=(w.itens||[]).filter(function(i){return!i.ok}).length;if(p){nl++;t+=" Na lista "+w.titulo+", "+p+(p>1?" itens pendentes.":" item pendente.")}}});
     if(cerebro())t+=" Toque no reator quando quiser falar comigo.";return t}
 
   var LINHAS=["Inicializando núcleo do reator…","Calibrando interface holográfica…","Sincronizando relógio…","Conectando satélites meteorológicos…","Carregando rotinas…","Estabelecendo link neural…"];
   var started=false,seqOn=false;
   function iniciar(semDiag){
     if(seqOn)return;seqOn=true;destravarVoz();semDiag=semDiag===true;
-    $("btnStart").hidden=true;$("btnReplay").hidden=false;$("chat").hidden=false;
+    $("btnStart").hidden=true;$("btnReplay").hidden=false;$("chat").hidden=false;mostrarDock();
     var diag=$("diag");diag.innerHTML="";var i=semDiag?LINHAS.length:0,passo=reduce?0:240;
     (function linha(){
       if(i<LINHAS.length){var el=document.createElement("div");el.textContent="> "+LINHAS[i]+" ";var ok=document.createElement("span");ok.className="ok";ok.textContent="OK";el.appendChild(ok);diag.appendChild(el);i++;setTimeout(linha,passo);return}
@@ -738,7 +813,7 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   if(cfg.key.trim()&&cfg.gvoz&&gPausaAte>Date.now()){var hrs=Math.ceil((gPausaAte-Date.now())/3600000);avisouG=true;setTimeout(function(){avisoVoz("Voz neural em pausa por limite gratuito (cerca de "+hrs+"h). Até lá, uso só a voz do celular. Para forçar nova tentativa, toque em TIMBRE.")},300)}
   bind($("btnTalk"),function(){talkMode=!talkMode;$("btnTalk").textContent="CONVERSA: "+(talkMode?"ON":"OFF");$("btnTalk").classList.toggle("on",talkMode)});
   bind($("btnCfg"),function(){var f=$("cfg");f.hidden=!f.hidden;$("saveMsg").textContent="";
-    if(!f.hidden){$("fIntro").checked=cfg.intro!=="off";$("fAvisos").checked=cfg.avisos==="1";$("fTrat").value=cfg.trat;$("fCid").value=cfg.cidades;$("fRot").value=cfg.rotinas;$("fSobre").value=cfg.sobre;$("fKey").value="";$("fCkey").value="";phKeys();preencherVozes()}});
+    if(!f.hidden){$("fIntro").checked=cfg.intro!=="off";$("fAvisos").checked=cfg.avisos==="1";$("fTrat").value=cfg.trat;$("fCid").value=cfg.cidades;$("fRot").value=cfg.rotinas;$("fSobre").value=cfg.sobre;$("fKey").value="";$("fCkey").value="";phKeys();preencherVozes();mostrarUso()}});
   $("fGvoz").addEventListener("change",function(){cfg.gvoz=$("fGvoz").value;avisouG=false;pausaVoz(0);$("vozInfo").textContent=descreverVoz();rotuloTroca()});
   $("fVoz").addEventListener("change",function(){cfg.voz=$("fVoz").value;$("vozInfo").textContent=descreverVoz()});
   bind($("btnTestVoz"),function(){destravarVoz();falar("Às suas ordens, "+cfg.trat+". Todos os sistemas estão online.")});
@@ -758,9 +833,9 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
   function fim4(k){return k?"salva, termina em …"+k.slice(-4):""}
   function phKeys(){$("fCkey").placeholder=cfg.ckey?fim4(cfg.ckey):"sk-ant-…";$("fKey").placeholder=cfg.key?fim4(cfg.key):"AIza…"}
   bind($("btnWipe"),function(){cfg.key="";cfg.ckey="";var ok=save();phKeys();tagCerebro();rotuloTroca();$("saveMsg").textContent=ok?"Chaves apagadas deste celular.":MSG_NAO_SALVA;$("saveMsg").style.color=ok?"var(--amber)":"var(--red)"});
-  bind($("btnRedo"),function(){$("cfg").hidden=true;cfg.feito="";save();$("chat").hidden=false;$("btnStart").hidden=true;$("btnReplay").hidden=false;started=true;destravarVoz();iniciarEntrevista()});
-  bind($("btnSend"),function(){destravarVoz();perguntar($("ask").value)});
-  $("ask").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();destravarVoz();perguntar($("ask").value)}});
+  bind($("btnRedo"),function(){$("cfg").hidden=true;cfg.feito="";save();$("chat").hidden=false;mostrarDock();$("btnStart").hidden=true;$("btnReplay").hidden=false;started=true;destravarVoz();iniciarEntrevista()});
+  bind($("btnSend"),function(){destravarVoz();porVoz=false;perguntar($("ask").value)});
+  $("ask").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();destravarVoz();porVoz=false;perguntar($("ask").value)}});
   if(!storageOk)setTimeout(function(){hint(MSG_NAO_SALVA)},800);
 
   /* ---------- backup (sem as chaves) ---------- */
@@ -785,29 +860,294 @@ ul.rot li::before{content:"▸ ";color:var(--amber)}
     r.onerror=function(){$("saveMsg").textContent="Não consegui ler o arquivo.";$("saveMsg").style.color="var(--red)"};
     r.readAsText(f)});
 
-  /* ---------- app instalável e avisos das rotinas ---------- */
+  /* ---------- app instalável, notificações e alertas ---------- */
   var swReg=null;
   try{if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("sw.js").then(function(r){swReg=r},function(){})}catch(e){}
   var SEM_NOTIF="Sem permissão de notificação: o lembrete será só falado e escrito na tela, com o painel aberto.";
   function pedirPermissaoAviso(){if(!("Notification" in window)){hint(SEM_NOTIF);return}
     if(Notification.permission==="denied"){hint("As notificações deste site estão bloqueadas no Chrome. "+SEM_NOTIF);return}
-    if(Notification.permission==="default")try{var p=Notification.requestPermission();if(p&&p.then)p.then(function(s){if(s!=="granted")hint(SEM_NOTIF)},function(){})}catch(e){}}
+    if(Notification.permission==="default")try{var p=Notification.requestPermission();if(p&&p.then)p.then(function(s){if(s!=="granted")hint(SEM_NOTIF);renderChips()},function(){})}catch(e){}}
   /* horário dentro da rotina: "19:00", "19h", "7h30" */
   function horaRotina(t){var m=/(?:^|\s)(\d{1,2})(?::(\d{2})|h(\d{2})?)(?=\s|$|[,.;])/i.exec(t);if(!m)return null;
     var h=+m[1],mi=+(m[2]||m[3]||0);return(h<24&&mi<60)?h*60+mi:null}
   function hojeId(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
-  function notificar(txt){var titulo="J.A.R.V.I.S.",op={body:txt,tag:"jarvis-"+txt,icon:"icon-192.png",badge:"icon-192.png"};
-    try{if("Notification" in window&&Notification.permission==="granted"){
-      if(swReg&&swReg.showNotification){swReg.showNotification(titulo,op).catch(function(){});}else{new Notification(titulo,op)}}}catch(e){}
-    try{if(started&&!speaking&&!listening&&!busy)falar("Lembrete, "+cfg.trat+": "+txt+".")}catch(e){}
-    hint("Lembrete: "+txt)}
-  function verificarAvisos(){if(cfg.avisos!=="1")return;var d=new Date(),agora=d.getHours()*60+d.getMinutes(),dia=hojeId(d),feitos={};
+  function notificacao(txt){var op={body:txt,tag:"jarvis-"+txt,icon:"icon-192.png",badge:"icon-192.png"};
+    try{if("Notification" in window&&Notification.permission==="granted"){if(swReg&&swReg.showNotification)swReg.showNotification("J.A.R.V.I.S.",op).catch(function(){});else new Notification("J.A.R.V.I.S.",op)}}catch(e){}}
+  /* bipes do alarme, sintetizados no navegador (sem arquivo de áudio) */
+  var acBip=null;
+  function prepararBip(){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;try{if(!acBip)acBip=new AC();if(acBip.state==="suspended")acBip.resume()}catch(e){}}
+  function bipes(){prepararBip();if(!acBip)return;try{var t=acBip.currentTime+.05;
+    for(var i=0;i<6;i++){var o=acBip.createOscillator(),g=acBip.createGain(),t0=t+i*.3+(i>2?.4:0);o.type="sine";o.frequency.value=i%3===2?1320:880;
+      g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(.4,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+.22);o.connect(g);g.connect(acBip.destination);o.start(t0);o.stop(t0+.25)}}catch(e){}}
+  /* aviso completo: notificação, vibração, bipes (alarmes), balão na conversa e fala */
+  function alertar(txt,fala,alarme){notificacao(txt);if(alarme)bipes();
+    try{if(navigator.vibrate)navigator.vibrate(alarme?[500,250,500,250,500]:[250,120,250])}catch(e){}
+    hint(txt);if(started){bolha("j",txt);if(!listening&&!busy)setTimeout(function(){falar(fala||txt,null,true)},alarme?2300:0)}}
+  function verificarAvisos(){var d=new Date(),agora=d.getHours()*60+d.getMinutes(),dia=hojeId(d),feitos={};
+    var ls=lerL(),venceu=ls.filter(function(x){return x.quando<=Date.now()});
+    if(venceu.length){gravarL(ls.filter(function(x){return x.quando>Date.now()}));
+      venceu.forEach(function(x){var atraso=Date.now()-x.quando>5*60000;alertar("Lembrete: "+x.txt+(atraso?" (era para "+hm(x.quando)+")":""),"Lembrete, "+cfg.trat+": "+x.txt+".",!!x.alarme)})}
+    if(cfg.avisos!=="1")return;
     try{feitos=JSON.parse(localStorage.getItem("jarvis_avisados")||"{}")||{}}catch(e){}
     if(feitos.dia!==dia)feitos={dia:dia,itens:[]};var mudou=false;
     rotinasHoje().forEach(function(r){var h=horaRotina(r);if(h==null)return;
-      if(agora>=h&&agora<h+10&&feitos.itens.indexOf(r)<0){feitos.itens.push(r);mudou=true;notificar(r)}});
+      if(agora>=h&&agora<h+10&&feitos.itens.indexOf(r)<0){feitos.itens.push(r);mudou=true;alertar("Lembrete: "+r,"Lembrete, "+cfg.trat+": "+r+".")}});
     if(mudou)try{localStorage.setItem("jarvis_avisados",JSON.stringify(feitos))}catch(e){}}
-  setInterval(verificarAvisos,20000);setTimeout(verificarAvisos,3000);
+  setInterval(verificarAvisos,15000);setTimeout(verificarAvisos,3000);
+
+  /* ---------- uso do Gemini hoje: contado neste aparelho; a cota renova à meia-noite do Pacífico ---------- */
+  /* O Google não informa o saldo. O limite real vem na primeira recusa por cota e fica guardado; antes disso, estimativa. */
+  var ESTIMA={"gemini-flash-latest":20,"gemini-flash-lite-latest":500,"gemini-3.5-flash-lite":500,"gemini-2.5-flash-lite":500,"gemini-2.5-flash":20},ESTIMA_VOZ=15;
+  function relogioPT(){var p={};try{new Intl.DateTimeFormat("en-US",{timeZone:"America/Los_Angeles",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value})}catch(e){}return p}
+  function diaPT(){var p=relogioPT();return p.year?p.year+"-"+p.month+"-"+p.day:hojeId(new Date())}
+  function msAteRenovar(){var p=relogioPT();if(!p.hour)return 6*3600000;return Math.max(60000,((24-(+p.hour))*3600-(+p.minute)*60-(+p.second))*1000)}
+  function renovaEm(){return hm(Date.now()+msAteRenovar())}
+  function lerUso(){var u={};try{u=JSON.parse(localStorage.getItem("jarvis_uso")||"{}")||{}}catch(e){}if(!u.lim)u.lim={};var d=diaPT();if(u.dia!==d){u.dia=d;u.c={};u.v={};u.av={}}return u}
+  function gravarUso(u){try{localStorage.setItem("jarvis_uso",JSON.stringify(u))}catch(e){}}
+  function contarUso(k,modelo){var u=lerUso();u[k][modelo]=(u[k][modelo]||0)+1;gravarUso(u);mostrarUso();avisoCota()}
+  function aprenderLimite(modelo,n){if(!(n>0))return;var u=lerUso();u.lim[modelo]=n;gravarUso(u)}
+  function usoAgora(){var u=lerUso(),agora=Date.now(),livres=MODELOS.filter(function(m){return!(esfria[m]>agora)}),mc=livres[0],vc=ROTAS[rotaOk>=0?rotaOk:0][1];
+    function lim(m,est){return u.lim[m]?{n:u.lim[m],est:false}:{n:est,est:true}}
+    var lc=lim(mc||MODELOS[0],ESTIMA[mc]||20),lv=lim(vc,ESTIMA_VOZ);
+    return{u:u,c:{m:mc||"",usado:mc?(u.c[mc]||0):lc.n,lim:lc.n,est:lc.est,reservas:Math.max(0,livres.length-1),esgotado:!mc},
+      v:{m:vc,usado:u.v[vc]||0,lim:lv.n,est:lv.est,esgotado:gPausaAte>agora&&gPausaCota,pausada:gPausaAte>agora&&!gPausaCota,ativa:!!(cfg.key.trim()&&cfg.gvoz)}}}
+  function fracao(x){return x.esgotado?1:(x.est&&x.usado>=x.lim)?null:Math.min(1,x.usado/x.lim)}
+  function barraUso(rot,x,extra){var w=el("div"),top=el("div","ubt"),f=fracao(x),tr=el("div","ubar"),i=el("i");
+    top.appendChild(el("span",null,rot));
+    top.appendChild(el("span",null,x.esgotado?"esgotada · renova às "+renovaEm():f==null?x.usado+" hoje · acima da estimativa":x.usado+" de "+(x.est?"~":"")+x.lim+(x.est?" (estimado)":"")));
+    i.style.width=(f==null?100:Math.round(f*100))+"%";i.className=f==null?"desc":f>=.9?"alto":f>=.7?"medio":"";
+    tr.appendChild(i);w.appendChild(top);w.appendChild(tr);if(extra)w.appendChild(el("div","sub",extra));return w}
+  function mostrarUso(){var x=usoAgora(),mi=$("cotaMini"),usa=!!cfg.key.trim();
+    if(mi){mi.hidden=!usa;if(usa){var fs=[];if(cerebro()==="gemini")fs.push(fracao(x.c));if(x.v.ativa)fs.push(fracao(x.v));
+      var f=Math.max.apply(null,fs.map(function(v){return v==null?.5:v}).concat([0])),bar=$("cotaMiniBar");
+      bar.style.width=Math.round(f*100)+"%";bar.className=f>=.9?"alto":f>=.7?"medio":"";mi.title="Uso do Gemini hoje: "+Math.round(f*100)+"%"}}
+    var box=$("uso");if(!box||$("cfg").hidden)return;box.innerHTML="";
+    if(!usa){box.appendChild(el("p","muted","Sem chave do Gemini: nada a medir."));return}
+    box.appendChild(el("h4",null,"USO DO GEMINI HOJE (CONTADO NESTE CELULAR)"));
+    if(cerebro()==="gemini")box.appendChild(barraUso("Cérebro",x.c,x.c.esgotado?"Todos os modelos no limite. Volta às "+renovaEm()+".":"Modelo em uso: "+x.c.m+(x.c.reservas?" · "+x.c.reservas+(x.c.reservas>1?" modelos reserva":" modelo reserva"):"")));
+    if(x.v.ativa)box.appendChild(barraUso("Voz neural",x.v,x.v.pausada?"Pausada por falha de chave ou conexão (não é cota). Enquanto isso, uso a voz do celular; toque em TIMBRE para tentar de novo.":"Modelo: "+x.v.m+". Sem cota, uso a voz do celular."));
+    var p=el("p","muted","Renova às "+renovaEm()+" (meia-noite no horário do Pacífico). O Google não informa o saldo: o limite exato aparece na primeira recusa por cota ou em ");
+    var a=el("a",null,"ai.dev/usage");a.href="https://ai.dev/usage?tab=rate-limit";a.target="_blank";a.rel="noopener noreferrer";p.appendChild(a);p.appendChild(document.createTextNode("."));box.appendChild(p)}
+  /* proativo: avisa uma vez por dia quando passar de 80% de um limite já conhecido */
+  function avisoCota(){var x=usoAgora(),u=x.u;u.av=u.av||{};
+    [["c",x.c,"O cérebro",cerebro()==="gemini"],["v",x.v,"A voz neural",x.v.ativa]].forEach(function(k){var y=k[1];
+      if(!k[3]||y.est||y.esgotado||u.av[k[0]]||y.usado/y.lim<.8)return;u.av[k[0]]=1;gravarUso(u);
+      hint(k[2]+" já usou "+Math.round(y.usado/y.lim*100)+"% da cota gratuita de hoje. Renova às "+renovaEm()+".")})}
+  setInterval(mostrarUso,60000);
+
+  /* ---------- lembretes avulsos ("me lembre às 15h de…", "daqui a 20 minutos…") ---------- */
+  function lerL(){try{var a=JSON.parse(cfg.lembretes||"[]");return Array.isArray(a)?a.filter(function(x){return x&&+x.quando&&x.txt}):[]}catch(e){return[]}}
+  function gravarL(a){cfg.lembretes=JSON.stringify(a.slice(-50));if(!save())hint(MSG_NAO_SALVA);renderLembretes();renderChips()}
+  function hm(ms){var d=new Date(ms);return pad(d.getHours())+":"+pad(d.getMinutes())}
+  function quandoFalado(ms){var d=new Date(ms),h=new Date(),dia=Math.round((new Date(d.getFullYear(),d.getMonth(),d.getDate())-new Date(h.getFullYear(),h.getMonth(),h.getDate()))/864e5);
+    return(dia===0?"hoje":dia===1?"amanhã":DIAS[d.getDay()]+", "+d.getDate()+"/"+(d.getMonth()+1))+" às "+hm(ms)}
+  function renderLembretes(){var box=$("lembretesBox");if(!box)return;box.innerHTML="";var a=lerL().sort(function(x,y){return x.quando-y.quando});if(!a.length)return;
+    var c=el("section","card"),hd=el("div","hd"),ul=el("ul","tl");hd.appendChild(el("h3",null,"LEMBRETES"));c.appendChild(hd);
+    a.forEach(function(x){var li=el("li");li.appendChild(el("span",null,quandoFalado(x.quando)+" · "+x.txt));
+      li.appendChild(mini("×",function(){gravarL(lerL().filter(function(y){return y.id!==x.id}))},true,"Apagar lembrete"));ul.appendChild(li)});
+    c.appendChild(ul);box.appendChild(c)}
+  var pendente=null;
+  function criarLembrete(l){var a=lerL();a.push({id:novoId(),quando:l.quando,txt:l.txt,alarme:l.alarme?1:0});gravarL(a);
+    var t="Combinado: "+quandoFalado(l.quando)+", "+l.txt+".",n=0;
+    try{n=+localStorage.getItem("jarvis_dica_lemb")||0;localStorage.setItem("jarvis_dica_lemb",String(n+1))}catch(e){}
+    if(n<2)t+=" Eu aviso com o painel aberto, mesmo em segundo plano.";return t}
+
+  /* ---------- linguagem: números, durações e horários falados (texto normalizado, sem acentos) ---------- */
+  var NUMS={um:1,uma:1,dois:2,duas:2,tres:3,quatro:4,cinco:5,seis:6,sete:7,oito:8,nove:9,dez:10,onze:11,doze:12,treze:13,catorze:14,quatorze:14,quinze:15,dezesseis:16,dezessete:17,dezoito:18,dezenove:19,vinte:20,trinta:30,quarenta:40,cinquenta:50,sessenta:60,noventa:90};
+  function numPt(s){s=norm(String(s||"")).trim();if(/^\d+$/.test(s))return+s;var t=0,ok=true,algum=false;
+    s.split(/\s+e\s+|\s+/).forEach(function(w){if(!w)return;if(NUMS[w]!=null){t+=NUMS[w];algum=true}else ok=false});return ok&&algum?t:NaN}
+  /* "10 minutos", "1 hora e 30 minutos", "meia hora", "uma hora e meia", "1h30" -> ms */
+  var RE_DUR=/(\d+|[a-z]+(?:\s+e\s+[a-z]+)?)\s*(horas?|h|minutos?|min|segundos?|seg)(?![a-z])/g;
+  function duracao(s){s=s.replace(/(\d+)h(\d{1,2})\b/g,"$1 horas $2 minutos");var ms=0,ok=false,m;
+    if(/\bmeia hora\b/.test(s)){ms+=1800000;ok=true;s=s.replace(/\bmeia hora\b/g," ")}
+    RE_DUR.lastIndex=0;while((m=RE_DUR.exec(s))){var n=numPt(m[1]);if(isNaN(n))continue;ms+=n*(/^h/.test(m[2])?3600000:/^m/.test(m[2])?60000:1000);ok=true}
+    if(ok&&/\bhoras?\s+e\s+meia\b/.test(s))ms+=1800000;return ok?ms:0}
+  /* "às 15h", "às 15:30", "às 3 da tarde", "às sete e meia", "meio-dia" -> {h,mi,i,f} com a posição no texto */
+  function acharHora(s){var re=/\b(?:as|para as|pras|pelas)\s+(\d{1,2}|[a-z]+)((?::|h)(\d{2})(?!\d)|\s*h(?:oras?)?(?![a-z])|\s+e\s+(meia|quinze|\d{1,2})(?![a-z\d]))?(?:\s+(?:da|de)\s+(manha|tarde|noite|madrugada))?/g,m;
+    while((m=re.exec(s))){var h=numPt(m[1]);if(isNaN(h)||h>23)continue;
+      /* sem "h", minutos ou período, só vale se a frase seguir como horário ("às 15 de…"), não como contagem ("as 2 pastas") */
+      if(!m[2]&&!m[5]){var resto=s.slice(m.index+m[0].length).trim();if(resto&&!/^(de|do|da|que|pra|para|me|amanha|hoje|e\b|[,.;!?])/.test(resto))continue}
+      var mi=m[3]?+m[3]:m[4]?(m[4]==="meia"?30:numPt(m[4])):0;if(isNaN(mi)||mi>59)mi=0;
+      if(/tarde|noite/.test(m[5]||"")&&h<12)h+=12;if(/madrugada|manha/.test(m[5]||"")&&h===12)h=0;
+      return{h:h,mi:mi,i:m.index,f:m.index+m[0].length}}
+    var md=/\bmeio-?dia\b/.exec(s);if(md)return{h:12,mi:0,i:md.index,f:md.index+md[0].length};
+    return null}
+  /* quando: "daqui a 20 minutos", "em 1 hora" ou horário do relógio (hoje, amanhã, depois de amanhã) */
+  function quandoDe(s){var cortes=[],quando=0;
+    var r=/\b(?:daqui a|daqui|dentro de|em)\s+(meia hora|(?:\d+|[a-z]+(?:\s+e\s+[a-z]+)?)\s*(?:horas?|h|minutos?|min|segundos?)(?![a-z])(?:\s+e\s+(?:meia|(?:\d+|[a-z]+)\s*(?:minutos?|min)(?![a-z])))?)/.exec(s);
+    if(r){var ms=duracao(r[1]);if(ms){quando=Date.now()+ms;cortes.push([r.index,r.index+r[0].length])}}
+    if(!quando){var h=acharHora(s);if(h){var d=new Date(),a=new Date(d.getFullYear(),d.getMonth(),d.getDate(),h.h,h.mi,0,0),dd=/\b(depois de amanha|amanha|hoje)\b/.exec(s);
+      if(dd){cortes.push([dd.index,dd.index+dd[0].length]);if(dd[1]!=="hoje")a.setDate(a.getDate()+(dd[1]==="amanha"?1:2))}
+      else if(a.getTime()<=Date.now()+20000)a.setDate(a.getDate()+1);
+      quando=a.getTime();cortes.push([h.i,h.f])}}
+    return quando?{quando:quando,cortes:cortes}:null}
+  var RE_LEMB=/(?:^|[\s,])(me\s+lembr[ae]|lembr[ae]-me|me\s+avis[ae]|avis[ae]-me|lembrete|despertador|me\s+despert[ae]|despert[ae]-me|alarme)(?![a-z])/;
+  function lerLembrete(txt){var s=norm(txt),g=RE_LEMB.exec(s);if(!g)return null;
+    var q=quandoDe(s),gi=g.index+g[0].length-g[1].length,cortes=[[gi,gi+g[1].length]].concat(q?q.cortes:[]);
+    var base=s.length===txt.length?txt:s,ch=base.split("");cortes.forEach(function(c){for(var i=c[0];i<c[1];i++)ch[i]=" "});
+    var o=ch.join("").replace(/^\s*(jarvis,?|por favor,?)\s*/i,"").replace(/\s+/g," ").trim(),conect=/^(de|que|para|pra|sobre)\s/i.test(o),alarme=/despert|alarme/.test(g[1]);
+    o=o.replace(/^(?:(?:de|que|para|pra|sobre|a|o)\s+)+/i,"").replace(/\s+(?:de|que|para|pra|a|o)$/i,"").replace(/^[,.:;\s-]+|[,.:;!?\s]+$/g,"");
+    /* "me lembre o que eu anotei" não é lembrete: sem horário e sem "de/que" vai para o cérebro */
+    if(!q&&!conect&&!alarme)return null;
+    return{quando:q?q.quando:0,txt:o?o.charAt(0).toUpperCase()+o.slice(1):(alarme?"Alarme":"Lembrete"),alarme:alarme}}
+  function lerTimer(txt){var s=norm(txt);
+    if(/(?:^|[\s,])(me\s+lembr[ae]|lembr[ae]-me|me\s+avis[ae]|avis[ae]-me|lembrete)(?![a-z])/.test(s))return null;
+    if(/\b(pomodoro|modo foco)\b/.test(s)&&!/\b(cancel\w*|pare|parar|encerr\w*|quanto)\b/.test(s))return{ms:duracao(s)||1500000,rot:"Foco",tipo:"foco"};
+    if(!/\b(timer|temporizador|cronometr[oa]|cronometre|alarme|pomodoro|foco)\b/.test(s))return null;
+    if(/\b(cancel\w*|pare|parar|desligu?e|desligar|encerr\w*|zer[ae]r?)\b/.test(s))return{cancelar:true};
+    if(/\b(quanto (falta|tempo|resta)|como esta)\b/.test(s))return{consulta:true};
+    if(/\b(pause|pausar|pausa o|pausa a)\b/.test(s))return{pausar:true};
+    if(/\b(continu[ae]r?|retom[ae]r?)\b/.test(s))return{continuar:true};
+    if(acharHora(s))return null;
+    var ms=duracao(s);if(!ms)return null;
+    var r=/\b(?:para|pra|pro)\s+(?:o\s+|a\s+)?([^\d\s].{1,40})$/i.exec(txt),rot=r&&!duracao(norm(r[1]))?r[1].replace(/[.!?]+$/,""):"";
+    return{ms:ms,rot:rot?rot.charAt(0).toUpperCase()+rot.slice(1):"Timer",tipo:"timer"}}
+  /* "coloque leite e café na lista do mercado" */
+  function lerLista(txt){var m=/^(?:jarvis,?\s*)?(?:por favor,?\s*)?(?:colo(?:c[ao]r?|que)|p[õo]e|ponha|bot[ae]r?|adicion[ae]r?|acrescent[ae]r?|inclu[ai]r?|inclua|anot[ae]r?)\s+(.+?)\s+(?:na|à|a)\s+lista\s*(?:de|do|da|dos|das)?\s*([^.!?]*)[.!?]*$/i.exec(txt);
+    if(!m)return null;var itens=m[1].split(/\s*,\s*|\s+e\s+/).map(function(s){return s.trim()}).filter(Boolean),nome=m[2].trim();
+    return itens.length?{itens:itens,nome:nome||"Tarefas"}:null}
+  function addLista(p){var a=lerW(),alvo=norm(p.nome),w=a.filter(function(x){return x.tipo==="tarefas"&&norm(x.titulo||"")===alvo})[0]||
+      a.filter(function(x){var t=norm(x.titulo||"");return x.tipo==="tarefas"&&t&&(t.indexOf(alvo)>=0||alvo.indexOf(t)>=0)})[0];
+    if(!w)w=addWidget({tipo:"tarefas",titulo:p.nome.charAt(0).toUpperCase()+p.nome.slice(1),itens:[]});
+    mudarW(w.id,function(x){x.itens=x.itens||[];p.itens.forEach(function(t){x.itens.push({t:t,ok:false})})});renderWidgets();
+    return"Na lista "+w.titulo+": "+p.itens.join(", ")+"."}
+
+  /* ---------- timer e pomodoro (som, vibração e notificação no fim; a tela fica ligada enquanto corre) ---------- */
+  var timer=null;try{timer=JSON.parse(localStorage.getItem("jarvis_timer")||"null")}catch(e){timer=null}
+  if(timer&&!(timer.fim>0))timer=null;
+  var fimFocoEm=0,fimPausaEm=0;
+  function gravarT(){try{if(timer)localStorage.setItem("jarvis_timer",JSON.stringify(timer));else localStorage.removeItem("jarvis_timer")}catch(e){}}
+  function mmss(ms){var s=Math.max(0,Math.ceil(ms/1000)),h=Math.floor(s/3600);s%=3600;return(h?h+":"+pad(Math.floor(s/60)):pad(Math.floor(s/60)))+":"+pad(s%60)}
+  function durFalada(ms){var s=Math.round(ms/1000);if(s<60)return s+" segundos";var m=Math.round(s/60),h=Math.floor(m/60);m%=60;
+    return(h?h+(h>1?" horas":" hora")+(m?" e ":""):"")+(m?m+(m>1?" minutos":" minuto"):"")}
+  function restaTimer(){return timer?(timer.pausa||Math.max(0,timer.fim-Date.now())):0}
+  function iniciarTimer(ms,rot,tipo){timer={fim:Date.now()+ms,total:ms,rot:rot||"Timer",tipo:tipo||"timer",pausa:0};gravarT();telaLigada("timer",true);atualizaTimer(new Date());renderChips();
+    return tipo==="foco"?"Foco de "+durFalada(ms)+" iniciado. Eu aviso no fim.":tipo==="pausa"?"Pausa de "+durFalada(ms)+". Eu chamo quando acabar.":"Timer de "+durFalada(ms)+(rot&&rot!=="Timer"?" para "+rot.toLowerCase():"")+" iniciado."}
+  function pararTimer(){timer=null;gravarT();telaLigada("timer",false);atualizaTimer(new Date());renderChips()}
+  function pausarTimer(){if(!timer)return;if(timer.pausa){timer.fim=Date.now()+timer.pausa;timer.pausa=0}else timer.pausa=Math.max(1000,timer.fim-Date.now());gravarT();atualizaTimer(new Date())}
+  function atualizaTimer(d){var b=$("tbar");if(!b)return;if(!timer){b.hidden=true;return}
+    b.hidden=false;$("tTempo").textContent=mmss(restaTimer());$("tRot").textContent=(timer.pausa?"PAUSADO · ":"")+String(timer.rot).toUpperCase();$("tPausa").textContent=timer.pausa?"CONTINUAR":"PAUSAR";
+    if(!timer.pausa&&d.getTime()>=timer.fim)fimTimer()}
+  function registraFoco(ms){var d=hojeId(new Date()),f={};try{f=JSON.parse(localStorage.getItem("jarvis_foco")||"{}")||{}}catch(e){}
+    if(f.dia!==d)f={dia:d,ciclos:0,ms:0};f.ciclos++;f.ms+=ms;try{localStorage.setItem("jarvis_foco",JSON.stringify(f))}catch(e){}return f}
+  function fimTimer(){var t=timer,atraso=Date.now()-t.fim,txt;timer=null;gravarT();telaLigada("timer",false);atualizaTimer(new Date());
+    if(t.tipo==="foco"){var f=registraFoco(t.total);fimFocoEm=Date.now();txt="Foco concluído, "+cfg.trat+". Hoje: "+f.ciclos+(f.ciclos>1?" ciclos":" ciclo")+", "+durFalada(f.ms)+" de estudo. Hora de uma pausa."}
+    else if(t.tipo==="pausa"){fimPausaEm=Date.now();txt="Pausa encerrada, "+cfg.trat+". Pronta para mais um ciclo?"}
+    else txt=(t.rot&&t.rot!=="Timer"?t.rot+": tempo esgotado.":"Tempo esgotado, "+cfg.trat+".");
+    var fala=txt;if(atraso>60000)txt+=" (Terminou às "+hm(t.fim)+".)";
+    alertar(txt,fala,true);renderChips()}
+  bind($("tPausa"),function(){pausarTimer()});
+  bind($("tParar"),function(){pararTimer();hint("Timer cancelado.")});
+
+  /* ---------- tela sempre ligada (Wake Lock): manual, no modo mesa e enquanto um timer corre ---------- */
+  var wl=null,wlPor={},wlBloq=false;
+  function telaOn(){return Object.keys(wlPor).length>0}
+  function telaLigada(motivo,on){if(on){if(wlBloq&&motivo!=="manual")return;wlPor[motivo]=1}else delete wlPor[motivo];aplicaWL()}
+  function aplicaWL(){if(!("wakeLock" in navigator))return;var quer=telaOn();
+    if(quer&&!wl&&document.visibilityState==="visible"){wl={};navigator.wakeLock.request("screen").then(function(s){if(!telaOn()){s.release().catch(function(){});wl=null;return}wl=s;s.addEventListener("release",function(){if(wl===s)wl=null})},function(){wl=null})}
+    else if(!quer&&wl&&wl.release){var s=wl;wl=null;s.release().catch(function(){})}}
+  document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")aplicaWL()});
+  function alternarTela(){if(telaOn()){wlBloq=true;wlPor={};aplicaWL();dizer("Tela volta ao normal.")}else{wlBloq=false;telaLigada("manual",true);dizer("Tela mantida ligada enquanto o painel estiver aberto.")}renderChips()}
+
+  /* ---------- Z Flip: modo Flex (dobrado em L) e Flex Window (tela externa) ---------- */
+  var mqFlex=null;try{mqFlex=matchMedia("(vertical-viewport-segments: 2)")}catch(e){}
+  function postura(){var b=document.body,f=!!(mqFlex&&mqFlex.matches),c=!f&&screen.width<600&&screen.height<600&&Math.max(innerWidth,innerHeight)<600;
+    if(b.classList.contains("flex")===f&&b.classList.contains("capa")===c)return;
+    b.classList.toggle("flex",f);b.classList.toggle("capa",c);telaLigada("flex",f);
+    try{dispatchEvent(new Event("resize"))}catch(e){}medirDock();renderChips();
+    if(f)hint("Modo mesa: relógio em cima, conversa embaixo. A tela fica ligada enquanto o Flip estiver dobrado.")}
+  try{if(mqFlex){if(mqFlex.addEventListener)mqFlex.addEventListener("change",postura);else if(mqFlex.addListener)mqFlex.addListener(postura)}}catch(e){}
+  addEventListener("resize",postura);
+
+  /* ---------- rodapé: sugestões + conversa ---------- */
+  function medirDock(){var d=$("dock"),b=document.body;if(!d||d.hidden){b.classList.remove("com-dock");return}b.classList.add("com-dock");document.documentElement.style.setProperty("--dock",d.offsetHeight+"px")}
+  try{new ResizeObserver(function(){medirDock()}).observe($("dock"))}catch(e){addEventListener("resize",medirDock)}
+  function mostrarDock(){$("dock").hidden=false;medirDock();renderChips();dicaInicial()}
+  function dicaInicial(){var n=0;try{n=+localStorage.getItem("jarvis_dicas")||0}catch(e){}if(n>=2)return;try{localStorage.setItem("jarvis_dicas",String(n+1))}catch(e){}
+    bolha("j","Novidade: as sugestões aqui embaixo mostram o que eu faço. Também pode dizer \"timer de 10 minutos\", \"me lembre às 15h de ligar para o cliente\" ou \"coloque leite na lista do mercado\".")}
+  function dizer(t,ouvirDepois){bolha("j",t);falar(t,ouvirDepois&&porVoz&&!micBlocked?function(){setTimeout(ouvir,350)}:null,true)}
+  function exemplo(frase){hint("Diga ou digite, por exemplo: \""+frase+"\".");$("ask").placeholder=frase;if(SR&&!micBlocked)ouvir();else try{$("ask").focus()}catch(e){}}
+
+  /* ---------- "o que você faz?" e "o que tenho amanhã?" ---------- */
+  var AJUDA=[["Conversar","toque no reator e fale; com CONVERSA ligado, eu volto a ouvir sozinho."],["Timer","\"timer de 10 minutos\", \"pomodoro\", \"quanto falta no timer?\", \"pare o timer\"."],
+    ["Lembretes","\"me lembre às 15h de ligar para o cliente\", \"me lembre daqui a 20 minutos de tirar o bolo\", \"lembrete amanhã às 9h pagar o boleto\"."],
+    ["Listas","\"coloque leite e café na lista do mercado\"."],["Notas","\"anote: levar a carteira da OAB na audiência\"."],["Pesquisa","\"pesquise informativos recentes do STJ\"."],
+    ["Estudo","\"Treinar questões\" nas sugestões: certo ou errado, uma por vez, com correção."],["Agenda","\"o que tenho amanhã?\"; rotinas com horário em AJUSTES (\"terça: 19:00 cursinho\") avisam na hora."],
+    ["Modo mesa","dobre o Flip em L: relógio em cima, conversa embaixo, tela ligada."],["Cota","toque em J.A.R.V.I.S. no topo para ver o uso do Gemini hoje."]];
+  function mostrarAjuda(){var box=$("resultados"),c=el("section","card in"),hd=el("div","hd"),acts=el("div","acts"),ul=el("ul","ajuda");
+    hd.appendChild(el("h3",null,"O QUE O JARVIS FAZ"));acts.appendChild(mini("×",function(){c.remove()},true,"Fechar"));hd.appendChild(acts);c.appendChild(hd);
+    AJUDA.forEach(function(a){var li=el("li");li.appendChild(el("b",null,a[0]+": "));li.appendChild(document.createTextNode(a[1]));ul.appendChild(li)});c.appendChild(ul);
+    box.insertBefore(c,box.firstChild);try{c.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"})}catch(e){}
+    dizer("Aqui está o que eu faço, "+cfg.trat+". Toque nas sugestões ou fale comigo.")}
+  function dizerAmanha(){var d=new Date();d.setDate(d.getDate()+1);var r=rotinasDoDia(1),ls=lerL().filter(function(x){return new Date(x.quando).toDateString()===d.toDateString()}).sort(function(a,b){return a.quando-b.quando});
+    dizer("Amanhã, "+DIAS[d.getDay()]+": "+(r.length?r.join("; "):"nenhuma rotina cadastrada")+"."+(ls.length?" Lembretes: "+ls.map(function(x){return hm(x.quando)+", "+x.txt}).join("; ")+".":""))}
+
+  /* ---------- sugestões (chips): mostram o que o Jarvis faz e mudam com a hora e o contexto ---------- */
+  var PEDIDO_QUESTOES="Quero treinar questões de concurso. Pergunte qual matéria eu quero. Depois, faça uma questão por vez, de certo ou errado no estilo Cebraspe, fiel ao texto da lei e à jurisprudência consolidada. Espere minha resposta, corrija em até três frases citando o artigo ou o precedente e então ofereça a próxima.";
+  function rotinasComHora(){return cfg.rotinas.split("\n").some(function(l){return horaRotina(l)!=null||horaRotina(l.replace(/^[^:]+:\s*/,""))!=null})}
+  function precisaPermissao(){try{return"Notification" in window&&Notification.permission==="default"&&(cfg.avisos==="1"||lerL().length>0||!!timer)}catch(e){return false}}
+  function chipsAgora(){var h=new Date().getHours(),agora=Date.now(),L=[],flex=document.body.classList.contains("flex");
+    if(!cerebro())L.push(["cerebro","Conectar cérebro",1]);
+    if(timer)L.push(["tparar","Parar timer",1]);
+    else if(agora-fimFocoEm<600000)L.push(["pausa5","Pausa de 5 min",1],["foco25","Mais 25 min de foco"]);
+    else if(agora-fimPausaEm<600000)L.push(["foco25","Voltar ao foco (25 min)",1]);
+    if(precisaPermissao())L.push(["notif","Permitir notificações",1]);
+    if(cfg.avisos!=="1"&&rotinasComHora())L.push(["avisos","Avisar rotinas na hora",1]);
+    if(flex)L.push(["tela",telaOn()?"Tela ligada ✓":"Manter tela ligada",0,telaOn()]);
+    if(h>=5&&h<11)L.push(["briefing","Briefing do dia"]);
+    if(!timer)L.push(["foco25","Pomodoro 25 min"],["timer","Timer"]);
+    L.push(["lembrete","Lembrete"]);
+    if(cerebro())L.push(["questoes","Treinar questões"]);
+    L.push(["lista","Lista"]);
+    if(cerebro())L.push(["juridico","Notícias jurídicas"]);
+    L.push(["anotar","Anotar"]);
+    if(h>=17||h<5)L.push(["amanha","O que tenho amanhã"]);
+    L.push(["briefing","Briefing"],["tela",telaOn()?"Tela ligada ✓":"Manter tela ligada",0,telaOn()],["ajuda","O que você faz?"]);
+    var vistos={};return L.filter(function(c){if(vistos[c[0]])return false;vistos[c[0]]=1;return true})}
+  function renderChips(lista){var box=$("chips");if(!box)return;box.innerHTML="";
+    (lista||chipsAgora()).forEach(function(c){var b=el("button","chip"+(c[2]?" dest":"")+(c[3]?" on":""),c[1]);b.type="button";
+      b.addEventListener("click",function(){destravarVoz();porVoz=false;try{acaoChip(c[0])}catch(e){hint("Erro: "+e.message)}});box.appendChild(b)});
+    try{box.scrollLeft=0}catch(e){}}
+  function abrirAjustes(alvo){if($("cfg").hidden)$("btnCfg").click();setTimeout(function(){try{var e=$(alvo||"fKey");e.scrollIntoView({block:"center",behavior:reduce?"auto":"smooth"});if(!alvo)e.focus()}catch(x){}},80)}
+  function acaoChip(k){var m;
+    if(k==="voltar"){renderChips();hint("");return}
+    if(k==="cerebro"){abrirAjustes();return}
+    if(k==="briefing"){iniciar(true);return}
+    if(k==="foco25"){dizer(iniciarTimer(1500000,"Foco","foco"));return}
+    if(k==="pausa5"){dizer(iniciarTimer(300000,"Pausa","pausa"));return}
+    if(k==="tparar"){pararTimer();dizer("Timer cancelado.");return}
+    if(k==="timer"){renderChips([["voltar","‹ Voltar"],["t5","5 min"],["t10","10 min"],["t15","15 min"],["t30","30 min"],["t60","1 hora"],["tvoz","Outro tempo"]]);hint("Escolha o tempo ou diga, por exemplo: \"timer de 12 minutos para o macarrão\".");return}
+    if((m=/^t(\d+)$/.exec(k))){dizer(iniciarTimer(+m[1]*60000,"Timer","timer"));return}
+    if(k==="tvoz"){renderChips();exemplo("timer de 12 minutos para o macarrão");return}
+    if(k==="lembrete"){exemplo("me lembre às 15h de ligar para o cliente");return}
+    if(k==="lista"){exemplo("coloque leite e café na lista do mercado");return}
+    if(k==="anotar"){exemplo("anote: levar a carteira da OAB");return}
+    if(k==="questoes"){perguntar(PEDIDO_QUESTOES,"Treinar questões");return}
+    if(k==="juridico"){bolha("j","Pesquisando as notícias jurídicas de hoje. O resultado aparece logo abaixo.");executarBusca("principais notícias jurídicas de hoje no Brasil: STF, STJ, CNJ e OAB",true);return}
+    if(k==="amanha"){dizerAmanha();return}
+    if(k==="tela"){alternarTela();return}
+    if(k==="notif"){pedirPermissaoAviso();return}
+    if(k==="avisos"){cfg.avisos="1";save();pedirPermissaoAviso();dizer("Pronto: aviso no horário das rotinas enquanto o painel estiver aberto.");renderChips();return}
+    if(k==="ajuda"){mostrarAjuda();return}}
+  bind($("tagBtn"),function(){abrirAjustes("uso")});
+
+  /* comandos executados no próprio painel, antes do cérebro */
+  function comandoLocal(txt,pend){var s=norm(txt).replace(/^jarvis,?\s*/,"").replace(/[.!?]+$/,"").trim();
+    if(pend){var q=quandoDe(s);if(q){limpa(txt);dizer(criarLembrete({quando:q.quando,txt:pend.txt,alarme:pend.alarme}));return true}}
+    if(/^(o que (voce|vc) (faz|sabe fazer|pode fazer)|ajuda|comandos|o que (eu )?posso (dizer|falar|pedir))$/.test(s)){limpa(txt);mostrarAjuda();return true}
+    if(/^(o que (eu )?tenho (para |pra )?amanha|minha agenda de amanha|agenda de amanha|e amanha|como (e|esta|fica) amanha)$/.test(s)){limpa(txt);dizerAmanha();return true}
+    var t=lerTimer(txt);if(t){limpa(txt);
+      if(t.cancelar){if(timer){pararTimer();dizer("Timer cancelado.")}else dizer("Não há timer correndo.");return true}
+      if(t.consulta){dizer(timer?"Faltam "+durFalada(restaTimer())+(timer.pausa?", com o timer pausado.":"."):"Não há timer correndo.");return true}
+      if(t.pausar||t.continuar){if(!timer){dizer("Não há timer correndo.");return true}if(!!t.pausar!==!!timer.pausa)pausarTimer();dizer(timer.pausa?"Timer pausado.":"Timer correndo.");return true}
+      if(t.ms>864e5){dizer("O timer vai até 24 horas. Para algo mais longe, use um lembrete.");return true}
+      dizer(iniciarTimer(t.ms,t.rot,t.tipo));return true}
+    var l=lerLembrete(txt);if(l){limpa(txt);
+      if(!l.quando){pendente={txt:l.txt,alarme:l.alarme};dizer("Para quando, "+cfg.trat+"? Por exemplo: às 15h, ou daqui a 20 minutos.",true);return true}
+      dizer(criarLembrete(l));return true}
+    return false}
+
+  renderLembretes();if(timer)telaLigada("timer",true);postura();mostrarUso();
 
   /* ---------- utilidades de interface ---------- */
   function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
